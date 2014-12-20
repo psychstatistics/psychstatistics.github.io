@@ -10,7 +10,7 @@ relative_permalinks: true
 title:            Psychstatistics
 tagline:          'Data Analysis in Psychology'
 description:      'Trying to be thoughful'
-url:              
+url:              psychstatistics.github.io
 baseurl:          /
 
 author:
