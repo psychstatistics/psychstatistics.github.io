@@ -2,6 +2,7 @@
 layout: post
 title: 'AMOS: Introduction'
 date: 2010-11-16 04:47:22.000000000 -07:00
+tags: [AMOS, Tutorial, Screencast]
 comments: true
 ---
 
