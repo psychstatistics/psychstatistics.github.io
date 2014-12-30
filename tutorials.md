@@ -9,7 +9,7 @@ title: Tutorials
 * [Correlaiton and Covariance]({{ site.baseurl }}2011/04/21/stata-correlation-and-covariance)
 * [Descriptive Statistics: Mean, Median, Variability]({{ site.baseurl }}2011/05/30/stata-descriptive-statistics-mean-median-variability)
 * [Do-files and Log-files]({{ site.baseurl }}2011/08/18/stata-do-file-log-files)
-* [Dummy Coding]({{ site.baseurl }}2011/10/05/stata-dummy-coding){{ site.baseurl }}
+* [Dummy Coding]({{ site.baseurl }}2011/10/05/stata-dummy-coding)
 * [Graphing Distributions]({{ site.baseurl }}2010/11/24/stata-graphing-distributions)
 * [Introduction to the Interface]({{ site.baseurl }}2011/04/26/stata-introduction-to-the-interface)
 * [Labeling and Recoding Data]({{ site.baseurl }}2011/08/29/stata-labeling-recoding-data)
