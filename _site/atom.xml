@@ -4,13 +4,54 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2014-12-29T20:50:11-07:00</updated>
+ <updated>2014-12-29T20:51:37-07:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Stata: Oneway ANOVA</title>
+   <link href="psychstatistics.github.io/2011/07/01/stata-oneway-anova/"/>
+   <updated>2011-07-01T03:24:36-06:00</updated>
+   <id>psychstatistics.github.io/2011/07/01/stata-oneway-anova</id>
+   <content type="html">&lt;h1 id=&quot;oneway-anova&quot;&gt;Oneway ANOVA&lt;/h1&gt;
+
+&lt;p&gt;This post will show how to use the &lt;code&gt;anova&lt;/code&gt; and &lt;code&gt;loneway&lt;/code&gt; commands in Stata to compute a oneway ANOVA.
+We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration. We will use &lt;em&gt;price&lt;/em&gt; as the outcome variable and &lt;em&gt;foreign&lt;/em&gt; as the factor.&lt;/p&gt;
+
+&lt;p&gt;Let’s initially look at descriptive statistics for &lt;em&gt;price&lt;/em&gt; stratified by &lt;em&gt;foreign&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta.jpg&quot; alt=&quot;Results-auto_dta_.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of &lt;em&gt;foreign&lt;/em&gt;).&lt;/p&gt;
+
+&lt;h2 id=&quot;anova-command&quot;&gt;&lt;code&gt;anova&lt;/code&gt; Command&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;anova&lt;/code&gt; command is simple and follows the standard Stata syntax – Command DV IV&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;anova price foreign
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Viola – you’ve got an ANOVA source table.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-1.jpg&quot; alt=&quot;Results-auto.dta-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Looks like the difference in price is not statistically significant. The advantage of using &lt;code&gt;anova&lt;/code&gt; is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the &lt;code&gt;loneway&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;h2 id=&quot;loneway-command&quot;&gt;&lt;code&gt;loneway&lt;/code&gt; Command&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;loneway&lt;/code&gt; command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, &lt;code&gt;loneway&lt;/code&gt; can be really useful.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;loneway price foreign
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-2.jpg&quot; alt=&quot;Results-auto_dta-2.jpg&quot; /&gt;&lt;/p&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Things I Love About Stata -- egen mean</title>

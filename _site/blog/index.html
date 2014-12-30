@@ -90,6 +90,50 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2011/07/01/stata-oneway-anova/">
+        Stata: Oneway ANOVA
+      </a>
+    </h1>
+
+    <span class="post-date">01 Jul 2011</span>
+    <h1 id="oneway-anova">Oneway ANOVA</h1>
+
+<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
+We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+
+<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+
+<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+
+<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
+
+<h2 id="anova-command"><code>anova</code> Command</h2>
+
+<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
+
+<pre><code>anova price foreign
+</code></pre>
+
+<p>Viola – you’ve got an ANOVA source table.</p>
+
+<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+
+<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
+
+<h2 id="loneway-command"><code>loneway</code> Command</h2>
+
+<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
+
+<pre><code>loneway price foreign
+</code></pre>
+
+<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2011/05/30/things-i-love-about-stata-egen-mean/">
         Things I Love About Stata -- egen mean
       </a>
