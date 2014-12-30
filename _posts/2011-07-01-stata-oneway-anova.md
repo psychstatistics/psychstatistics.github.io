@@ -2,6 +2,7 @@
 layout: post
 title: 'Stata: Oneway ANOVA'
 date: 2011-07-01 03:24:36.000000000 -06:00
+tags: [Stata, Tutorial]
 comments: true
 ---
 # Oneway ANOVA
