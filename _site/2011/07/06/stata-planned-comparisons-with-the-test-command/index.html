@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Planned Comparisons with the test command &middot; Psychstatistics
     
   </title>
 
@@ -107,42 +107,89 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Planned Comparisons with the test command</h1>
+  <span class="post-date">06 Jul 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="planned-comparisons">Planned Comparisons</h1>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<p>This post will show you how to:</p>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<ol>
+  <li>Run a one-way ANOVA using an independent variable with four levels.</li>
+  <li>Use planned comparisons to contrast levels of the independent variable.</li>
+</ol>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+<p>We will use the built-in dataset <strong>systolic</strong>.</p>
 
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
-
-<h2 id="anova-command"><code>anova</code> Command</h2>
-
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>webuse systolic
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<h2 id="examining-the-data">Examining the data</h2>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
-
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
-
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
-
-<pre><code>loneway price foreign
+<pre><code>summarize systolic, detail
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
 
+<pre><code>table drug
+</code></pre>
+
+<p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
+
+<p>Let’s also look at a boxplot of systolic by drug.</p>
+
+<pre><code>graph box systolic, by(drug)
+</code></pre>
+
+<p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
+
+<p>Thus, it appears there are some differences between drug levels and systolic blood pressure.</p>
+
+<h2 id="oneway-anova">Oneway ANOVA</h2>
+
+<p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
+
+<pre><code>anova systolic drug
+</code></pre>
+
+<p>We reject the null hypothesis.</p>
+
+<p><img src="/assets/Results-systolic_dta-2.jpg" alt="Results-systolic.dta-2.jpg" /></p>
+
+<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code>test</code> command to perform planned comparisons</h2>
+
+<p>In Stata, once we have completed the ANOVA, we can use the <code>test</code> command to perform planned comparisons. Note two important things about the <code>test</code> command:</p>
+
+<ol>
+  <li>You can only use it <strong>after</strong> you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.</li>
+  <li>The <code>test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code>test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code>test</code> needs will not be available if you run another model.</li>
+</ol>
+
+<p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
+
+<pre><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+</code></pre>
+
+<p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
+
+<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code>1.drug</code> or <code>2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
+See if you can figure out why the following statement is equivalent</p>
+
+<pre><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+</code></pre>
+
+<p>Suppose we want to know if level 1 of drug is different from level 2.</p>
+
+<pre><code>test 1.drug = 2.drug
+</code></pre>
+
+<p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
+
+<p>We cannot reject reject the null.</p>
+
+<p>The <code>test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
 
 </div>
 

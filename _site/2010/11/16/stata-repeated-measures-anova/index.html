@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Repeated Measures ANOVA &middot; Psychstatistics
     
   </title>
 
@@ -107,41 +107,65 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Repeated Measures ANOVA</h1>
+  <span class="post-date">16 Nov 2010</span>
+  <span class="post-tags">Tags: ANOVA, Stata, and Tutorial</span>
+  <h1 id="analyzing-repeated-measures">Analyzing Repeated Measures</h1>
+<p>The example for this post comes from Warner, R.M. (2008) <em>Applied Statistics: From Bivariate to Multivariate Techniques.</em> Thousand Oaks, CA: Sage – Chapter 20. The example data come from an experiment in which a researcher examines the effects of four stress conditions on heart rate on N=24 subjects. The four stress conditions are:</p>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<ol>
+  <li>Baseline</li>
+  <li>Pain Induction</li>
+  <li>Mental Arithmetic</li>
+  <li>Social Role Play</li>
+</ol>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<p>We will consider 2 ways to analyze this data.</p>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+<ol>
+  <li>Using the built-in command <code>anova</code>.</li>
+  <li>Using the user-written command <code>wsanova</code>.</li>
+</ol>
 
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
+<p>But first let’s look at the structure of the data. The data are in “long” format (i.e., there are multiple lines of data for every person). The <code>anova</code> and <code>wsanova</code> commands expect the data to be in long format.</p>
 
-<h2 id="anova-command"><code>anova</code> Command</h2>
+<p>We can also create a table of the data using the tabdisp command.</p>
 
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>tabdisp person stress, cellvar(hr) center cellwidth(9)
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<p><img src="/assets/Stata_SE-12.0.jpg" alt="Stata_SE-12.0.jpg" /></p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<p>This shows us each person’s score in all conditions.</p>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
+<p>You can also use the table command to specify any other data you want to look at.</p>
 
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
-
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
-
-<pre><code>loneway price foreign
+<pre><code>table stress, contents(n hr mean hr sd hr)
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<p><img src="/assets/Stata_SE-12.0-1.jpg" alt="Stata_SE 12.0-1.jpg" /></p>
+
+<p>This shows us the observations, mean and standard deviation for each condition.</p>
+
+<h2 id="method-1-anova">Method 1: <code>anova</code></h2>
+
+<p>To specify a repeated measures anova using the anova command, we’ll use the repeated option. I’ve found the repeated option to be a bit confusing sometimes, because I initially thought the repeated option meant the variable for which there are multiple measures – namely, person in our example. Instead, the repeated option expects the factor on which persons were repeatedly observed. In our case, this is stress. Thus, the syntax is:</p>
+
+<pre><code>anova hr person stress, repeated(stress)
+</code></pre>
+
+<p><img src="/assets/Stata_SE-12.0-2.jpg" alt="Stata_SE-12.0-2.jpg" /></p>
+
+<p>The output at the bottom provides the corrected p-values for each of the three epsilons.</p>
+
+<h2 id="method-2-wsanova">Method 2: <code>wsanova</code></h2>
+
+<p>A second method for estimating a repeated measures anova is to use the user-written command <code>wsanova</code> (type <code>findit wsanova</code> and install after clicking “sg103”). The syntax is different and I believe it is a bit more intuitive because we specify the variable that identifies the subjects we repeatedly observe using the id option. To get the corrected p-values, we also need to specify the epsilon option.</p>
+
+<pre><code>wsanova hr stress, id(person) epsilon
+</code></pre>
+
+<p><img src="/assets/Stata_SE-12.0-3.jpg" alt="Stata_SE-12.0-3.jpg" /></p>
 
 
 </div>

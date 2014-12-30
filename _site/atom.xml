@@ -4,13 +4,489 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2014-12-29T20:58:26-07:00</updated>
+ <updated>2014-12-29T21:18:09-07:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>LKJ Priors</title>
+   <link href="psychstatistics.github.io/2104/12/27/d-lkj-priors/"/>
+   <updated>2104-12-27T00:00:00-07:00</updated>
+   <id>psychstatistics.github.io/2104/12/27/d-lkj-priors</id>
+   <content type="html">&lt;h2 id=&quot;visualizing-the-lkj-correlation-distribution&quot;&gt;Visualizing the LKJ Correlation Distribution&lt;/h2&gt;
+
+&lt;p&gt;I use multilevel models a lot. I’ve transitioned from using software like &lt;a href=&quot;http://cran.r-project.org/web/packages/lme4/index.html&quot;&gt;&lt;code&gt;lme4&lt;/code&gt;&lt;/a&gt; in R or &lt;a href=&quot;http://www.stata.com/manuals13/me.pdf&quot;&gt;&lt;code&gt;mixed&lt;/code&gt;&lt;/a&gt; in Stata, which use maximum likelihood methods, to using Bayesian software like &lt;a href=&quot;http://mc-stan.org&quot;&gt;Stan&lt;/a&gt; or &lt;a href=&quot;http://mcmc-jags.sourceforge.net&quot;&gt;JAGS&lt;/a&gt; to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.  &lt;/p&gt;
+
+&lt;p&gt;Consider a simple growth-curve model for longitudinal data.  &lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+y_{ij} = b_0 + b_1time_{ij} + u_{0j} + u_{1j}time_{ij} + e_{ij}
+&lt;/script&gt;
+
+&lt;p&gt;Where &lt;script type=&quot;math/tex&quot;&gt;b_0&lt;/script&gt; is the overall intercept, &lt;script type=&quot;math/tex&quot;&gt;b_1&lt;/script&gt; is the effect of time, &lt;script type=&quot;math/tex&quot;&gt;u_{0j}&lt;/script&gt; is a person-specific intercept, &lt;script type=&quot;math/tex&quot;&gt;u_{1j}&lt;/script&gt; is a person-specific effect of time. The &lt;script type=&quot;math/tex&quot;&gt;u&lt;/script&gt;’s are the random effects, which we typically assume follow a multivariate normal distribution:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+
+\left [\
+        \begin{array}{c}
+            u_{0j} \\
+            u_{1j}
+        \end{array}
+    \right ]\
+    \sim
+    \textrm{MVN}
+    \left [\
+        \begin{array}{c}
+            0 \\
+            0
+        \end{array}
+    \right ]\ ,
+    \left [\
+        \begin{array}{ll}
+            \sigma^2_{u0} &amp; \sigma_{u0u1} \\
+            \sigma_{u0u1} &amp; \sigma^2_{u1}
+        \end{array}
+    \right ]\  
+ %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Unfortunately, choosing a prior for the covariance matrix can be difficult and, frankly, occassionally maddening. Usually I have to use an inverse-Wishart distribution, which seems easy enough. However, they can be tricky to specify once the covariance matrix gets pretty big. Further, in software like JAGS, the multivariate normal distribution is parameterized with a precision matrix, so you have to use the Wishart distribution. Finally, it is downright hard to choose a sensible prior for a covariance matrix.&lt;/p&gt;
+
+&lt;p&gt;Wouldn’t it be great if you could choose a prior using a correlation matrix? I, and I suspsect most folks, are a little more comfortable thinking about correlations than covariances. Fortunately, the developers of the open-source Bayesian modeling program Stan have made choosing a prior for a correlation matrix reasonably straightforward by using the LKJ Correlation Density.&lt;/p&gt;
+
+&lt;p&gt;It turns out it isn’t too difficult to choose a prior for this type of model because there is just a single covariance to deal with. However, suppose we extend the model above to include a random intercept and two random slopes and we estimate the covariances between all three. A possible way to set up this model in Stan is to choose whatever prior you’d like for the variances and then use the LKJ Correlation Distribution to to provide a prior for the correlations. You would then obtain the covariances by using the appropriate variances and correlation. I’ll do another post that provides the specifics.&lt;/p&gt;
+
+&lt;p&gt;There is only a single parameter for the LKJ Distribution - &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;. When I first started using the LKJ Correlation Distribution, I didn’t know what to set &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; to and the Stan documentation didn’t initially make a lot of sense to me. Fortunately, Stan provides a random number generator for the LKJ Correlation Distribution, so it is easy to visualize the distribution using random draws for various values of &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;. The primary purpose of this post is to show how different values of &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; affect the probability of different correlations.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-the-stan-manual-says&quot;&gt;What the Stan Manual Says&lt;/h2&gt;
+
+&lt;p&gt;The Stan Manual provides the following guidance regarding &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; (page 385, Stan Manual 2.5):&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The shape parameter &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; can be interpreted like the shape parameter of a symmetric
+beta distribution.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;if &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; = 1, then the density is uniform over all correlation matrices of a given order;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;if &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; &amp;gt; 1, the identity matrix is the modal correlation matrix, with sharper peaks in the density around the identity matrix for larger &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;; and&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;if 0 &amp;lt; &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; &amp;lt; 1, the density has a trough at the identity matrix.&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;using-simulation-to-visualize-what-the-manual-means&quot;&gt;Using Simulation to Visualize What the Manual Means&lt;/h2&gt;
+
+&lt;p&gt;To see what this looks like we are going to simulate correlation matrices for &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; = .5, 1, 2, 5, 10, and 50. We’ll then plot the density of one correlation from each of the simulated matrices to see how they look. Stan requires that you input some data, so I simulated some data out of poisson distribution to fit in Stan. We don’t care about those and they could be anything.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;rstan&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;reshape2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ggplot2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;set.seed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;123&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+sim_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; rpois&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; N &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; R &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;First, I load the required libraries for this post. Then I set the seed and create the data needed to pass into Stan. &lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt; is 30 random draws from a poisson with a rate parameter = 5, &lt;script type=&quot;math/tex&quot;&gt;N&lt;/script&gt; is the sample size for the poisson data, and &lt;script type=&quot;math/tex&quot;&gt;R&lt;/script&gt; is the number of correlations we are dealing with (recall we have the correlations among the random intercept and 2 random slopes).&lt;/p&gt;
+
+&lt;h3 id=&quot;stan-model&quot;&gt;Stan Model&lt;/h3&gt;
+
+&lt;p&gt;Next I write the Stan model. The key part of this code is &lt;code&gt;generated quantities&lt;/code&gt; block. This block creates 6 correlation matrices named &lt;code&gt;Omega&lt;/code&gt;. The number after &lt;code&gt;Omega&lt;/code&gt; describes the size of &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_stan &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;data {&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  int&amp;lt;lower=0&amp;gt; N; // number of observations&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  int&amp;lt;lower=0&amp;gt; x[N]; // outcome variable&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  int R;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  }&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;parameters {&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  real lambda;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;model {&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  x ~ poisson_log(lambda);  &lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;generated quantities {&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega0;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega1;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega2;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega5;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega10;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega50;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  Omega0 &amp;lt;- lkj_corr_rng(R,.9);&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  Omega1 &amp;lt;- lkj_corr_rng(R,1);&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  Omega2 &amp;lt;- lkj_corr_rng(R,2);&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  Omega5 &amp;lt;- lkj_corr_rng(R,5);&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  Omega10 &amp;lt;- lkj_corr_rng(R,10);&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  Omega50 &amp;lt;- lkj_corr_rng(R,50);&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;using-rstan-to-fit-the-model&quot;&gt;Using rstan to fit the model&lt;/h3&gt;
+
+&lt;p&gt;Next, I fit the model in R through the &lt;code&gt;rstan&lt;/code&gt; package.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_parms &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Omega0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			   &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega5&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Omega10&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega50&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+fit_sim &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; stan&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;model_code &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_stan&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; pars &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_parms&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_data&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; chains &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; iter &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;processing-the-mcmc-draws-and-getting-them-prepped-for-ggplot&quot;&gt;Processing the MCMC draws and getting them prepped for ggplot&lt;/h3&gt;
+
+&lt;p&gt;Finally, I process the data and transform it so that I can plot the density in &lt;code&gt;ggplot2&lt;/code&gt;. &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;res_sim &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fit_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\[&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;_&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\,&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;_&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+smalldata &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; res_sim&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Omega50_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega10_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega5_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                         &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega2_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega1_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega0_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+
+smalldata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;draw &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;smalldata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;Omega50_3_1&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+plotdata &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; melt&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;smalldata&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; id &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;draw&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;variable&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+		levels &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;variable&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; 
+		label &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 50&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 10&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+			  &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+			  &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = .9&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+my.labs &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+		&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+		&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;creating-the-plot&quot;&gt;Creating the Plot&lt;/h3&gt;
+
+&lt;p&gt;Here’s the code for the plot.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;p &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; ggplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; value&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; colour &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; eta&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+p &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; geom_density&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+  scale_colour_manual&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;values&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; breaks &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;eta&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+                      labels &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; my.labs&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; name &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Shape&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+  xlab&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Correlation Value&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+  ylab&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Density&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+  ggtitle&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Visualization of a correlation from the &lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;  		   lkj_corr density in Stan \n for various &lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;		   values of the shape parameter&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+  theme_bw&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;visualizing-the-density&quot;&gt;Visualizing the Density&lt;/h3&gt;
+
+&lt;p&gt;The moment you’ve been waiting for – a plot of the density.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/lkj_prior.png&quot; alt=&quot;LKJ Density&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;These plots are consistent with what the Stan manual says:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The shape parameter &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; can be interpreted like the shape parameter of a symmetric
+beta distribution.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;if &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; = 1, then the density is uniform over all correlation matrices of a given order;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;if &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; &amp;gt; 1, the identity matrix is the modal correlation matrix, with sharper peaks in the density around the identity matrix for larger &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;; and&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;if 0 &amp;lt; &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; &amp;lt; 1, the density has a trough at the identity matrix.&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I find this helps me make better decisions about the value of &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Beginning and Advanced SEM</title>
+   <link href="psychstatistics.github.io/2013/11/13/beginning-and-advanced-sem/"/>
+   <updated>2013-11-13T21:00:01-07:00</updated>
+   <id>psychstatistics.github.io/2013/11/13/beginning-and-advanced-sem</id>
+   <content type="html">&lt;p&gt;This page provides Mplus input and output files, as well as data files, for the examples I use in the Structural Equation Modeling (SEM) workshop. I also provide a link for the lecture slides. The Mplus files and data are stored on GitHub. For any who are interested, feel free to clone the directory and improve it. I will merge changes as needed.
+You can download all the training files in .zip file here: &lt;a href=&quot;https://raw.github.com/psychstatistics/sem_training_files/master/SEM_training_examples.zip&quot;&gt;SEM Workshop Example Files&lt;/a&gt;.
+The slides for the presentation can be downloaded here:  &lt;a href=&quot;http://www.psychstatistics.com/wp-content/uploads/2013/11/SEM_ABCT_2013_morning.pdf&quot;&gt;SEM_ABCT_2013_morning&lt;/a&gt; and &lt;a href=&quot;http://www.psychstatistics.com/wp-content/uploads/2013/11/SEM_ABCT_2013_afternoon.pdf&quot;&gt;SEM_ABCT_2013_afternoon&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;power&quot;&gt;Power&lt;/h2&gt;
+
+&lt;p&gt;For power there are a ton of examples. I am going to link to a zip file with all the example in them. Please get that here: &lt;a href=&quot;https://raw.github.com/psychstatistics/sem_training_files/master/power/power_examples.zip&quot; target=&quot;_blank&quot;&gt;Power Examples Zip File&lt;/a&gt;.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Predicted Scores and Residuals in Stata</title>
+   <link href="psychstatistics.github.io/2013/10/01/predicted-scores-and-residuals-in-stata/"/>
+   <updated>2013-10-01T17:22:26-06:00</updated>
+   <id>psychstatistics.github.io/2013/10/01/predicted-scores-and-residuals-in-stata</id>
+   <content type="html">&lt;h2 id=&quot;predicted-scores-in-stata&quot;&gt;Predicted Scores in Stata&lt;/h2&gt;
+
+&lt;p&gt;As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the &lt;code&gt;auto&lt;/code&gt; dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt; mpg^\prime = b_0 + b_1weight &lt;/script&gt;
+
+&lt;pre&gt;&lt;code&gt;sysuse auto
+regress mpg weight
+      Source |       SS       df       MS              Number of obs =      74
+-------------+------------------------------           F(  1,    72) =  134.62
+       Model |   1591.9902     1   1591.9902           Prob &amp;gt; F      =  0.0000
+    Residual |  851.469256    72  11.8259619           R-squared     =  0.6515
+-------------+------------------------------           Adj R-squared =  0.6467
+       Total |  2443.45946    73  33.4720474           Root MSE      =  3.4389
+------------------------------------------------------------------------------
+         mpg |      Coef.   Std. Err.      t    P&amp;gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      weight |  -.0060087   .0005179   -11.60   0.000    -.0070411   -.0049763
+       _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
+------------------------------------------------------------------------------
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Thus, we see a negative relationship between &lt;code&gt;weight&lt;/code&gt; and &lt;code&gt;mpg&lt;/code&gt;. For every 1 unit increase in &lt;code&gt;weight&lt;/code&gt;, &lt;code&gt;mpg&lt;/code&gt; goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;predict mpg_pred		
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This creates a new variable called &lt;code&gt;mpg_pred&lt;/code&gt; with the predicted &lt;code&gt;mpg&lt;/code&gt; for all the &lt;code&gt;weight&lt;/code&gt; values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;list mpg mpg_pred in 1/20
+     +----------------+
+     | mpg   mpg_pred |
+     |----------------|
+  1. |  22   21.83483 |
+  2. |  17   19.31118 |
+  3. |  22   23.57735 |
+  4. |  20   19.91205 |
+  5. |  15   14.92484 |
+     |----------------|
+  6. |  18    17.3884 |
+  7. |  26   26.04091 |
+  8. |  20   19.73179 |
+  9. |  16   16.12658 |
+ 10. |  19   19.01075 |
+     |----------------|
+ 11. |  14   13.42267 |
+ 12. |  14    16.0064 |
+ 13. |  21   13.66302 |
+ 14. |  29   26.76196 |
+ 15. |  16   17.26823 |
+     |----------------|
+ 16. |  22   20.33266 |
+ 17. |  22   20.09231 |
+ 18. |  24    22.9164 |
+ 19. |  19   18.83049 |
+ 20. |  30   26.70187 |
+     +----------------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;residuals-in-stata&quot;&gt;Residuals in Stata&lt;/h2&gt;
+
+&lt;p&gt;Recall the a residual in regression is defined as the difference between the actual value of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; and the predicted value of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; (or &lt;script type=&quot;math/tex&quot;&gt;Y^\prime&lt;/script&gt;):&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt; Y - Y^\prime &lt;/script&gt;
+
+&lt;p&gt;Thus, to compute residuals we can just subtract &lt;code&gt;mpg_pred&lt;/code&gt; from &lt;code&gt;mpg&lt;/code&gt;. Stata will do this for us using the predict command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;predict mpg_res, residuals
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here’s 20 of the actual mpg values, 20 of the predicted values, and 20 of the residuals.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; list mpg mpg_pred mpg_res in 1/20
+     +----------------------------+
+     | mpg   mpg_pred     mpg_res |
+     |----------------------------|
+  1. |  22   21.83483    .1651688 |
+  2. |  17   19.31118   -2.311183 |
+  3. |  22   23.57735    -1.57735 |
+  4. |  20   19.91205    .0879486 |
+  5. |  15   14.92484    .0751587 |
+     |----------------------------|
+  6. |  18    17.3884    .6115971 |
+  7. |  26   26.04091   -.0409119 |
+  8. |  20   19.73179    .2682092 |
+  9. |  16   16.12658   -.1265787 |
+ 10. |  19   19.01075   -.0107484 |
+     |----------------------------|
+ 11. |  14   13.42267    .5773304 |
+ 12. |  14    16.0064   -2.006405 |
+ 13. |  21   13.66302    7.336983 |
+ 14. |  29   26.76196    2.238046 |
+ 15. |  16   17.26823   -1.268229 |
+     |----------------------------|
+ 16. |  22   20.33266    1.667341 |
+ 17. |  22   20.09231    1.907688 |
+ 18. |  24    22.9164    1.083605 |
+ 19. |  19   18.83049    .1695122 |
+ 20. |  30   26.70187    3.298132 |
+     +----------------------------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can see that the residuals are intact the difference between the first two columns. 
+Given that the residuals are the part of the &lt;code&gt;mpg&lt;/code&gt; that is unrelated to &lt;code&gt;weight&lt;/code&gt;, &lt;code&gt;mpg_res&lt;/code&gt; should be uncorrelated with &lt;code&gt;weight&lt;/code&gt;. Let’s check:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;. corr weight mpg_res
+(obs=74)
+             |   weight  mpg_res
+-------------+------------------
+      weight |   1.0000
+     mpg_res |   0.0000   1.0000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/residual_predictor_correlation.png&quot; alt=&quot;residual_predictor_correlation.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Magic!&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Resources for Power in SEM</title>
+   <link href="psychstatistics.github.io/2013/08/30/resources-for-power-in-sem/"/>
+   <updated>2013-08-30T21:07:37-06:00</updated>
+   <id>psychstatistics.github.io/2013/08/30/resources-for-power-in-sem</id>
+   <content type="html">&lt;h1 id=&quot;references-for-power-in-structural-equation-modeling&quot;&gt;References for Power in Structural Equation Modeling&lt;/h1&gt;
+
+&lt;p&gt;Kaplan, D. (1995). Statistical power in structural equation modeling. In R. H. Hoyle (Ed.), &lt;em&gt;Structural Equation Modeling: Concepts, Issues, and Applications&lt;/em&gt; (pp. 100-117). Thousand Oaks, CA: Sage.
+Kaplan, D. &amp;amp; Wegner, R. N. (1993). Asymptotic independence and separability in covariance structure models: Implications for specification error, power, and model modification. &lt;em&gt;Multivariate Behavioral Research, 28,&lt;/em&gt; 467-482.
+Loehlin, J. C. (2004). &lt;em&gt;Latent variable models: An introduction to factor, path, and structural equation analysis&lt;/em&gt; (4 ed.). Mahwah, NJ: Lawrence Erlbaum. – See Chapter 2 and Appendix
+Maccallum, R. C., Browne, M. W., &amp;amp; Sugawara, H. M. (1996). Power analysis and determination of sample size for covariance structure modeling. &lt;em&gt;Psychological Methods, 1,&lt;/em&gt; 130-149.
+Muthen, L., &amp;amp; Muthen, B. (2002). How to use a Monte Carlo study to decide on sample size and determine power. &lt;em&gt;Structural Equation Modeling, 9,&lt;/em&gt; 599-620.
+Saris, W. E., &amp;amp; Satorra, A. (1993). Power evaluations in structural equation models. In K. A. Bollen &amp;amp; J. S. Long (Eds.), &lt;em&gt;Testing Structural Equation Models&lt;/em&gt; (pp. 181-204). Newbury Park, CA: Sage.
+Satorra, A. &amp;amp; Saris, W. E. (1985). Power of the likelihood ratio test in covariance structure analysis. &lt;em&gt;Psychometrika, 50,&lt;/em&gt; 83-90.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Dummy Coding</title>
+   <link href="psychstatistics.github.io/2011/10/05/stata-dummy-coding-2/"/>
+   <updated>2011-10-05T18:55:18-06:00</updated>
+   <id>psychstatistics.github.io/2011/10/05/stata-dummy-coding-2</id>
+   <content type="html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;This post will illustrate how to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Use the generate and replace commands to create dummy variables.&lt;/li&gt;
+  &lt;li&gt;A second use of the generate command to dummy variables that is simpler that #1.&lt;/li&gt;
+  &lt;li&gt;Using tabluate to create dummy variables.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Dummy coding is used when you have nominal categories, meaning the groups are assigned a value for coding purposes, but the values don’t represent more or less of anything. For example, I might code three different categories of race and coded them as follows: Caucasian = 1, African American = 2, Hispanic = 3. The numbers are for coding purposes only, 3 is not actually any bigger or more than 1. But if we use these in a regression (or any other) analysis, the numbers will be treated as continuous - not categorical. So we need to create dummy variables. Generally, we create k-1 new groups, where k is the total number of groups, and one group is used as the reference sample, or the group we want to compare other groups to.&lt;/p&gt;
+
+&lt;p&gt;Method 1: Using &lt;code&gt;generate&lt;/code&gt; and &lt;code&gt;replace&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;We’ll use the built in system data systolic.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12_0-systolic_dta-1.jpg&quot; alt=&quot;Stata_SE-12.0-systolic.dta-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The drug variable has 4 levels.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12_0-systolic_dta-2.jpg&quot; alt=&quot;Stata_SE-12.0-systolic.dta-2.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Consequently, we’ll need to make 3 dummy coded indicator variables to represent drug. We’ll use level 4 as the reference category. We’ll use a series of generate and replace commands to create the variables. This is definitely the brute-force way to make the variables, but it makes the logic behind creating dummy variables clear.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate drug1=1 if drug==1
+replace drug1=0 if drug!=1
+generate drug2=1 if drug==2
+replace drug2=0 if drug!=2
+generate drug3=1 if drug==3
+replace drug3=0 if drug!=3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Tabulating each of the dummy variables – drug1 - drug3 – we see they match our original tabulation.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12_0-systolic_dta-3.jpg&quot; alt=&quot;Stata_SE-12.0-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Method 2: Use &lt;code&gt;generate&lt;/code&gt; only&lt;/p&gt;
+
+&lt;p&gt;We can also use a feature of the generate command to create a new variable that takes on the values 1 and 0. So, for example, if we want to create drug1, where drug1 is equal to 1 when the drug condition equals 1, we say:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate drug1=drug==1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This creates a variable that is 1 when drug equals 1 (recall that &lt;code&gt;==&lt;/code&gt; is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate drug2=drug==2
+generate drug3=drug==3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Method 3: Use the &lt;code&gt;generate&lt;/code&gt; option of &lt;code&gt;tabulate&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The function tabulate has an option called generate. The generate option takes one argument called stubname, where stubname is the stub of the new variable names created by the option. In our examples so far, the stub has been drug. Unlike the examples we have done so far, this method will create as many dummy variables as there are levels of the categorical variable (4 in our case). In our example, we type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tabulate drug, generate(drug)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We now have four new variables in our dataset – drug1-drug4.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dummy_gen_example.png&quot; alt=&quot;dummy_gen_example.png&quot; /&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Labeling & Recoding Data</title>
+   <link href="psychstatistics.github.io/2011/08/29/stata-labeling-recoding-data/"/>
+   <updated>2011-08-29T15:32:37-06:00</updated>
+   <id>psychstatistics.github.io/2011/08/29/stata-labeling-recoding-data</id>
+   <content type="html">&lt;h1 id=&quot;labeling-variables&quot;&gt;Labeling Variables&lt;/h1&gt;
+&lt;p&gt;In order to assign labels to values of your variable, you can use either the variables manager or command syntax. For example, if you wanted to assign labels to each condition, where 1 represents No treatment, 2 represents Treatment A, 3 represents Treatment B &amp;amp; 4 represents Treatment C, you could double-click on the variable manager &amp;amp; click on “condition” and then “Manage.”&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pic1.png&quot; alt=&quot;pic1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;When the Manage Value Label box appears, click “Create Labels” and it will open a new dialogue box where you can give a label name to the variable and then assign labels for particular values. After you assign all of your values, be sure to click “Apply” back in your Variables Manager window.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pic2.png&quot; alt=&quot;pic2.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To create labels using commands, you would use the &lt;code&gt;label&lt;/code&gt; command. The syntax is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;label define labelname value &quot;name&quot;
+label define cond 1 &quot;No tx&quot; 2 &quot;Tx A&quot; 3 &quot;Tx B&quot; 4 &quot;Tx C&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To apply your labels, use the &lt;code&gt;label&lt;/code&gt; command again. The syntax is &lt;code&gt;label value variable labelname&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;label value condition cond
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;recoding-data&quot;&gt;Recoding Data&lt;/h1&gt;
+
+&lt;p&gt;You will often need to recode values in your data for a number of reasons. For example, you may need to reverse-score items negatively-worded items on a measure. To do this via point and click, Go to Data -&amp;gt; Create or Change Data -&amp;gt; Other Variable Transformation Commands -&amp;gt; Recode Categorical Variable. In the Main tab, you will enter the variable(s) you want recoded and in the “Required” window, you will enter how you want them recoded. This is an example of how you might reverse score a 5-pt Likert item.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pic3.png&quot; alt=&quot;pic3.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you’re done, click “Ok”. If you want to retain your original variable and create a new variable for the reverse-scored item, go to the “Options” tab and enter the name of the new variable(s).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pic4.png&quot; alt=&quot;pic4.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It is also quick and easy to recode variables using the &lt;code&gt;recode&lt;/code&gt; command:\&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you wanted to create a new variable with the recoded values, just use the &lt;code&gt;clonevar&lt;/code&gt; command &lt;em&gt;first&lt;/em&gt;, which will create a new variable with identical values to the first one. Then run the &lt;code&gt;recode&lt;/code&gt; command on your new variable. The syntax is &lt;code&gt;clonevar newvariable = variabletoclone&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;clonevar item2_reverse = item2	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you wanted to rename your new variable later, you would simply use the &lt;code&gt;rename&lt;/code&gt; command. The syntax is &lt;code&gt;rename oldname newname&lt;/code&gt;.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Stata: Do-files and Log-files</title>
@@ -62,6 +538,228 @@ use &quot;E:\relate.dta&quot;, clear
 &lt;p&gt;I included &lt;code&gt;text&lt;/code&gt; because I want the file to be a .log file, not an .smcl file. If I wanted to overwrite a file that already existed, I would add &lt;code&gt;replace&lt;/code&gt; after &lt;code&gt;text&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;After the log file is open, typing &lt;code&gt;log off&lt;/code&gt; will suspend the log file, &lt;code&gt;log on&lt;/code&gt; will resume the log file and &lt;code&gt;log close&lt;/code&gt; will close your log file.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Reshaping Data</title>
+   <link href="psychstatistics.github.io/2011/08/17/reshaping-labeling-recoding-data/"/>
+   <updated>2011-08-17T17:33:17-06:00</updated>
+   <id>psychstatistics.github.io/2011/08/17/reshaping-labeling-recoding-data</id>
+   <content type="html">&lt;h2 id=&quot;reshaping-data&quot;&gt;Reshaping Data&lt;/h2&gt;
+
+&lt;h3 id=&quot;reshaping&quot;&gt;Reshaping&lt;/h3&gt;
+
+&lt;p&gt;You will often have to reshape your data or change the name or values of your data to analyze it more easily. First, we’ll show you how to transform your data between “long” format, where there are multiple lines of data for every person, and “wide” format, where each subject has only one row and all data is entered in columns.&lt;/p&gt;
+
+&lt;p&gt;Right now, my data is in the “wide” format, where each participant reported their mood in four conditions.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Reshaping_wideformat.png&quot; alt=&quot;Reshaping.wideformat.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the &lt;code&gt;reshape&lt;/code&gt; command, specifying that you’re reshaping to the long format. The syntax is &lt;code&gt;reshape long/wide stubname, i(i) j(j)&lt;/code&gt; where the stubname is the stub of your variables (in this case, it is “cond”), &lt;em&gt;i&lt;/em&gt; is the id variable and &lt;em&gt;j&lt;/em&gt; is the new variable you’ll create (or the existing variable if reshaping the data into wide format).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;reshape long cond, i(id) j(condition)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now my data looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Reshaping_longformat-176x300.png&quot; alt=&quot;Reshaping.longformat-176x300.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the &lt;code&gt;rename&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rename cond mood
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/rename_condition.png&quot; alt=&quot;rename.condition.png&quot; /&gt;&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Using generate to create new variables</title>
+   <link href="psychstatistics.github.io/2011/07/06/stata-using-generate-to-create-new-variables/"/>
+   <updated>2011-07-06T22:42:54-06:00</updated>
+   <id>psychstatistics.github.io/2011/07/06/stata-using-generate-to-create-new-variables</id>
+   <content type="html">&lt;h1 id=&quot;generating-new-variables&quot;&gt;Generating New Variables&lt;/h1&gt;
+&lt;p&gt;The primary method for creating new variables in Stata is the &lt;code&gt;generate&lt;/code&gt; command. Load the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;clear
+sysuse auto
+describe
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta_1.jpg&quot; alt=&quot;Results-auto.dta_1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;new-variable-from-existing-variables&quot;&gt;New Variable from Existing Variables&lt;/h2&gt;
+
+&lt;p&gt;Let’s create a new variable that is the sum of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; (ignore for the moment that summing weights and lengths doesn’t make a ton of sense). Simple with &lt;code&gt;generate&lt;/code&gt;. The syntax of &lt;code&gt;generate&lt;/code&gt; is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So to create a new variable called &lt;em&gt;weightlength&lt;/em&gt; that is the sum of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; we type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate weightlength = weight+length
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we have new variable called &lt;em&gt;weightlength&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-21.jpg&quot; alt=&quot;Results-auto.dta-21.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Suppose now that we want to create a new variable that is the square of weight.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate weight2 = weight^2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;new-variable-that-is-a-constant&quot;&gt;New Variable that is a Constant&lt;/h2&gt;
+
+&lt;p&gt;Suppose we want to create a new variable that is a constant value (this isn’t necessarily a good idea and you can use macros to store constants but using a variable can be pretty convenient too). Let’s make a new variable &lt;em&gt;x&lt;/em&gt; that is equal to 100.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate x = 100
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let’s create a new variable that is equal to the mean of weight – we’ll call it &lt;em&gt;meanweight&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize weight
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-3.jpg&quot; alt=&quot;Results-auto.dta-3.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate meanweight = 3019.459
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can also use the results of the &lt;code&gt;summarize&lt;/code&gt; command to create a mean.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Viewer-1-help-summarize-1.jpg&quot; alt=&quot;Viewer-1-help-summarize-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize weight
+generate meanweight = r(mean)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can use the &lt;code&gt;_N&lt;/code&gt; operator to create a new variable that is equal to the number of observations in a dataset.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate obs = _N
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you combine this with &lt;code&gt;by&lt;/code&gt; you can create a new variable that will be equal to the number of observations within the levels of the &lt;code&gt;by&lt;/code&gt; variable. For example, we can type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;by foreign: generate obs = _N
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will create a variable that is a constant within the levels of &lt;em&gt;foreign&lt;/em&gt;. That is, we are going to get the number of foreign cars and the number of domestic cars. If a line in the data is associated with foreign cars the new &lt;em&gt;obs&lt;/em&gt; variable will have a value of 22 and domestic cars will have a value of 52. Give it a try and see how it works.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-variable-that-is-a-random-draw-from-a-distribution&quot;&gt;New Variable that is a Random Draw from a Distribution&lt;/h2&gt;
+
+&lt;p&gt;We can create a new variable that is a random draw from a distribution. Let’s create a new variable whose values will be random draws from a normal distribution with a mean of 0 and a standard deviation of 1. The random normal generator command is &lt;code&gt;rnormal()&lt;/code&gt; (it defaults to a mean of 0 and standard deviation of 1 and it will draw as many values as there are observations in the dataset).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate random = rnormal()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;create-a-new-variable-that-indexes-the-observations&quot;&gt;Create a New Variable that Indexes the Observations&lt;/h2&gt;
+
+&lt;p&gt;You can use the &lt;code&gt;_n&lt;/code&gt; operator to create a variable that indexes the observation number.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;generate index = _n
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will create a new variable that runs from 1 to 74. You can combine this with &lt;code&gt;by&lt;/code&gt; to create an index within another variable.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;by foreign: index = _n
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will create a new variable that runs from 1 to 52 for domestic cars and 1 to 22 for foreign cars.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I’ve just touched on the ways you can create new variables. You can also use the &lt;code&gt;egen&lt;/code&gt; command to create new variables. Try new ways to create variables and be sure to read the help files.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Planned Comparisons with the test command</title>
+   <link href="psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command/"/>
+   <updated>2011-07-06T18:31:33-06:00</updated>
+   <id>psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command</id>
+   <content type="html">&lt;h1 id=&quot;planned-comparisons&quot;&gt;Planned Comparisons&lt;/h1&gt;
+
+&lt;p&gt;This post will show you how to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Run a one-way ANOVA using an independent variable with four levels.&lt;/li&gt;
+  &lt;li&gt;Use planned comparisons to contrast levels of the independent variable.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We will use the built-in dataset &lt;strong&gt;systolic&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;webuse systolic
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;examining-the-data&quot;&gt;Examining the data&lt;/h2&gt;
+
+&lt;p&gt;We will treat the &lt;em&gt;systolic&lt;/em&gt; variable as the outcome and &lt;em&gt;drug&lt;/em&gt; as the independent variable. Let’s look at descriptive statistics for &lt;em&gt;systolic&lt;/em&gt; and frequencies for &lt;em&gt;drug&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize systolic, detail
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-1.jpg&quot; alt=&quot;Results-systolic.dta-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;table drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta.jpg&quot; alt=&quot;Results-systolic.dta_.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s also look at a boxplot of systolic by drug.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph box systolic, by(drug)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/NewImage.png&quot; alt=&quot;NewImage.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Thus, it appears there are some differences between drug levels and systolic blood pressure.&lt;/p&gt;
+
+&lt;h2 id=&quot;oneway-anova&quot;&gt;Oneway ANOVA&lt;/h2&gt;
+
+&lt;p&gt;Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;anova systolic drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We reject the null hypothesis.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-2.jpg&quot; alt=&quot;Results-systolic.dta-2.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;using-the-test-command-to-perform-planned-comparisons&quot;&gt;Using the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons&lt;/h2&gt;
+
+&lt;p&gt;In Stata, once we have completed the ANOVA, we can use the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons. Note two important things about the &lt;code&gt;test&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;You can only use it &lt;strong&gt;after&lt;/strong&gt; you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.&lt;/li&gt;
+  &lt;li&gt;The &lt;code&gt;test&lt;/code&gt; command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the &lt;code&gt;test&lt;/code&gt; command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that &lt;code&gt;test&lt;/code&gt; needs will not be available if you run another model.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-3.jpg&quot; alt=&quot;Results-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We reject the null hypothesis that they are not different. Note that to reference levels of the variable &lt;em&gt;drug&lt;/em&gt; we type &lt;code&gt;1.drug&lt;/code&gt; or &lt;code&gt;2.drug&lt;/code&gt;, etc. We put the level number, then a period, then the variabl ename.
+See if you can figure out why the following statement is equivalent&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Suppose we want to know if level 1 of drug is different from level 2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test 1.drug = 2.drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-5.jpg&quot; alt=&quot;Results-systolic.dta-5.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We cannot reject reject the null.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;test&lt;/code&gt; command is really quite flexible. Fiddle around with it to better learn the syntax.&lt;/p&gt;
 </content>
  </entry>
  
@@ -226,6 +924,780 @@ id week weight grandw~t groupw~t
  </entry>
  
  <entry>
+   <title>Stata: Reading in Comma Separated Files</title>
+   <link href="psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files/"/>
+   <updated>2011-05-30T22:03:37-06:00</updated>
+   <id>psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files</id>
+   <content type="html">&lt;h1 id=&quot;reading-in-comma-separated-files&quot;&gt;Reading in Comma Separated Files&lt;/h1&gt;
+
+&lt;p&gt;This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.&lt;/p&gt;
+
+&lt;h2 id=&quot;syntax&quot;&gt;Syntax&lt;/h2&gt;
+&lt;p&gt;You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;insheet using &quot;auto.csv&quot;, comma clear
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;using auto.csv&lt;/code&gt; statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or &lt;code&gt;cd&lt;/code&gt; to the directory with the csv file. I typically include the option &lt;code&gt;comma&lt;/code&gt;. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the &lt;code&gt;insheet&lt;/code&gt; command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the &lt;code&gt;clear&lt;/code&gt; option to clear out any data that are currently in memory.&lt;/p&gt;
+
+&lt;h2 id=&quot;point-and-click&quot;&gt;Point-and-Click&lt;/h2&gt;
+
+&lt;p&gt;We can import csv files by using the &lt;strong&gt;Import&lt;/strong&gt; submenu under the &lt;strong&gt;File&lt;/strong&gt; menu. We’ll select ASCII data created by a spreadsheet under the &lt;strong&gt;Import&lt;/strong&gt; submenu.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/import_pointclick-1.jpg&quot; alt=&quot;import_pointclick-1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This will open the following dialog menu.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/insheet-Import-ASCII-data.jpg&quot; alt=&quot;insheet-Import-ASCII-data&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on &lt;strong&gt;Browse&lt;/strong&gt; to select the csv file saved on your computer. Select &lt;strong&gt;Comma-delimited data&lt;/strong&gt;. I’ve also selected &lt;strong&gt;Replace data in memory&lt;/strong&gt; to clear out any data loaded into Stata already. If you need to add variable names, you can add them in the dialog box.&lt;/p&gt;
+
+&lt;p&gt;Now your data will be read into Stata and ready to use.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Descriptive Statistics - Mean, median, variability</title>
+   <link href="psychstatistics.github.io/2011/05/30/stata-descriptive-statistics-mean-median-variability/"/>
+   <updated>2011-05-30T16:02:33-06:00</updated>
+   <id>psychstatistics.github.io/2011/05/30/stata-descriptive-statistics-mean-median-variability</id>
+   <content type="html">&lt;h2 id=&quot;descriptive-statistics&quot;&gt;Descriptive Statistics&lt;/h2&gt;
+&lt;p&gt;For this tutorial we are going to use the &lt;code&gt;auto&lt;/code&gt; dataset that comes with Stata. To load this data type&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The auto dataset has the following variables.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;describe
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/describe_stata.jpg&quot; alt=&quot;describe_stata.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Suppose we want to get some summarize statistics for price such as the mean, standard deviation, and range. We’ll use the &lt;code&gt;summarize&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize price
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/summarize_price.jpg&quot; alt=&quot;summarize_price.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s add the option &lt;code&gt;detail&lt;/code&gt; to &lt;code&gt;summarize&lt;/code&gt;. This will give us lots more information, including the median and other percentiles.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize price, detail
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/summ_detail.jpg&quot; alt=&quot;summ_detail.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;multiple-variables-at-once&quot;&gt;Multiple Variables at Once&lt;/h2&gt;
+
+&lt;p&gt;To get descriptives for multiple variables at once just add the variable names after &lt;code&gt;summarize&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize price mpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/summ_mult.jpg&quot; alt=&quot;summ_mult.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Adding the &lt;code&gt;detail&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize price mpg, detail
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/summ_mult_detail.jpg&quot; alt=&quot;summ_mult_detail.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;using-by-processing&quot;&gt;Using &lt;code&gt;by&lt;/code&gt; processing&lt;/h2&gt;
+
+&lt;p&gt;Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called &lt;code&gt;by&lt;/code&gt; processing.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;by foreign: summarize price
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/summ_by.jpg&quot; alt=&quot;summ_by.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;When using the by command, the variable of interest needs to be sorted in the data set. For example, in the previous example the variable “foreign” is already sorted within our data set. If we wanted to examine the price by mpg, we would need to sort miles per gallon. One way to sort data is using a simple sort command followed by the variable name. Stata will sort the data in ascending order by default.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sort mpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After we sort the data, we can then use the standard by mpg: command. In &lt;code&gt;by&lt;/code&gt; processing, we can also sort the data and execute the &lt;code&gt;by&lt;/code&gt; command at the same time using the &lt;code&gt;bysort&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bysort mpg: summarize price
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;by&lt;/code&gt; command can also be used in other commands, such as creating graphics. For example, if we wanted to examine histograms of mpg by the make of the car, we would use the &lt;code&gt;by&lt;/code&gt; command as an option. The make of car does not have to be sorted for this command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;histogram(mpg), by(foreign)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/histogram_by_foreign.png&quot; alt=&quot;histogram_by_foreign.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;using-if&quot;&gt;Using &lt;code&gt;if&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;by&lt;/code&gt; statement will give us descriptives for all levels of the &lt;code&gt;by&lt;/code&gt; variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the &lt;code&gt;by&lt;/code&gt; variable. We can use the &lt;code&gt;if&lt;/code&gt; statement for that. For foreign cars (i.e., &lt;code&gt;foreign == 1&lt;/code&gt;):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize price if foreign == 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/sum_if_1.jpg&quot; alt=&quot;sum_if_1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For domestic cars (i.e., &lt;code&gt;foreign == 0&lt;/code&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize price if foreign == 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/sum_if_11.jpg&quot; alt=&quot;sum_if_11.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This table is to help in determining how to specify what levels of the variable you want to use.&lt;/p&gt;
+
+&lt;table width=&quot;241&quot; border=&quot;1&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot; width=&quot;95&quot;&gt;
+&lt;h3&gt;Symbol&lt;/h3&gt;
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot; width=&quot;194&quot;&gt;
+&lt;h3&gt;Meaning&lt;/h3&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot; width=&quot;95&quot;&gt;==&lt;/td&gt;
+&lt;td valign=&quot;top&quot; width=&quot;194&quot;&gt;is or is equal to&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot; width=&quot;95&quot;&gt;!= or ~=&lt;/td&gt;
+&lt;td valign=&quot;top&quot; width=&quot;194&quot;&gt;is not or is not equal to&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot; width=&quot;95&quot;&gt;&amp;gt;&lt;/td&gt;
+&lt;td valign=&quot;top&quot; width=&quot;194&quot;&gt;is greater than&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot; width=&quot;95&quot;&gt;&amp;gt;=&lt;/td&gt;
+&lt;td valign=&quot;top&quot; width=&quot;194&quot;&gt;is greater than or equal to&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot; width=&quot;95&quot;&gt;&amp;lt;&lt;/td&gt;
+&lt;td valign=&quot;top&quot; width=&quot;194&quot;&gt;is less than&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot; width=&quot;95&quot;&gt;&amp;lt;=&lt;/td&gt;
+&lt;td valign=&quot;top&quot; width=&quot;194&quot;&gt;is less than or equal to&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot; valign=&quot;top&quot; width=&quot;289&quot;&gt;*From pg. 74 of &lt;em&gt;A Gentle Introduction to Stata&lt;/em&gt; by Alan Acock&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;using-in&quot;&gt;Using &lt;code&gt;in&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;in&lt;/code&gt; qualifier specifies a particular subset of cases based on their order in the dataset. For example, if we want to examine the mpg in the 10 least expensive cars, we would use the &lt;code&gt;in&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sort price
+summarize mpg in 1/10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/summarize_mpg_in.png&quot; alt=&quot;summarize_mpg_in.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As a helpful hint for any of these processes, if your variables are labeled (showing the label instead of the numeric value) and you need to find the numeric values to examine levels of the variable, you can use the &lt;code&gt;nolabel&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;browse, nolabel
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will show you the number values for variables. You can also find those values by double-clicking on them in the data browser.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Project Euler - Probelm #3</title>
+   <link href="psychstatistics.github.io/2011/05/29/project-euler-probelm-3/"/>
+   <updated>2011-05-29T14:53:23-06:00</updated>
+   <id>psychstatistics.github.io/2011/05/29/project-euler-probelm-3</id>
+   <content type="html">&lt;h2 id=&quot;problem-description&quot;&gt;Problem Description&lt;/h2&gt;
+
+&lt;p&gt;The prime factors of 13195 are 5, 7, 13 and 29. What is the largest prime factor of the number 600851475143?&lt;/p&gt;
+
+&lt;h2 id=&quot;python-solution&quot;&gt;Python Solution&lt;/h2&gt;
+
+&lt;p&gt;I started trying to solve this problem by writing a function for identifying prime numbers. I found an entry on Wikipedia for the “&lt;a href=&quot;http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes&quot;&gt;Sieve of Eratosthenes&lt;/a&gt;.” The entry also included Python code for implementing the sieve. I’ve reproduced an adapted version of the Wikipedia code. I had to change it because my computer ran out of memory when creating the candidate list. I had to change it so the candidate list had an upper limit of the square root of 600851475143. In any case, here is the solution with the sieve function first and then a function for actually solving the problem.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def sieve(n): 
+    fin = int(n**0.5) ##candidates below sqrt of n -- this is the upper limit
+    candidates = list(range(fin+1)) ##This is an change of the wiki code
+
+    # Loop over the candidates, marking out each multiple.
+    for i in xrange(2, fin+1): 
+        if candidates[i]:
+            candidates[2*i::i] = [None] * (fin//i - 1) 
+            ##the previous line replaces all multiples of i with None
+
+    # Filter out non-primes and return the list.
+    return [i for i in candidates[2:] if i]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;a-function-for-returning-prime-factors-of-n&quot;&gt;A function for returning prime factors of n&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;def largeprime(n):
+    for i in sieve(n):
+        if n % i == 0:
+            yield i
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;return-the-prime-factors-as-a-list-and-print-the-last-number&quot;&gt;Return the prime factors as a list and print the last number&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;div = list(largeprime(n))
+print div[-1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This solution takes .38 seconds.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Project Euler - Problem #2</title>
+   <link href="psychstatistics.github.io/2011/05/25/project-euler-problem-2/"/>
+   <updated>2011-05-25T01:54:59-06:00</updated>
+   <id>psychstatistics.github.io/2011/05/25/project-euler-problem-2</id>
+   <content type="html">&lt;h2 id=&quot;problem-description&quot;&gt;Problem Description&lt;/h2&gt;
+
+&lt;p&gt;Each new term in the Fibonacci sequence is generated by adding the previous two terms. By starting with 1 and 2, the first 10 terms will be:&lt;/p&gt;
+
+&lt;p&gt;1, 2, 3, 5, 8, 13, 21, 34, 55, 89, …&lt;/p&gt;
+
+&lt;p&gt;By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.&lt;/p&gt;
+
+&lt;h2 id=&quot;python-solution-1&quot;&gt;Python Solution 1&lt;/h2&gt;
+
+&lt;p&gt;This solution creates a function &lt;code&gt;fibon&lt;/code&gt; that takes a single argument – &lt;code&gt;maximum&lt;/code&gt;. The value of &lt;code&gt;maximum&lt;/code&gt; will be 4,000,000 in this example. The function first initializes an iterator (&lt;code&gt;i&lt;/code&gt;), a list with two entries (&lt;code&gt;fib&lt;/code&gt;), and a variable (&lt;code&gt;n&lt;/code&gt;) that will be used to tell Python when to stop the &lt;code&gt;while&lt;/code&gt; loop. The &lt;code&gt;while&lt;/code&gt; loop creates the next entry in the sequence (&lt;code&gt;fibtemp&lt;/code&gt;), makes it a list, and adds it to the &lt;code&gt;fib&lt;/code&gt; list. Then it alters the value of &lt;code&gt;n&lt;/code&gt; and adds 1 to the iterator.&lt;/p&gt;
+
+&lt;p&gt;Next it creates another empty list to hold the even numbers of the sequence (&lt;code&gt;fibeven&lt;/code&gt;). The it uses a &lt;code&gt;for&lt;/code&gt; loop over the elements of &lt;code&gt;fib&lt;/code&gt; to identify whether a particular element is even. If it is even, it adds that element to &lt;code&gt;fibeven&lt;/code&gt;. The function then returns the sum of &lt;code&gt;fibeven&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def fibon(maximum):
+    i = 2
+    fib = [1,2,]
+    n=0
+    while n &amp;amp;lt; maximum:
+        fibtemp=fib[i-2]+fib[i-1]
+        fibtemp = [fibtemp]
+        fib.extend(fibtemp)
+        n = fib[i]
+        i = i + 1
+    fibeven = []
+    for j in fib:
+        if j % 2 == 0:
+            j = [j]
+            fibeven.extend(j)
+    return sum(fibeven)
+
+print fibon(4000000)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;python-solution-2&quot;&gt;Python Solution 2&lt;/h2&gt;
+
+&lt;p&gt;This solution uses a generator function to create the sequence. You can tell it is a generator function because of the &lt;code&gt;yield&lt;/code&gt; keyword in it. Then I used NumPy arrays to process the sequence and identify the even numbers. I’ve been using NumPy quite a bit lately, so I wanted to come up with a solution that involved NumPy.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import numpy as np
+
+def fibfun(maxnum):
+    x = 0
+    y = 1
+    while x &amp;amp;lt; maxnum:
+        yield x
+        x,y = y, x+y
+
+allnum = list(fibfun(4000000))  
+npall = np.array(allnum)
+npeven = npall[np.where(npall % 2 == 0)]
+print np.sum(npeven)
+&lt;/code&gt;&lt;/pre&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Project Euler - Problem #1</title>
+   <link href="psychstatistics.github.io/2011/05/24/project-euler-problem-1/"/>
+   <updated>2011-05-24T03:24:37-06:00</updated>
+   <id>psychstatistics.github.io/2011/05/24/project-euler-problem-1</id>
+   <content type="html">&lt;h2 id=&quot;problem-description&quot;&gt;Problem Description&lt;/h2&gt;
+
+&lt;p&gt;If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23. Find the sum of all the multiples of 3 or 5 below 1000.&lt;/p&gt;
+
+&lt;h2 id=&quot;python-solution-1&quot;&gt;Python Solution #1&lt;/h2&gt;
+
+&lt;p&gt;This uses the built in &lt;code&gt;range()&lt;/code&gt; function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using &lt;code&gt;extend()&lt;/code&gt;) and identify the unique values with the &lt;code&gt;set()&lt;/code&gt; function. I also sorted them because I like it better that way.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;answer =[] # empty list
+three = range(0,1000,3) #list of multiples of 3
+five = range(0,1000,5) #list of multiples of 5
+answer.extend(three) # add three to the answer list
+answer.extend(five) #add five to the answer list
+answer.sort() #sort the list
+print sum(set(answer)) #print the sum of the unique values
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;python-solution-2&quot;&gt;Python Solution #2&lt;/h2&gt;
+
+&lt;p&gt;This solution uses a &lt;code&gt;for&lt;/code&gt; loop and take advantage of the mod operator in python – &lt;code&gt;%&lt;/code&gt; – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;answer2 = [] #empty list
+for i in range(1000): #iterate from 0 to 999 -- 1000 isn&#39;t included
+	if i % 3 == 0 or i % 5 == 0: #identify whether i is divisible by 3 or 5
+    	answer2.append(i) #if divisible, then append it to the answer2 list
+print sum(answer2) #print the sum of answer 2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will produce the correct answer. It is a bit slower than Solution #1 but both are very fast.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Introduction to the Interface</title>
+   <link href="psychstatistics.github.io/2011/04/26/stata-introduction-to-the-interface/"/>
+   <updated>2011-04-26T02:56:12-06:00</updated>
+   <id>psychstatistics.github.io/2011/04/26/stata-introduction-to-the-interface</id>
+   <content type="html">&lt;h1 id=&quot;statas-interface&quot;&gt;Stata’s Interface&lt;/h1&gt;
+&lt;p&gt;## Part 1
+&amp;lt;iframe width=&quot;640&quot; height=&quot;480&quot; src=&quot;//www.youtube.com/embed/Kh0XGoz0ppA&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+## Part 2
+&amp;lt;iframe width=&quot;640&quot; height=&quot;480&quot; src=&quot;//www.youtube.com/embed/NWRl9QRnZHI&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Scatterplots and Histograms</title>
+   <link href="psychstatistics.github.io/2011/04/23/stata-scatterplots-basic/"/>
+   <updated>2011-04-23T22:40:27-06:00</updated>
+   <id>psychstatistics.github.io/2011/04/23/stata-scatterplots-basic</id>
+   <content type="html">&lt;h1 id=&quot;scatterplots-and-histograms&quot;&gt;Scatterplots and Histograms&lt;/h1&gt;
+&lt;p&gt;In this post I’ll show you how to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create a basic scatterplot for examining the relationship between two variables.&lt;/li&gt;
+  &lt;li&gt;Add a lowess smoother to a scatterplot to help visualize the relationship between two variables.&lt;/li&gt;
+  &lt;li&gt;Create a histogram to look at your data.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;basic-scatterplots&quot;&gt;Basic Scatterplots&lt;/h2&gt;
+
+&lt;p&gt;In this post we’ll use the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/autoscatter.jpg&quot; alt=&quot;autoscatter.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-a-scatterplot&quot;&gt;Creating a Scatterplot&lt;/h2&gt;
+
+&lt;p&gt;Creating scatterplots is easy in Stata. We’ll use the &lt;code&gt;graph twoway scatter&lt;/code&gt; command (we can just type &lt;code&gt;scatter&lt;/code&gt; but I like to use the &lt;code&gt;graph twoway&lt;/code&gt; syntax to make things more consistent across graph types. We’ll visualize the relationship between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt;. When using &lt;code&gt;graph twoway scatter&lt;/code&gt; we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph twoway scatter price length, title(&quot;Scatterplot of price and length&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/scatter1.jpg&quot; alt=&quot;scatter1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;adding-a-lowess-smoother&quot;&gt;Adding a Lowess Smoother&lt;/h2&gt;
+
+&lt;p&gt;Adding the lowess smoother is easy as well. To do this we are going to append two &lt;code&gt;graph twoway&lt;/code&gt; plots. Specifically, we are going to append &lt;code&gt;scatter&lt;/code&gt; and &lt;code&gt;lowess&lt;/code&gt;. We append two plots by using double-pipes – &lt;code&gt;||&lt;/code&gt;. The pipe is found on the key directly above return or enter on most keyboards (you need to hold shift).&lt;/p&gt;
+
+&lt;p&gt;So to get the scatterplot of &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; with a lowess smoother, we type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph twoway scatter price length || lowess price length, title(&quot;Scatterplot of price and length&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/lowess1.jpg&quot; alt=&quot;lowess1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;histograms&quot;&gt;Histograms&lt;/h2&gt;
+
+&lt;p&gt;You can also use a histogram to look at your data. To create a histogram using drop-down menus, you will go to Graphics -&amp;gt; Histogram. In this dialogue box you need to specify which variable you are looking at in the “Variable” box. You can make any other changes or specifications you need within this window. For example, if I wanted to create a histogram of price, with the y-axis reflecting frequency, I would enter “price” in the “Variable” box and click on the “Frequency” option under the Y axis.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Picture-61.jpg&quot; alt=&quot;Picture-61.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To create a histogram using commands, just type “histogram (your variable).” For example, to look at miles per gallon, you would type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;histogram mpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Picture-7.png&quot; alt=&quot;Picture-7.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the &lt;code&gt;histogram&lt;/code&gt; command, including &lt;code&gt;width&lt;/code&gt; with allows you to specify bin width, &lt;code&gt;frequency&lt;/code&gt; which changes the y-axis to reflect frequency instead of density and &lt;code&gt;normal&lt;/code&gt; which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;histogram mpg, width(2) frequency normal title(mpg histogram)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Picture-11.png&quot; alt=&quot;Picture-11.png&quot; /&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Correlation and Covariance</title>
+   <link href="psychstatistics.github.io/2011/04/21/stata-correlation-and-covariance/"/>
+   <updated>2011-04-21T14:18:41-06:00</updated>
+   <id>psychstatistics.github.io/2011/04/21/stata-correlation-and-covariance</id>
+   <content type="html">&lt;h1 id=&quot;correlation-and-covariance&quot;&gt;Correlation and Covariance&lt;/h1&gt;
+&lt;p&gt;This post will illustrate how to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create a correlation matrix of variables using the &lt;a href=&quot;http://www.stata.com/help.cgi?correlate&quot;&gt;&lt;code&gt;correlate&lt;/code&gt;&lt;/a&gt; command.&lt;/li&gt;
+  &lt;li&gt;Display a correlation matrix as a covariance matrix.&lt;/li&gt;
+  &lt;li&gt;Obtain the statistical significance of a correlation using the &lt;a href=&quot;http://www.stata.com/help.cgi?pwcorr&quot;&gt;&lt;code&gt;pwcorr&lt;/code&gt;&lt;/a&gt; command.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;correlation-matrix&quot;&gt;Correlation Matrix&lt;/h2&gt;
+
+&lt;p&gt;We’ll use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this tutorial.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sysuse auto, clear 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/auto.jpg&quot; alt=&quot;auto.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We’ll create a correlation matrix of four variables – &lt;em&gt;price&lt;/em&gt;, &lt;em&gt;mpg&lt;/em&gt;, &lt;em&gt;weight&lt;/em&gt;, and &lt;em&gt;length&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;correlation price mpg weight length
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/corr.jpg&quot; alt=&quot;corr.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note: We can shorten the &lt;code&gt;correlation&lt;/code&gt; command to &lt;code&gt;corr&lt;/code&gt; for convenience.&lt;/p&gt;
+
+&lt;h2 id=&quot;covariance-matrix&quot;&gt;Covariance Matrix&lt;/h2&gt;
+
+&lt;p&gt;If we want to create of covariance matrix, we simply add the &lt;code&gt;covariance&lt;/code&gt; option to the &lt;code&gt;correlation&lt;/code&gt; command. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;correlation price mpg weigh length, covariance
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/covariance.jpg&quot; alt=&quot;covariance.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;statistical-significance-of-a-correlation&quot;&gt;Statistical Significance of a Correlation&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;correlation&lt;/code&gt; command produces a clean correlation matrix (or covariance matrix with the &lt;code&gt;covariance&lt;/code&gt; option). If we want to see the statistical significance of a correlation, we need to use the &lt;code&gt;pwcorr&lt;/code&gt; command with the &lt;code&gt;sig&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pwcorr price mpg weight length, sig
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pwcorr.jpg&quot; alt=&quot;pwcorr.jpg&quot; /&gt;&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Multiple Regression and Partial and Semipartial Correlations</title>
+   <link href="psychstatistics.github.io/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations/"/>
+   <updated>2011-04-21T05:26:12-06:00</updated>
+   <id>psychstatistics.github.io/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations</id>
+   <content type="html">&lt;h1 id=&quot;multiple-regression&quot;&gt;Multiple Regression&lt;/h1&gt;
+&lt;p&gt;This post will:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Show how to extend &lt;a href=&quot;http://www.psychstatistics.com/2011/04/19/stata-bivariate-regression/&quot;&gt;bivariate regression&lt;/a&gt; to include multiple predictor variables.&lt;/li&gt;
+  &lt;li&gt;Show how to manually create partial and semipartial correlations using residuals from a regression model.&lt;/li&gt;
+  &lt;li&gt;Show how to use the &lt;code&gt;pcorr&lt;/code&gt; command to obtain partial and semipartial correlations.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;multiple-predictors&quot;&gt;Multiple Predictors&lt;/h2&gt;
+
+&lt;p&gt;We will again use the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/autodata.jpg&quot; alt=&quot;autodata.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Suppose we want to regress &lt;em&gt;price&lt;/em&gt; on three variables – &lt;em&gt;mpg&lt;/em&gt;, &lt;em&gt;weight&lt;/em&gt;, and &lt;em&gt;foreign&lt;/em&gt;. To add three predictors, we simply add the variables we want after the dependent variable.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;regress price mpg weight foreign
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This produces the following output.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/multreg.jpg&quot; alt=&quot;multreg.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;partial-and-semipartial-correlations---manual-method&quot;&gt;Partial and Semipartial Correlations - Manual Method&lt;/h2&gt;
+
+&lt;p&gt;Recall that a partial correlation is the relationship between &lt;em&gt;x&lt;/em&gt; and &lt;em&gt;y&lt;/em&gt; once the shared variance between &lt;em&gt;x&lt;/em&gt; and &lt;em&gt;x2&lt;/em&gt; has been removed from &lt;em&gt;x&lt;/em&gt; and once the shared variance between &lt;em&gt;y&lt;/em&gt; and &lt;em&gt;x2&lt;/em&gt; has been removed from &lt;em&gt;y&lt;/em&gt;. A semipartial correlation is similar except that we only remove the shared variance between &lt;em&gt;x&lt;/em&gt; and &lt;em&gt;x2&lt;/em&gt; (i.e., &lt;em&gt;y&lt;/em&gt; remains untouched). Note: Although I’ve only referenced &lt;em&gt;x2&lt;/em&gt;, we can in principle include many control variables as our example will show.&lt;/p&gt;
+
+&lt;p&gt;Suppose we want to obtain the partial correlation between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;mpg&lt;/em&gt; controlling for &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. To do this we need the part of &lt;em&gt;price&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. We also need the part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. We can get this information with residuals.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-part-of-price-independent-of-weight-and-foreign&quot;&gt;The part of &lt;em&gt;price&lt;/em&gt; independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;To obtain the part of &lt;em&gt;price&lt;/em&gt; independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt; we regress &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;regress price weight foreign
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We then save the residuals for &lt;em&gt;price&lt;/em&gt;. We’ll call this &lt;em&gt;priceres&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;predict priceres, residuals
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We now have a new variable in our dataset called &lt;em&gt;priceres&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize priceres, detail
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/priceres.jpg&quot; alt=&quot;priceres.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-part-of-mpg-that-is-independent-of-weight-and-foreign&quot;&gt;The part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;At this point, we need to repeat what we did about except substitute &lt;em&gt;mpg&lt;/em&gt; for price. We regress &lt;em&gt;mpg&lt;/em&gt; on &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;regress mpg weight foreign
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We save the residuals for &lt;em&gt;mpg&lt;/em&gt;. We’ll call this &lt;em&gt;mpgres&lt;/em&gt; (not very original, I know).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;predict mpgres, residuals
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We now have a new variable in our dataset called &lt;em&gt;mpgres&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize mpgres, detail
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mpgres.jpg&quot; alt=&quot;mpgres.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;partial-correlation&quot;&gt;Partial correlation&lt;/h3&gt;
+
+&lt;p&gt;We know have everything we need for the partial correlation between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;mpg&lt;/em&gt; controlling for &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Specifically, we have &lt;em&gt;priceres&lt;/em&gt; – which is the part of &lt;em&gt;price&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. We also have &lt;em&gt;mpgres&lt;/em&gt; – which is the part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Therefore, to obtain the partial correlation we simply need to correlate &lt;em&gt;priceres&lt;/em&gt; and &lt;em&gt;mpgres&lt;/em&gt;. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;corr priceres mpgres
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/partialcorrelation.jpg&quot; alt=&quot;partialcorrelation.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;semipartial-correlation&quot;&gt;Semipartial correlation&lt;/h3&gt;
+
+&lt;p&gt;We also already have everything we need for the semipartial correlation. Recall that for the semipartial correlation we only remove the shared relationship between &lt;em&gt;x&lt;/em&gt; and the &lt;em&gt;x2&lt;/em&gt; (or set of covariates). We don’t do anything with &lt;em&gt;y&lt;/em&gt;. In our example &lt;em&gt;price&lt;/em&gt; is our &lt;em&gt;y&lt;/em&gt; variable. So to compute the semipartial correlation we correlate &lt;em&gt;price&lt;/em&gt; (i.e., the “untouched” &lt;em&gt;y&lt;/em&gt; variable) and &lt;em&gt;mpgres&lt;/em&gt; (i.e., the part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;corr price mpgres
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/semipartialcorrelation.jpg&quot; alt=&quot;semipartialcorrelation.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;partial-and-semipartial-correlations---pcorr&quot;&gt;Partial and Semipartial Correlations - &lt;code&gt;pcorr&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;Thankfully Stata has a built in command for computing partial and semipartial correlations – &lt;a href=&quot;http://www.stata.com/help.cgi?pcorr&quot;&gt;pcorr&lt;/a&gt;. To obtain the partial and semipartial correlations, we type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pcorr price mpg weight foreign
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that the first variable listed is considered the &lt;em&gt;y&lt;/em&gt; variable. All other variables are variables are considered &lt;em&gt;x&lt;/em&gt; variables. Stata reports as many partial and semipartial correlations as there are &lt;em&gt;x&lt;/em&gt; variables. Additionally, Stata reports the squared partial and squared semipartial correlations. These are interpreted as the proportion of shared variance between &lt;em&gt;y&lt;/em&gt; and &lt;em&gt;x&lt;/em&gt; controlling for the other &lt;em&gt;x&lt;/em&gt; variables. The partial and semipartial correlations listed for &lt;em&gt;mpg&lt;/em&gt; are the same as what we found above.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pcorr.jpg&quot; alt=&quot;pcorr.jpg&quot; /&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Bivariate Regression</title>
+   <link href="psychstatistics.github.io/2011/04/19/stata-bivariate-regression/"/>
+   <updated>2011-04-19T03:57:19-06:00</updated>
+   <id>psychstatistics.github.io/2011/04/19/stata-bivariate-regression</id>
+   <content type="html">&lt;h1 id=&quot;bivariate-regression&quot;&gt;Bivariate Regression&lt;/h1&gt;
+&lt;p&gt;In this post we’ll use the system dataset &lt;strong&gt;auto&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-1.jpg&quot; alt=&quot;Results - auto.dta-1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To estimate the model we use the &lt;code&gt;regress&lt;/code&gt; command in the command window. The &lt;code&gt;regress&lt;/code&gt; command follows the general format of &lt;code&gt;regress dv iv, options&lt;/code&gt;. Type &lt;code&gt;help regress&lt;/code&gt; or visit the online help for &lt;a href=&quot;http://www.stata.com/help.cgi?regress&quot;&gt;&lt;code&gt;regress&lt;/code&gt;&lt;/a&gt; for a description of the options available for regress. For example the regression of &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;mpg&lt;/em&gt; is estimated as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;regress price mpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-3.jpg&quot; alt=&quot;Results-auto.dta-3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The output includes:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The ANOVA source table&lt;/li&gt;
+  &lt;li&gt;Descriptive statistics and effect sizes&lt;/li&gt;
+  &lt;li&gt;Coefficients, hypothesis tests, and confidence intervals&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;standardized-coefficients&quot;&gt;Standardized Coefficients&lt;/h2&gt;
+
+&lt;p&gt;Suppose we would like Stata to report standardized coefficients. To get standardized coefficients we add the &lt;code&gt;beta&lt;/code&gt; option to our command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;regress price mpg, beta
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-4.jpg&quot; alt=&quot;Results-auto.dta-4&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;visualizing-regression-lines&quot;&gt;Visualizing Regression Lines&lt;/h2&gt;
+
+&lt;p&gt;We can visualize the relationship between two variables with a scatterplot. Stata’s graphics provide several useful commands for including regression lines on a scatterplot. We’ll discuss the &lt;code&gt;lfit&lt;/code&gt; and &lt;code&gt;lfitci&lt;/code&gt; commands.&lt;/p&gt;
+
+&lt;p&gt;To produce a scatterplot between &lt;em&gt;price&lt;/em&gt; (y-axis) and &lt;em&gt;mpg&lt;/em&gt; (x-axis), we use the &lt;code&gt;graph twoway scatter&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph twoway scatter price mpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Graph-Graph-1.jpg&quot; alt=&quot;Graph-Graph-1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s add the regression line to the plot. The &lt;code&gt;lfit&lt;/code&gt; graph command allows us to do this (&lt;code&gt;lfit&lt;/code&gt; stands for &lt;em&gt;linear&lt;/em&gt; fit). However, we don’t want the regression line in isolation. We want it on top of the scatterplot. Stata lets you combine twoway graphs in one of two ways: (1) using parentheses or (2) using pipes. To add the regression line with parentheses, we type:&amp;lt;/p&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph twoway (lfit price mpg) (scatter price mpg)	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first set of parentheses is the regression line and the second is the scatterplot. This produces the following plot:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/scatter2.jpg&quot; alt=&quot;scatter2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To add the regression line with pipes (this produces an identical plot as above), we type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph twoway lfit price mpg || scatter price mpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It can be nice to include confidence intervals on the plot. To do this we simply change the &lt;code&gt;lfit&lt;/code&gt; command to &lt;code&gt;lfitci&lt;/code&gt;, where the &lt;code&gt;ci&lt;/code&gt; refers to confidence interval.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph twoway lfitci price mpg || scatter price mpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/scatter3.jpg&quot; alt=&quot;scatter3&quot; /&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Graphing Distributions</title>
+   <link href="psychstatistics.github.io/2010/11/24/stata-graphing-distributions/"/>
+   <updated>2010-11-24T16:34:22-07:00</updated>
+   <id>psychstatistics.github.io/2010/11/24/stata-graphing-distributions</id>
+   <content type="html">&lt;h1 id=&quot;graphing-distributions&quot;&gt;Graphing Distributions&lt;/h1&gt;
+&lt;p&gt;This post will demonstrate how:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Use the `twoway function’ plotting command to visualize distributions&lt;/li&gt;
+  &lt;li&gt;Add colored shading to a graph to visualize portions of a distribution&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;the-twoway-function-command&quot;&gt;The &lt;code&gt;twoway function&lt;/code&gt; command&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;twoway function&lt;/code&gt; plotting command is used to plot functions, such as &lt;code&gt;y = mx + b&lt;/code&gt;. If we want to plot the density of a normal distribution across a range of x values, we type &lt;code&gt;y=normalden(x)&lt;/code&gt;. You can also include graphing options available to twoway plots (e.g., &lt;code&gt;xtitle&lt;/code&gt;).  &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-4 4) xtitle(&quot;{it: x}&quot;) ///
+ytitle(&quot;Density&quot;) title(&quot;Standard Normal Distribution&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stand_Normal.jpg&quot; alt=&quot;Stand_Normal.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;add-shading-to-a-figure&quot;&gt;Add Shading to a Figure&lt;/h2&gt;
+
+&lt;p&gt;Suppose we want to shade parts of a distribution above (or below) a particular critical value. For example, we can shade a normal distribution above 1.96 and below -1.96 if we want critical values for a two-tailed test with an alpha-level of .05. To do this we will draw 3 graphs.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A normal curve from -4 to -1.96&lt;/li&gt;
+  &lt;li&gt;A normal curve from -1.96 to 1.96&lt;/li&gt;
+  &lt;li&gt;A normal curve from 1.96 to 4&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, &lt;code&gt;||&lt;/code&gt;, between calls to the &lt;code&gt;twoway function&lt;/code&gt; command. We will shade the area under the curve for #1 and #3 using the &lt;code&gt;recast(area)&lt;/code&gt; option of &lt;code&gt;twoway function&lt;/code&gt;. We will assign the color of the shading to dark navy blue using the &lt;code&gt;color(dknavy)&lt;/code&gt; option. We will leave the area under the curve for #2 unshaded. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
+function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///
+function y=normalden(x), range(1.96 4) recast(area) color(dknavy) ///
+xtitle(&quot;{it: x}&quot;) ///
+ytitle(&quot;Density&quot;) title(&quot;Critial Values for Standard Normal&quot;) ///
+subtitle(&quot;Two-tailed test and {&amp;amp;alpha}=.05&quot;) ///
+legend(off) xlabel(-1.96 0 1.96)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/twotail_normal.jpg&quot; alt=&quot;twotail_normal.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can repeat for a one-tailed test.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-4 1.64) color(dknavy) || ///
+function y=normalden(x), range(1.64 4) recast(area) color(dknavy) ///
+xtitle(&quot;{it: x}&quot;) ///
+ytitle(&quot;Density&quot;) title(&quot;Critial Values for Standard Normal&quot;) ///
+subtitle(&quot;One-tailed test and {&amp;amp;alpha}=.05&quot;) ///
+legend(off) xlabel(0 1.64)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/onetailed_normal.jpg&quot; alt=&quot;onetailed_normal.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can also visualize other distributions available in Stata. Below, I provide an example of a &lt;em&gt;t&lt;/em&gt;-distribution with 20 degrees of freedom&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;twoway function y=tden(20,x), range(-2.09 2.09) color(dknavy) || ///
+function y=tden(20,x), range(-4 -2.09) recast(area) color(dknavy) || ///
+function y=tden(20,x), range(2.09 4) recast(area) color(dknavy) ///
+xtitle(&quot;{it: x}&quot;) ///
+ytitle(&quot;Density&quot;) title(&quot;Critial Values for {it: t}-distribution with 20 df&quot;) ///
+subtitle(&quot;Two-tailed test and {&amp;amp;alpha}=.05&quot;) ///
+legend(off) xlabel(-2.09 0 2.09)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/tdist20df.jpg&quot; alt=&quot;tdist20df.jpg&quot; /&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Repeated Measures ANOVA</title>
+   <link href="psychstatistics.github.io/2010/11/16/stata-repeated-measures-anova/"/>
+   <updated>2010-11-16T18:37:20-07:00</updated>
+   <id>psychstatistics.github.io/2010/11/16/stata-repeated-measures-anova</id>
+   <content type="html">&lt;h1 id=&quot;analyzing-repeated-measures&quot;&gt;Analyzing Repeated Measures&lt;/h1&gt;
+&lt;p&gt;The example for this post comes from Warner, R.M. (2008) &lt;em&gt;Applied Statistics: From Bivariate to Multivariate Techniques.&lt;/em&gt; Thousand Oaks, CA: Sage – Chapter 20. The example data come from an experiment in which a researcher examines the effects of four stress conditions on heart rate on N=24 subjects. The four stress conditions are:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Baseline&lt;/li&gt;
+  &lt;li&gt;Pain Induction&lt;/li&gt;
+  &lt;li&gt;Mental Arithmetic&lt;/li&gt;
+  &lt;li&gt;Social Role Play&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We will consider 2 ways to analyze this data.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Using the built-in command &lt;code&gt;anova&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Using the user-written command &lt;code&gt;wsanova&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;But first let’s look at the structure of the data. The data are in “long” format (i.e., there are multiple lines of data for every person). The &lt;code&gt;anova&lt;/code&gt; and &lt;code&gt;wsanova&lt;/code&gt; commands expect the data to be in long format.&lt;/p&gt;
+
+&lt;p&gt;We can also create a table of the data using the tabdisp command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tabdisp person stress, cellvar(hr) center cellwidth(9)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0.jpg&quot; alt=&quot;Stata_SE-12.0.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This shows us each person’s score in all conditions.&lt;/p&gt;
+
+&lt;p&gt;You can also use the table command to specify any other data you want to look at.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;table stress, contents(n hr mean hr sd hr)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0-1.jpg&quot; alt=&quot;Stata_SE 12.0-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This shows us the observations, mean and standard deviation for each condition.&lt;/p&gt;
+
+&lt;h2 id=&quot;method-1-anova&quot;&gt;Method 1: &lt;code&gt;anova&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;To specify a repeated measures anova using the anova command, we’ll use the repeated option. I’ve found the repeated option to be a bit confusing sometimes, because I initially thought the repeated option meant the variable for which there are multiple measures – namely, person in our example. Instead, the repeated option expects the factor on which persons were repeatedly observed. In our case, this is stress. Thus, the syntax is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;anova hr person stress, repeated(stress)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0-2.jpg&quot; alt=&quot;Stata_SE-12.0-2.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The output at the bottom provides the corrected p-values for each of the three epsilons.&lt;/p&gt;
+
+&lt;h2 id=&quot;method-2-wsanova&quot;&gt;Method 2: &lt;code&gt;wsanova&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;A second method for estimating a repeated measures anova is to use the user-written command &lt;code&gt;wsanova&lt;/code&gt; (type &lt;code&gt;findit wsanova&lt;/code&gt; and install after clicking “sg103”). The syntax is different and I believe it is a bit more intuitive because we specify the variable that identifies the subjects we repeatedly observe using the id option. To get the corrected p-values, we also need to specify the epsilon option.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wsanova hr stress, id(person) epsilon
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0-3.jpg&quot; alt=&quot;Stata_SE-12.0-3.jpg&quot; /&gt;&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
    <title>AMOS: Introduction</title>
    <link href="psychstatistics.github.io/2010/11/16/amos-introduction/"/>
    <updated>2010-11-16T04:47:22-07:00</updated>
@@ -240,6 +1712,38 @@ id week weight grandw~t groupw~t
 &lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
 
 &lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>AMOS: Multiple Group Analysis</title>
+   <link href="psychstatistics.github.io/2010/11/16/amos-multiple-group-analysis/"/>
+   <updated>2010-11-16T04:45:35-07:00</updated>
+   <id>psychstatistics.github.io/2010/11/16/amos-multiple-group-analysis</id>
+   <content type="html">&lt;h1 id=&quot;multiple-group-analysis-in-amos&quot;&gt;Multiple Group Analysis in AMOS&lt;/h1&gt;
+
+&lt;p&gt;This screencast will introduce how to perform a multiple group analysis in AMOS.&lt;/p&gt;
+
+&lt;p&gt;&lt;object width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;425&quot; height=&quot;344&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>AMOS: Model Comparisons</title>
+   <link href="psychstatistics.github.io/2010/11/16/amos-model-comparisons/"/>
+   <updated>2010-11-16T04:32:54-07:00</updated>
+   <id>psychstatistics.github.io/2010/11/16/amos-model-comparisons</id>
+   <content type="html">&lt;h1 id=&quot;model-comparisons-in-amos&quot;&gt;Model Comparisons in AMOS&lt;/h1&gt;
+
+&lt;p&gt;This two-part screencast will demonstrate how to conduct model comparisons in AMOS.&lt;/p&gt;
+
+&lt;h2 id=&quot;part-i&quot;&gt;Part I&lt;/h2&gt;
+
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
+
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
 </content>
  </entry>
  

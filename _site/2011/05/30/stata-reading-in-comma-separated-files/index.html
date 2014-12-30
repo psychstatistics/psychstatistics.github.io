@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Reading in Comma Separated Files &middot; Psychstatistics
     
   </title>
 
@@ -107,42 +107,34 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Reading in Comma Separated Files</h1>
+  <span class="post-date">30 May 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorials</span>
+  <h1 id="reading-in-comma-separated-files">Reading in Comma Separated Files</h1>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<p>This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.</p>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<h2 id="syntax">Syntax</h2>
+<p>You can import csv files using the <code>insheet</code> command.</p>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
-
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
-
-<h2 id="anova-command"><code>anova</code> Command</h2>
-
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>insheet using "auto.csv", comma clear
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<p>The <code>using auto.csv</code> statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or <code>cd</code> to the directory with the csv file. I typically include the option <code>comma</code>. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the <code>insheet</code> command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the <code>clear</code> option to clear out any data that are currently in memory.</p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<h2 id="point-and-click">Point-and-Click</h2>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
+<p>We can import csv files by using the <strong>Import</strong> submenu under the <strong>File</strong> menu. We’ll select ASCII data created by a spreadsheet under the <strong>Import</strong> submenu.</p>
 
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
+<p><img src="/assets/import_pointclick-1.jpg" alt="import_pointclick-1" /></p>
 
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
+<p>This will open the following dialog menu.</p>
 
-<pre><code>loneway price foreign
-</code></pre>
+<p><img src="/assets/insheet-Import-ASCII-data.jpg" alt="insheet-Import-ASCII-data" /></p>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<p>Click on <strong>Browse</strong> to select the csv file saved on your computer. Select <strong>Comma-delimited data</strong>. I’ve also selected <strong>Replace data in memory</strong> to clear out any data loaded into Stata already. If you need to add variable names, you can add them in the dialog box.</p>
 
+<p>Now your data will be read into Stata and ready to use.</p>
 
 </div>
 

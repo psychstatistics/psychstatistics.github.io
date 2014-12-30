@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Labeling & Recoding Data &middot; Psychstatistics
     
   </title>
 
@@ -107,42 +107,50 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Labeling & Recoding Data</h1>
+  <span class="post-date">29 Aug 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="labeling-variables">Labeling Variables</h1>
+<p>In order to assign labels to values of your variable, you can use either the variables manager or command syntax. For example, if you wanted to assign labels to each condition, where 1 represents No treatment, 2 represents Treatment A, 3 represents Treatment B &amp; 4 represents Treatment C, you could double-click on the variable manager &amp; click on “condition” and then “Manage.”</p>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<p><img src="/assets/pic1.png" alt="pic1.png" /></p>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<p>When the Manage Value Label box appears, click “Create Labels” and it will open a new dialogue box where you can give a label name to the variable and then assign labels for particular values. After you assign all of your values, be sure to click “Apply” back in your Variables Manager window.</p>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+<p><img src="/assets/pic2.png" alt="pic2.png" /></p>
 
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
+<p>To create labels using commands, you would use the <code>label</code> command. The syntax is:</p>
 
-<h2 id="anova-command"><code>anova</code> Command</h2>
-
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>label define labelname value "name"
+label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<p>To apply your labels, use the <code>label</code> command again. The syntax is <code>label value variable labelname</code></p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
-
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
-
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
-
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
-
-<pre><code>loneway price foreign
+<pre><code>label value condition cond
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<h1 id="recoding-data">Recoding Data</h1>
 
+<p>You will often need to recode values in your data for a number of reasons. For example, you may need to reverse-score items negatively-worded items on a measure. To do this via point and click, Go to Data -&gt; Create or Change Data -&gt; Other Variable Transformation Commands -&gt; Recode Categorical Variable. In the Main tab, you will enter the variable(s) you want recoded and in the “Required” window, you will enter how you want them recoded. This is an example of how you might reverse score a 5-pt Likert item.</p>
+
+<p><img src="/assets/pic3.png" alt="pic3.png" /></p>
+
+<p>If you’re done, click “Ok”. If you want to retain your original variable and create a new variable for the reverse-scored item, go to the “Options” tab and enter the name of the new variable(s).</p>
+
+<p><img src="/assets/pic4.png" alt="pic4.png" /></p>
+
+<p>It is also quick and easy to recode variables using the <code>recode</code> command:\</p>
+
+<pre><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+</code></pre>
+
+<p>If you wanted to create a new variable with the recoded values, just use the <code>clonevar</code> command <em>first</em>, which will create a new variable with identical values to the first one. Then run the <code>recode</code> command on your new variable. The syntax is <code>clonevar newvariable = variabletoclone</code></p>
+
+<pre><code>clonevar item2_reverse = item2	
+</code></pre>
+
+<p>If you wanted to rename your new variable later, you would simply use the <code>rename</code> command. The syntax is <code>rename oldname newname</code>.</p>
 
 </div>
 

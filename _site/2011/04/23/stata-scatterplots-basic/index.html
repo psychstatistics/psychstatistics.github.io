@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Scatterplots and Histograms &middot; Psychstatistics
     
   </title>
 
@@ -107,42 +107,66 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Scatterplots and Histograms</h1>
+  <span class="post-date">23 Apr 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="scatterplots-and-histograms">Scatterplots and Histograms</h1>
+<p>In this post I’ll show you how to:</p>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<ol>
+  <li>Create a basic scatterplot for examining the relationship between two variables.</li>
+  <li>Add a lowess smoother to a scatterplot to help visualize the relationship between two variables.</li>
+  <li>Create a histogram to look at your data.</li>
+</ol>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<h2 id="basic-scatterplots">Basic Scatterplots</h2>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+<p>In this post we’ll use the <strong>auto</strong> dataset.</p>
 
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
-
-<h2 id="anova-command"><code>anova</code> Command</h2>
-
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>sysuse auto, clear
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<p><img src="/assets/autoscatter.jpg" alt="autoscatter.jpg" /></p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<h2 id="creating-a-scatterplot">Creating a Scatterplot</h2>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
+<p>Creating scatterplots is easy in Stata. We’ll use the <code>graph twoway scatter</code> command (we can just type <code>scatter</code> but I like to use the <code>graph twoway</code> syntax to make things more consistent across graph types. We’ll visualize the relationship between <em>price</em> and <em>length</em>. When using <code>graph twoway scatter</code> we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.</p>
 
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
-
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
-
-<pre><code>loneway price foreign
+<pre><code>graph twoway scatter price length, title("Scatterplot of price and length")
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<p><img src="/assets/scatter1.jpg" alt="scatter1.jpg" /></p>
 
+<h2 id="adding-a-lowess-smoother">Adding a Lowess Smoother</h2>
+
+<p>Adding the lowess smoother is easy as well. To do this we are going to append two <code>graph twoway</code> plots. Specifically, we are going to append <code>scatter</code> and <code>lowess</code>. We append two plots by using double-pipes – <code>||</code>. The pipe is found on the key directly above return or enter on most keyboards (you need to hold shift).</p>
+
+<p>So to get the scatterplot of <em>price</em> and <em>length</em> with a lowess smoother, we type:</p>
+
+<pre><code>graph twoway scatter price length || lowess price length, title("Scatterplot of price and length")
+</code></pre>
+
+<p><img src="/assets/lowess1.jpg" alt="lowess1.jpg" /></p>
+
+<h2 id="histograms">Histograms</h2>
+
+<p>You can also use a histogram to look at your data. To create a histogram using drop-down menus, you will go to Graphics -&gt; Histogram. In this dialogue box you need to specify which variable you are looking at in the “Variable” box. You can make any other changes or specifications you need within this window. For example, if I wanted to create a histogram of price, with the y-axis reflecting frequency, I would enter “price” in the “Variable” box and click on the “Frequency” option under the Y axis.</p>
+
+<p><img src="/assets/Picture-61.jpg" alt="Picture-61.jpg" /></p>
+
+<p>To create a histogram using commands, just type “histogram (your variable).” For example, to look at miles per gallon, you would type:</p>
+
+<pre><code>histogram mpg
+</code></pre>
+
+<p><img src="/assets/Picture-7.png" alt="Picture-7.png" /></p>
+
+<p>Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the <code>histogram</code> command, including <code>width</code> with allows you to specify bin width, <code>frequency</code> which changes the y-axis to reflect frequency instead of density and <code>normal</code> which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.</p>
+
+<pre><code>histogram mpg, width(2) frequency normal title(mpg histogram)
+</code></pre>
+
+<p><img src="/assets/Picture-11.png" alt="Picture-11.png" /></p>
 
 </div>
 

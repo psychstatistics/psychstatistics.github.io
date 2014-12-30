@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Graphing Distributions &middot; Psychstatistics
     
   </title>
 
@@ -107,42 +107,74 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Graphing Distributions</h1>
+  <span class="post-date">24 Nov 2010</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="graphing-distributions">Graphing Distributions</h1>
+<p>This post will demonstrate how:</p>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<ol>
+  <li>Use the `twoway function’ plotting command to visualize distributions</li>
+  <li>Add colored shading to a graph to visualize portions of a distribution</li>
+</ol>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<h2 id="the-twoway-function-command">The <code>twoway function</code> command</h2>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+<p>The <code>twoway function</code> plotting command is used to plot functions, such as <code>y = mx + b</code>. If we want to plot the density of a normal distribution across a range of x values, we type <code>y=normalden(x)</code>. You can also include graphing options available to twoway plots (e.g., <code>xtitle</code>).  </p>
 
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
-
-<h2 id="anova-command"><code>anova</code> Command</h2>
-
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>twoway function y=normalden(x), range(-4 4) xtitle("{it: x}") ///
+ytitle("Density") title("Standard Normal Distribution")
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<p><img src="/assets/Stand_Normal.jpg" alt="Stand_Normal.jpg" /></p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<h2 id="add-shading-to-a-figure">Add Shading to a Figure</h2>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
+<p>Suppose we want to shade parts of a distribution above (or below) a particular critical value. For example, we can shade a normal distribution above 1.96 and below -1.96 if we want critical values for a two-tailed test with an alpha-level of .05. To do this we will draw 3 graphs.</p>
 
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
+<ol>
+  <li>A normal curve from -4 to -1.96</li>
+  <li>A normal curve from -1.96 to 1.96</li>
+  <li>A normal curve from 1.96 to 4</li>
+</ol>
 
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
+<p>The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, <code>||</code>, between calls to the <code>twoway function</code> command. We will shade the area under the curve for #1 and #3 using the <code>recast(area)</code> option of <code>twoway function</code>. We will assign the color of the shading to dark navy blue using the <code>color(dknavy)</code> option. We will leave the area under the curve for #2 unshaded. </p>
 
-<pre><code>loneway price foreign
+<pre><code>twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
+function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///
+function y=normalden(x), range(1.96 4) recast(area) color(dknavy) ///
+xtitle("{it: x}") ///
+ytitle("Density") title("Critial Values for Standard Normal") ///
+subtitle("Two-tailed test and {&amp;alpha}=.05") ///
+legend(off) xlabel(-1.96 0 1.96)
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<p><img src="/assets/twotail_normal.jpg" alt="twotail_normal.jpg" /></p>
 
+<p>We can repeat for a one-tailed test.</p>
+
+<pre><code>twoway function y=normalden(x), range(-4 1.64) color(dknavy) || ///
+function y=normalden(x), range(1.64 4) recast(area) color(dknavy) ///
+xtitle("{it: x}") ///
+ytitle("Density") title("Critial Values for Standard Normal") ///
+subtitle("One-tailed test and {&amp;alpha}=.05") ///
+legend(off) xlabel(0 1.64)
+</code></pre>
+
+<p><img src="/assets/onetailed_normal.jpg" alt="onetailed_normal.jpg" /></p>
+
+<p>We can also visualize other distributions available in Stata. Below, I provide an example of a <em>t</em>-distribution with 20 degrees of freedom</p>
+
+<pre><code>twoway function y=tden(20,x), range(-2.09 2.09) color(dknavy) || ///
+function y=tden(20,x), range(-4 -2.09) recast(area) color(dknavy) || ///
+function y=tden(20,x), range(2.09 4) recast(area) color(dknavy) ///
+xtitle("{it: x}") ///
+ytitle("Density") title("Critial Values for {it: t}-distribution with 20 df") ///
+subtitle("Two-tailed test and {&amp;alpha}=.05") ///
+legend(off) xlabel(-2.09 0 2.09)
+</code></pre>
+
+<p><img src="/assets/tdist20df.jpg" alt="tdist20df.jpg" /></p>
 
 </div>
 

@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Reshaping Data &middot; Psychstatistics
     
   </title>
 
@@ -107,41 +107,34 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Reshaping Data</h1>
+  <span class="post-date">17 Aug 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h2 id="reshaping-data">Reshaping Data</h2>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<h3 id="reshaping">Reshaping</h3>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<p>You will often have to reshape your data or change the name or values of your data to analyze it more easily. First, we’ll show you how to transform your data between “long” format, where there are multiple lines of data for every person, and “wide” format, where each subject has only one row and all data is entered in columns.</p>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+<p>Right now, my data is in the “wide” format, where each participant reported their mood in four conditions.</p>
 
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
+<p><img src="/assets/Reshaping_wideformat.png" alt="Reshaping.wideformat.png" /></p>
 
-<h2 id="anova-command"><code>anova</code> Command</h2>
+<p>However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the <code>reshape</code> command, specifying that you’re reshaping to the long format. The syntax is <code>reshape long/wide stubname, i(i) j(j)</code> where the stubname is the stub of your variables (in this case, it is “cond”), <em>i</em> is the id variable and <em>j</em> is the new variable you’ll create (or the existing variable if reshaping the data into wide format).</p>
 
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>reshape long cond, i(id) j(condition)
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<p>Now my data looks like this:</p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<p><img src="/assets/Reshaping_longformat-176x300.png" alt="Reshaping.longformat-176x300.png" /></p>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
+<p>Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the <code>rename</code> command.</p>
 
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
-
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
-
-<pre><code>loneway price foreign
+<pre><code>rename cond mood
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<p><img src="/assets/rename_condition.png" alt="rename.condition.png" /></p>
 
 
 </div>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Blog &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/07/01/stata-oneway-anova/">
+        Stata: Oneway ANOVA
+      </a>
+    </h1>
+
+    <span class="post-date">01 Jul 2011</span>
+    <h1 id="oneway-anova">Oneway ANOVA</h1>
+
+<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
+We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+
+<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+
+<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+
+<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
+
+<h2 id="anova-command"><code>anova</code> Command</h2>
+
+<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
+
+<pre><code>anova price foreign
+</code></pre>
+
+<p>Viola – you’ve got an ANOVA source table.</p>
+
+<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+
+<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
+
+<h2 id="loneway-command"><code>loneway</code> Command</h2>
+
+<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
+
+<pre><code>loneway price foreign
+</code></pre>
+
+<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/05/30/things-i-love-about-stata-egen-mean/">
+        Things I Love About Stata -- egen mean
+      </a>
+    </h1>
+
+    <span class="post-date">30 May 2011</span>
+    <h1 id="egen-mean">egen mean</h1>
+
+<p>I work a lot with clustered data, including group psychotherapy data (people clustered in groups), individual psychotherapy data (people clustered within therapists), and longitudinal data (observations clustered within people). Consequently, I often need to create cluster-level means and grand means for graphing and modeling. The <code>egen mean</code> function makes creating means easy. Combining <code>egen mean</code> with <code>by</code> processing in Stata makes this a breeze, even when cluster sizes differ.</p>
+
+<h2 id="egen-mean-for-grand-means"><code>egen mean</code> for grand means</h2>
+
+<p>The <code>egen</code> function is used to create new variables. To create a mean with <code>egen</code> we use the following syntax:</p>
+
+<pre><code>egen nameofnewvariable=mean(nameofoldvariable)
+</code></pre>
+
+<p>We can download the the pig data from the <code>xtmixed</code> help.</p>
+
+<pre><code>webuse pig, clear
+</code></pre>
+
+<p>The variables are <strong>id</strong>, <strong>week</strong>, and <strong>weight</strong>.</p>
+
+<pre><code>list in 1/15, clean
+id week weight
+1. 1 1 24
+2. 1 2 32
+3. 1 3 39
+4. 1 4 42.5
+5. 1 5 48
+6. 1 6 54.5
+7. 1 7 61
+8. 1 8 65
+9. 1 9 72
+10. 2 1 22.5
+11. 2 2 30.5
+12. 2 3 40.5
+13. 2 4 45
+14. 2 5 51
+15. 2 6 58.5
+</code></pre>
+
+<p>We can create a grand mean (say, for creating centered variables) of <strong>weight</strong> using <code>egen</code>.</p>
+
+<pre><code>egen grandweight=mean(weight)
+</code></pre>
+
+<p>This creates a new variable that is equal to the grand mean for weight (it is a constant across all variables)</p>
+
+<pre><code>list in 1/15, clean
+id week weight grandw~t
+1. 1 1 24 50.40509
+2. 1 2 32 50.40509
+3. 1 3 39 50.40509
+4. 1 4 42.5 50.40509
+5. 1 5 48 50.40509
+6. 1 6 54.5 50.40509
+7. 1 7 61 50.40509
+8. 1 8 65 50.40509
+9. 1 9 72 50.40509
+10. 2 1 22.5 50.40509
+11. 2 2 30.5 50.40509
+12. 2 3 40.5 50.40509
+13. 2 4 45 50.40509
+14. 2 5 51 50.40509
+15. 2 6 58.5 50.40509
+</code></pre>
+
+<h2 id="egen-mean-for-cluster-means"><code>egen mean</code> for cluster means</h2>
+
+<p>We can combine <code>egen mean</code> with <code>by</code> to compute cluster means. (Remember that <strong>id</strong> is the cluster id variable.)</p>
+
+<pre><code>by id: egen groupweight=mean(weight)
+</code></pre>
+
+<p>If the <strong>id</strong> variable isn’t sorted, then you can change the code to:</p>
+
+<pre><code>by id, sort: egen groupweight=mean(weight)
+</code></pre>
+
+<p>This creates a variable that is equal to the cluster mean for each cluster. That is, its value is constant within clusters but varies across clusters.</p>
+
+<pre><code>list in 1/15, clean
+id week weight grandw~t groupw~t
+1. 1 1 24 50.40509 48.66667
+2. 1 2 32 50.40509 48.66667
+3. 1 3 39 50.40509 48.66667
+4. 1 4 42.5 50.40509 48.66667
+5. 1 5 48 50.40509 48.66667
+6. 1 6 54.5 50.40509 48.66667
+7. 1 7 61 50.40509 48.66667
+8. 1 8 65 50.40509 48.66667
+9. 1 9 72 50.40509 48.66667
+10. 2 1 22.5 50.40509 51.33333
+11. 2 2 30.5 50.40509 51.33333
+12. 2 3 40.5 50.40509 51.33333
+13. 2 4 45 50.40509 51.33333
+14. 2 5 51 50.40509 51.33333
+15. 2 6 58.5 50.40509 51.33333
+</code></pre>
+
+<h2 id="looking-at-missing-data">Looking at missing data</h2>
+
+<p>You can also use <code>egen</code> to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use <code>egen</code> combined with <code>rowmiss</code> to create a missing variable to examine this:</p>
+
+<pre><code>egen missing = rowmiss(weight weight2)
+</code></pre>
+
+<p>Then you can use the tabulate command to identify if any values are missing:</p>
+
+<pre><code>tabulate missing
+</code></pre>
+
+<p><img src="/assets/tabulate_missing1.png" alt="tabulate.missing1.png" /></p>
+
+<p>Take a look at the other functions of <code>egen</code>–they’re remarkably useful.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/05/30/stata-reading-in-comma-separated-files/">
+        Stata: Reading in Comma Separated Files
+      </a>
+    </h1>
+
+    <span class="post-date">30 May 2011</span>
+    <h1 id="reading-in-comma-separated-files">Reading in Comma Separated Files</h1>
+
+<p>This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.</p>
+
+<h2 id="syntax">Syntax</h2>
+<p>You can import csv files using the <code>insheet</code> command.</p>
+
+<pre><code>insheet using "auto.csv", comma clear
+</code></pre>
+
+<p>The <code>using auto.csv</code> statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or <code>cd</code> to the directory with the csv file. I typically include the option <code>comma</code>. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the <code>insheet</code> command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the <code>clear</code> option to clear out any data that are currently in memory.</p>
+
+<h2 id="point-and-click">Point-and-Click</h2>
+
+<p>We can import csv files by using the <strong>Import</strong> submenu under the <strong>File</strong> menu. We’ll select ASCII data created by a spreadsheet under the <strong>Import</strong> submenu.</p>
+
+<p><img src="/assets/import_pointclick-1.jpg" alt="import_pointclick-1" /></p>
+
+<p>This will open the following dialog menu.</p>
+
+<p><img src="/assets/insheet-Import-ASCII-data.jpg" alt="insheet-Import-ASCII-data" /></p>
+
+<p>Click on <strong>Browse</strong> to select the csv file saved on your computer. Select <strong>Comma-delimited data</strong>. I’ve also selected <strong>Replace data in memory</strong> to clear out any data loaded into Stata already. If you need to add variable names, you can add them in the dialog box.</p>
+
+<p>Now your data will be read into Stata and ready to use.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/05/30/stata-descriptive-statistics-mean-median-variability/">
+        Stata: Descriptive Statistics - Mean, median, variability
+      </a>
+    </h1>
+
+    <span class="post-date">30 May 2011</span>
+    <h2 id="descriptive-statistics">Descriptive Statistics</h2>
+<p>For this tutorial we are going to use the <code>auto</code> dataset that comes with Stata. To load this data type</p>
+
+<pre><code>sysuse auto, clear
+</code></pre>
+
+<p>The auto dataset has the following variables.</p>
+
+<pre><code>describe
+</code></pre>
+
+<p><img src="/assets/describe_stata.jpg" alt="describe_stata.jpg" /></p>
+
+<p>Suppose we want to get some summarize statistics for price such as the mean, standard deviation, and range. We’ll use the <code>summarize</code> command.</p>
+
+<pre><code>summarize price
+</code></pre>
+
+<p><img src="/assets/summarize_price.jpg" alt="summarize_price.jpg" /></p>
+
+<p>Now let’s add the option <code>detail</code> to <code>summarize</code>. This will give us lots more information, including the median and other percentiles.</p>
+
+<pre><code>summarize price, detail
+</code></pre>
+
+<p><img src="/assets/summ_detail.jpg" alt="summ_detail.jpg" /></p>
+
+<h2 id="multiple-variables-at-once">Multiple Variables at Once</h2>
+
+<p>To get descriptives for multiple variables at once just add the variable names after <code>summarize</code>.</p>
+
+<pre><code>summarize price mpg
+</code></pre>
+
+<p><img src="/assets/summ_mult.jpg" alt="summ_mult.jpg" /></p>
+
+<p>Adding the <code>detail</code> option.</p>
+
+<pre><code>summarize price mpg, detail
+</code></pre>
+
+<p><img src="/assets/summ_mult_detail.jpg" alt="summ_mult_detail.jpg" /></p>
+
+<h2 id="using-by-processing">Using <code>by</code> processing</h2>
+
+<p>Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called <code>by</code> processing.</p>
+
+<pre><code>by foreign: summarize price
+</code></pre>
+
+<p><img src="/assets/summ_by.jpg" alt="summ_by.jpg" /></p>
+
+<p>When using the by command, the variable of interest needs to be sorted in the data set. For example, in the previous example the variable “foreign” is already sorted within our data set. If we wanted to examine the price by mpg, we would need to sort miles per gallon. One way to sort data is using a simple sort command followed by the variable name. Stata will sort the data in ascending order by default.</p>
+
+<pre><code>sort mpg
+</code></pre>
+
+<p>After we sort the data, we can then use the standard by mpg: command. In <code>by</code> processing, we can also sort the data and execute the <code>by</code> command at the same time using the <code>bysort</code> command:</p>
+
+<pre><code>bysort mpg: summarize price
+</code></pre>
+
+<p>The <code>by</code> command can also be used in other commands, such as creating graphics. For example, if we wanted to examine histograms of mpg by the make of the car, we would use the <code>by</code> command as an option. The make of car does not have to be sorted for this command.</p>
+
+<pre><code>histogram(mpg), by(foreign)
+</code></pre>
+
+<p><img src="/assets/histogram_by_foreign.png" alt="histogram_by_foreign.png" /></p>
+
+<h2 id="using-if">Using <code>if</code></h2>
+
+<p>The <code>by</code> statement will give us descriptives for all levels of the <code>by</code> variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the <code>by</code> variable. We can use the <code>if</code> statement for that. For foreign cars (i.e., <code>foreign == 1</code>):</p>
+
+<pre><code>summarize price if foreign == 1
+</code></pre>
+
+<p><img src="/assets/sum_if_1.jpg" alt="sum_if_1.jpg" /></p>
+
+<p>For domestic cars (i.e., <code>foreign == 0</code>)</p>
+
+<pre><code>summarize price if foreign == 0
+</code></pre>
+
+<p><img src="/assets/sum_if_11.jpg" alt="sum_if_11.jpg" /></p>
+
+<p>This table is to help in determining how to specify what levels of the variable you want to use.</p>
+
+<table width="241" border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="95">
+<h3>Symbol</h3>
+</td>
+<td valign="top" width="194">
+<h3>Meaning</h3>
+</td>
+</tr>
+<tr>
+<td valign="top" width="95">==</td>
+<td valign="top" width="194">is or is equal to</td>
+</tr>
+<tr>
+<td valign="top" width="95">!= or ~=</td>
+<td valign="top" width="194">is not or is not equal to</td>
+</tr>
+<tr>
+<td valign="top" width="95">&gt;</td>
+<td valign="top" width="194">is greater than</td>
+</tr>
+<tr>
+<td valign="top" width="95">&gt;=</td>
+<td valign="top" width="194">is greater than or equal to</td>
+</tr>
+<tr>
+<td valign="top" width="95">&lt;</td>
+<td valign="top" width="194">is less than</td>
+</tr>
+<tr>
+<td valign="top" width="95">&lt;=</td>
+<td valign="top" width="194">is less than or equal to</td>
+</tr>
+<tr>
+<td colspan="2" valign="top" width="289">*From pg. 74 of <em>A Gentle Introduction to Stata</em> by Alan Acock</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="using-in">Using <code>in</code></h2>
+
+<p>The <code>in</code> qualifier specifies a particular subset of cases based on their order in the dataset. For example, if we want to examine the mpg in the 10 least expensive cars, we would use the <code>in</code> command.</p>
+
+<pre><code>sort price
+summarize mpg in 1/10
+</code></pre>
+
+<p><img src="/assets/summarize_mpg_in.png" alt="summarize_mpg_in.png" /></p>
+
+<p>As a helpful hint for any of these processes, if your variables are labeled (showing the label instead of the numeric value) and you need to find the numeric values to examine levels of the variable, you can use the <code>nolabel</code> option.</p>
+
+<pre><code>browse, nolabel
+</code></pre>
+
+<p>This will show you the number values for variables. You can also find those values by double-clicking on them in the data browser.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/05/29/project-euler-probelm-3/">
+        Project Euler - Probelm #3
+      </a>
+    </h1>
+
+    <span class="post-date">29 May 2011</span>
+    <h2 id="problem-description">Problem Description</h2>
+
+<p>The prime factors of 13195 are 5, 7, 13 and 29. What is the largest prime factor of the number 600851475143?</p>
+
+<h2 id="python-solution">Python Solution</h2>
+
+<p>I started trying to solve this problem by writing a function for identifying prime numbers. I found an entry on Wikipedia for the “<a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>.” The entry also included Python code for implementing the sieve. I’ve reproduced an adapted version of the Wikipedia code. I had to change it because my computer ran out of memory when creating the candidate list. I had to change it so the candidate list had an upper limit of the square root of 600851475143. In any case, here is the solution with the sieve function first and then a function for actually solving the problem.</p>
+
+<pre><code>def sieve(n): 
+    fin = int(n**0.5) ##candidates below sqrt of n -- this is the upper limit
+    candidates = list(range(fin+1)) ##This is an change of the wiki code
+
+    # Loop over the candidates, marking out each multiple.
+    for i in xrange(2, fin+1): 
+        if candidates[i]:
+            candidates[2*i::i] = [None] * (fin//i - 1) 
+            ##the previous line replaces all multiples of i with None
+
+    # Filter out non-primes and return the list.
+    return [i for i in candidates[2:] if i]
+</code></pre>
+
+<h2 id="a-function-for-returning-prime-factors-of-n">A function for returning prime factors of n</h2>
+<pre><code>def largeprime(n):
+    for i in sieve(n):
+        if n % i == 0:
+            yield i
+</code></pre>
+
+<h2 id="return-the-prime-factors-as-a-list-and-print-the-last-number">Return the prime factors as a list and print the last number</h2>
+
+<pre><code>div = list(largeprime(n))
+print div[-1]
+</code></pre>
+
+<p>This solution takes .38 seconds.</p>
+
+  </div>
+  
+</div>
+
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/blog/page4/">Older</a>
+  
+  
+    
+      <a class="/blog/page2/">Newer</a>
+    
+  
+</div>
+	  	
+
+    </div>
+
+  </body>
+</html>

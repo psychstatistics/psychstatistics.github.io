@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Stata: Multiple Regression and Partial and Semipartial Correlations &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Stata: Multiple Regression and Partial and Semipartial Correlations</h1>
+  <span class="post-date">21 Apr 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="multiple-regression">Multiple Regression</h1>
+<p>This post will:</p>
+
+<ol>
+  <li>Show how to extend <a href="http://www.psychstatistics.com/2011/04/19/stata-bivariate-regression/">bivariate regression</a> to include multiple predictor variables.</li>
+  <li>Show how to manually create partial and semipartial correlations using residuals from a regression model.</li>
+  <li>Show how to use the <code>pcorr</code> command to obtain partial and semipartial correlations.</li>
+</ol>
+
+<h2 id="multiple-predictors">Multiple Predictors</h2>
+
+<p>We will again use the <strong>auto</strong> dataset.</p>
+
+<pre><code>sysuse auto, clear
+</code></pre>
+
+<p><img src="/assets/autodata.jpg" alt="autodata.jpg" /></p>
+
+<p>Suppose we want to regress <em>price</em> on three variables – <em>mpg</em>, <em>weight</em>, and <em>foreign</em>. To add three predictors, we simply add the variables we want after the dependent variable.</p>
+
+<pre><code>regress price mpg weight foreign
+</code></pre>
+
+<p>This produces the following output.</p>
+
+<p><img src="/assets/multreg.jpg" alt="multreg.jpg" /></p>
+
+<h2 id="partial-and-semipartial-correlations---manual-method">Partial and Semipartial Correlations - Manual Method</h2>
+
+<p>Recall that a partial correlation is the relationship between <em>x</em> and <em>y</em> once the shared variance between <em>x</em> and <em>x2</em> has been removed from <em>x</em> and once the shared variance between <em>y</em> and <em>x2</em> has been removed from <em>y</em>. A semipartial correlation is similar except that we only remove the shared variance between <em>x</em> and <em>x2</em> (i.e., <em>y</em> remains untouched). Note: Although I’ve only referenced <em>x2</em>, we can in principle include many control variables as our example will show.</p>
+
+<p>Suppose we want to obtain the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. To do this we need the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also need the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. We can get this information with residuals.</p>
+
+<h3 id="the-part-of-price-independent-of-weight-and-foreign">The part of <em>price</em> independent of <em>weight</em> and <em>foreign</em></h3>
+
+<p>To obtain the part of <em>price</em> independent of <em>weight</em> and <em>foreign</em> we regress <em>price</em> on <em>weight</em> and <em>foreign</em>. </p>
+
+<pre><code>regress price weight foreign
+</code></pre>
+
+<p>We then save the residuals for <em>price</em>. We’ll call this <em>priceres</em></p>
+
+<pre><code>predict priceres, residuals
+</code></pre>
+
+<p>We now have a new variable in our dataset called <em>priceres</em>.</p>
+
+<pre><code>summarize priceres, detail
+</code></pre>
+
+<p><img src="/assets/priceres.jpg" alt="priceres.jpg" /></p>
+
+<h3 id="the-part-of-mpg-that-is-independent-of-weight-and-foreign">The part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em></h3>
+
+<p>At this point, we need to repeat what we did about except substitute <em>mpg</em> for price. We regress <em>mpg</em> on <em>weight</em> and <em>foreign</em>.</p>
+
+<pre><code>regress mpg weight foreign
+</code></pre>
+
+<p>We save the residuals for <em>mpg</em>. We’ll call this <em>mpgres</em> (not very original, I know).</p>
+
+<pre><code>predict mpgres, residuals
+</code></pre>
+
+<p>We now have a new variable in our dataset called <em>mpgres</em>.</p>
+
+<pre><code>summarize mpgres, detail
+</code></pre>
+
+<p><img src="/assets/mpgres.jpg" alt="mpgres.jpg" /></p>
+
+<h3 id="partial-correlation">Partial correlation</h3>
+
+<p>We know have everything we need for the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. Specifically, we have <em>priceres</em> – which is the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also have <em>mpgres</em> – which is the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. Therefore, to obtain the partial correlation we simply need to correlate <em>priceres</em> and <em>mpgres</em>. </p>
+
+<pre><code>corr priceres mpgres
+</code></pre>
+
+<p><img src="/assets/partialcorrelation.jpg" alt="partialcorrelation.jpg" /></p>
+
+<h3 id="semipartial-correlation">Semipartial correlation</h3>
+
+<p>We also already have everything we need for the semipartial correlation. Recall that for the semipartial correlation we only remove the shared relationship between <em>x</em> and the <em>x2</em> (or set of covariates). We don’t do anything with <em>y</em>. In our example <em>price</em> is our <em>y</em> variable. So to compute the semipartial correlation we correlate <em>price</em> (i.e., the “untouched” <em>y</em> variable) and <em>mpgres</em> (i.e., the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>).</p>
+
+<pre><code>corr price mpgres
+</code></pre>
+
+<p><img src="/assets/semipartialcorrelation.jpg" alt="semipartialcorrelation.jpg" /></p>
+
+<h2 id="partial-and-semipartial-correlations---pcorr">Partial and Semipartial Correlations - <code>pcorr</code></h2>
+
+<p>Thankfully Stata has a built in command for computing partial and semipartial correlations – <a href="http://www.stata.com/help.cgi?pcorr">pcorr</a>. To obtain the partial and semipartial correlations, we type:</p>
+
+<pre><code>pcorr price mpg weight foreign
+</code></pre>
+
+<p>Note that the first variable listed is considered the <em>y</em> variable. All other variables are variables are considered <em>x</em> variables. Stata reports as many partial and semipartial correlations as there are <em>x</em> variables. Additionally, Stata reports the squared partial and squared semipartial correlations. These are interpreted as the proportion of shared variance between <em>y</em> and <em>x</em> controlling for the other <em>x</em> variables. The partial and semipartial correlations listed for <em>mpg</em> are the same as what we found above.</p>
+
+<p><img src="/assets/pcorr.jpg" alt="pcorr.jpg" /></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2104/12/27/d-lkj-priors/">
+            LKJ Priors
+            <small>27 Dec 2104</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>

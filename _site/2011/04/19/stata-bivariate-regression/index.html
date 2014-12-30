@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Stata: Bivariate Regression &middot; Psychstatistics
     
   </title>
 
@@ -107,42 +107,72 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Stata: Bivariate Regression</h1>
+  <span class="post-date">19 Apr 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="bivariate-regression">Bivariate Regression</h1>
+<p>In this post we’ll use the system dataset <strong>auto</strong>.</p>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
-
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
-
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
-
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
-
-<h2 id="anova-command"><code>anova</code> Command</h2>
-
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>sysuse auto, clear
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results - auto.dta-1" /></p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<p>To estimate the model we use the <code>regress</code> command in the command window. The <code>regress</code> command follows the general format of <code>regress dv iv, options</code>. Type <code>help regress</code> or visit the online help for <a href="http://www.stata.com/help.cgi?regress"><code>regress</code></a> for a description of the options available for regress. For example the regression of <em>price</em> on <em>mpg</em> is estimated as follows:</p>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
-
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
-
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
-
-<pre><code>loneway price foreign
+<pre><code>regress price mpg
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
+<p><img src="/assets/Results-auto_dta-3.jpg" alt="Results-auto.dta-3" /></p>
 
+<p>The output includes:</p>
+
+<ol>
+  <li>The ANOVA source table</li>
+  <li>Descriptive statistics and effect sizes</li>
+  <li>Coefficients, hypothesis tests, and confidence intervals</li>
+</ol>
+
+<h2 id="standardized-coefficients">Standardized Coefficients</h2>
+
+<p>Suppose we would like Stata to report standardized coefficients. To get standardized coefficients we add the <code>beta</code> option to our command.</p>
+
+<pre><code>regress price mpg, beta
+</code></pre>
+
+<p><img src="/assets/Results-auto_dta-4.jpg" alt="Results-auto.dta-4" /></p>
+
+<h2 id="visualizing-regression-lines">Visualizing Regression Lines</h2>
+
+<p>We can visualize the relationship between two variables with a scatterplot. Stata’s graphics provide several useful commands for including regression lines on a scatterplot. We’ll discuss the <code>lfit</code> and <code>lfitci</code> commands.</p>
+
+<p>To produce a scatterplot between <em>price</em> (y-axis) and <em>mpg</em> (x-axis), we use the <code>graph twoway scatter</code> command.</p>
+
+<pre><code>graph twoway scatter price mpg
+</code></pre>
+
+<p><img src="/assets/Graph-Graph-1.jpg" alt="Graph-Graph-1" /></p>
+
+<p>Now let’s add the regression line to the plot. The <code>lfit</code> graph command allows us to do this (<code>lfit</code> stands for <em>linear</em> fit). However, we don’t want the regression line in isolation. We want it on top of the scatterplot. Stata lets you combine twoway graphs in one of two ways: (1) using parentheses or (2) using pipes. To add the regression line with parentheses, we type:&lt;/p&gt;</p>
+
+<pre><code>graph twoway (lfit price mpg) (scatter price mpg)	
+</code></pre>
+
+<p>The first set of parentheses is the regression line and the second is the scatterplot. This produces the following plot:</p>
+
+<p><img src="/assets/scatter2.jpg" alt="scatter2" /></p>
+
+<p>To add the regression line with pipes (this produces an identical plot as above), we type:</p>
+
+<pre><code>graph twoway lfit price mpg || scatter price mpg
+</code></pre>
+
+<p>It can be nice to include confidence intervals on the plot. To do this we simply change the <code>lfit</code> command to <code>lfitci</code>, where the <code>ci</code> refers to confidence interval.</p>
+
+<pre><code>graph twoway lfitci price mpg || scatter price mpg
+</code></pre>
+
+<p><img src="/assets/scatter3.jpg" alt="scatter3" /></p>
 
 </div>
 

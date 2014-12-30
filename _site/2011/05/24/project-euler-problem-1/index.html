@@ -11,7 +11,7 @@
 
   <title>
     
-      Stata: Oneway ANOVA &middot; Psychstatistics
+      Project Euler - Problem #1 &middot; Psychstatistics
     
   </title>
 
@@ -107,42 +107,38 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Stata: Oneway ANOVA</h1>
-  <span class="post-date">01 Jul 2011</span>
-  <span class="post-tags">Tags: </span>
-  <h1 id="oneway-anova">Oneway ANOVA</h1>
+  <h1 class="post-title">Project Euler - Problem #1</h1>
+  <span class="post-date">24 May 2011</span>
+  <span class="post-tags">Tags: python and project euler</span>
+  <h2 id="problem-description">Problem Description</h2>
 
-<p>This post will show how to use the <code>anova</code> and <code>loneway</code> commands in Stata to compute a oneway ANOVA.
-We will use the <strong>auto</strong> dataset for this illustration. We will use <em>price</em> as the outcome variable and <em>foreign</em> as the factor.</p>
+<p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23. Find the sum of all the multiples of 3 or 5 below 1000.</p>
 
-<p>Let’s initially look at descriptive statistics for <em>price</em> stratified by <em>foreign</em>.</p>
+<h2 id="python-solution-1">Python Solution #1</h2>
 
-<p><img src="/assets/Results-auto_dta.jpg" alt="Results-auto_dta_.jpg" /></p>
+<p>This uses the built in <code>range()</code> function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using <code>extend()</code>) and identify the unique values with the <code>set()</code> function. I also sorted them because I like it better that way.</p>
 
-<p>So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of <em>foreign</em>).</p>
-
-<h2 id="anova-command"><code>anova</code> Command</h2>
-
-<p>The <code>anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
-
-<pre><code>anova price foreign
+<pre><code>answer =[] # empty list
+three = range(0,1000,3) #list of multiples of 3
+five = range(0,1000,5) #list of multiples of 5
+answer.extend(three) # add three to the answer list
+answer.extend(five) #add five to the answer list
+answer.sort() #sort the list
+print sum(set(answer)) #print the sum of the unique values
 </code></pre>
 
-<p>Viola – you’ve got an ANOVA source table.</p>
+<h2 id="python-solution-2">Python Solution #2</h2>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<p>This solution uses a <code>for</code> loop and take advantage of the mod operator in python – <code>%</code> – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).</p>
 
-<p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
-
-<h2 id="loneway-command"><code>loneway</code> Command</h2>
-
-<p>The <code>loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code>loneway</code> can be really useful.</p>
-
-<pre><code>loneway price foreign
+<pre><code>answer2 = [] #empty list
+for i in range(1000): #iterate from 0 to 999 -- 1000 isn't included
+	if i % 3 == 0 or i % 5 == 0: #identify whether i is divisible by 3 or 5
+    	answer2.append(i) #if divisible, then append it to the answer2 list
+print sum(answer2) #print the sum of answer 2
 </code></pre>
 
-<p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
-
+<p>This will produce the correct answer. It is a bit slower than Solution #1 but both are very fast.</p>
 
 </div>
 
