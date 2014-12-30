@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2014-12-29T21:26:43-07:00</updated>
+ <updated>2014-12-29T21:29:55-07:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -374,9 +374,9 @@ Satorra, A. &amp;amp; Saris, W. E. (1985). Power of the likelihood ratio test in
  
  <entry>
    <title>Stata: Dummy Coding</title>
-   <link href="psychstatistics.github.io/2011/10/05/stata-dummy-coding-2/"/>
+   <link href="psychstatistics.github.io/2011/10/05/stata-dummy-coding/"/>
    <updated>2011-10-05T18:55:18-06:00</updated>
-   <id>psychstatistics.github.io/2011/10/05/stata-dummy-coding-2</id>
+   <id>psychstatistics.github.io/2011/10/05/stata-dummy-coding</id>
    <content type="html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;This post will illustrate how to:&lt;/p&gt;
