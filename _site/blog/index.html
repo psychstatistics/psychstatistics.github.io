@@ -11,7 +11,7 @@
 
   <title>
     
-      LKJ Priors &middot; Psychstatistics
+      Blog &middot; Psychstatistics
     
   </title>
 
@@ -112,11 +112,17 @@
 
 
     <div class="content container">
-      <div class="post">
-  <h1 class="post-title">LKJ Priors</h1>
-  <span class="post-date">27 Dec 2104</span>
-  <span class="post-tags">Tags: R, Stan, and multilevel</span>
-  <h2 id="visualizing-the-lkj-correlation-distribution">Visualizing the LKJ Correlation Distribution</h2>
+      <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2104/12/27/d-lkj-priors/">
+        LKJ Priors
+      </a>
+    </h1>
+
+    <span class="post-date">27 Dec 2104</span>
+    <h2 id="visualizing-the-lkj-correlation-distribution">Visualizing the LKJ Correlation Distribution</h2>
 
 <p>I use multilevel models a lot. I’ve transitioned from using software like <a href="http://cran.r-project.org/web/packages/lme4/index.html"><code>lme4</code></a> in R or <a href="http://www.stata.com/manuals13/me.pdf"><code>mixed</code></a> in Stata, which use maximum likelihood methods, to using Bayesian software like <a href="http://mc-stan.org">Stan</a> or <a href="http://mcmc-jags.sourceforge.net">JAGS</a> to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.  </p>
 
@@ -313,56 +319,255 @@ beta distribution.</p>
 
 <p>I find this helps me make better decisions about the value of <script type="math/tex">\eta</script>.</p>
 
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2013/11/13/beginning-and-advanced-sem/">
+        Beginning and Advanced SEM
+      </a>
+    </h1>
+
+    <span class="post-date">13 Nov 2013</span>
+    <p>This page provides Mplus input and output files, as well as data files, for the examples I use in the Structural Equation Modeling (SEM) workshop. I also provide a link for the lecture slides. The Mplus files and data are stored on GitHub. For any who are interested, feel free to clone the directory and improve it. I will merge changes as needed.
+You can download all the training files in .zip file here: <a href="https://raw.github.com/psychstatistics/sem_training_files/master/SEM_training_examples.zip">SEM Workshop Example Files</a>.
+The slides for the presentation can be downloaded here:  <a href="http://www.psychstatistics.com/wp-content/uploads/2013/11/SEM_ABCT_2013_morning.pdf">SEM_ABCT_2013_morning</a> and <a href="http://www.psychstatistics.com/wp-content/uploads/2013/11/SEM_ABCT_2013_afternoon.pdf">SEM_ABCT_2013_afternoon</a></p>
+
+<h2 id="power">Power</h2>
+
+<p>For power there are a ton of examples. I am going to link to a zip file with all the example in them. Please get that here: <a href="https://raw.github.com/psychstatistics/sem_training_files/master/power/power_examples.zip" target="_blank">Power Examples Zip File</a>.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+        Predicted Scores and Residuals in Stata
+      </a>
+    </h1>
+
+    <span class="post-date">01 Oct 2013</span>
+    <h2 id="predicted-scores-in-stata">Predicted Scores in Stata</h2>
+
+<p>As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the <code>auto</code> dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation</p>
+
+<script type="math/tex; mode=display"> mpg^\prime = b_0 + b_1weight </script>
+
+<pre><code>sysuse auto
+regress mpg weight
+      Source |       SS       df       MS              Number of obs =      74
+-------------+------------------------------           F(  1,    72) =  134.62
+       Model |   1591.9902     1   1591.9902           Prob &gt; F      =  0.0000
+    Residual |  851.469256    72  11.8259619           R-squared     =  0.6515
+-------------+------------------------------           Adj R-squared =  0.6467
+       Total |  2443.45946    73  33.4720474           Root MSE      =  3.4389
+------------------------------------------------------------------------------
+         mpg |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      weight |  -.0060087   .0005179   -11.60   0.000    -.0070411   -.0049763
+       _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
+------------------------------------------------------------------------------
+</code></pre>
+
+<p>Thus, we see a negative relationship between <code>weight</code> and <code>mpg</code>. For every 1 unit increase in <code>weight</code>, <code>mpg</code> goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:</p>
+
+<pre><code>predict mpg_pred		
+</code></pre>
+
+<p>This creates a new variable called <code>mpg_pred</code> with the predicted <code>mpg</code> for all the <code>weight</code> values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.</p>
+
+<pre><code>list mpg mpg_pred in 1/20
+     +----------------+
+     | mpg   mpg_pred |
+     |----------------|
+  1. |  22   21.83483 |
+  2. |  17   19.31118 |
+  3. |  22   23.57735 |
+  4. |  20   19.91205 |
+  5. |  15   14.92484 |
+     |----------------|
+  6. |  18    17.3884 |
+  7. |  26   26.04091 |
+  8. |  20   19.73179 |
+  9. |  16   16.12658 |
+ 10. |  19   19.01075 |
+     |----------------|
+ 11. |  14   13.42267 |
+ 12. |  14    16.0064 |
+ 13. |  21   13.66302 |
+ 14. |  29   26.76196 |
+ 15. |  16   17.26823 |
+     |----------------|
+ 16. |  22   20.33266 |
+ 17. |  22   20.09231 |
+ 18. |  24    22.9164 |
+ 19. |  19   18.83049 |
+ 20. |  30   26.70187 |
+     +----------------+
+</code></pre>
+
+<h2 id="residuals-in-stata">Residuals in Stata</h2>
+
+<p>Recall the a residual in regression is defined as the difference between the actual value of <script type="math/tex">Y</script> and the predicted value of <script type="math/tex">Y</script> (or <script type="math/tex">Y^\prime</script>):</p>
+
+<script type="math/tex; mode=display"> Y - Y^\prime </script>
+
+<p>Thus, to compute residuals we can just subtract <code>mpg_pred</code> from <code>mpg</code>. Stata will do this for us using the predict command:</p>
+
+<pre><code>predict mpg_res, residuals
+</code></pre>
+
+<p>Here’s 20 of the actual mpg values, 20 of the predicted values, and 20 of the residuals.</p>
+
+<pre><code> list mpg mpg_pred mpg_res in 1/20
+     +----------------------------+
+     | mpg   mpg_pred     mpg_res |
+     |----------------------------|
+  1. |  22   21.83483    .1651688 |
+  2. |  17   19.31118   -2.311183 |
+  3. |  22   23.57735    -1.57735 |
+  4. |  20   19.91205    .0879486 |
+  5. |  15   14.92484    .0751587 |
+     |----------------------------|
+  6. |  18    17.3884    .6115971 |
+  7. |  26   26.04091   -.0409119 |
+  8. |  20   19.73179    .2682092 |
+  9. |  16   16.12658   -.1265787 |
+ 10. |  19   19.01075   -.0107484 |
+     |----------------------------|
+ 11. |  14   13.42267    .5773304 |
+ 12. |  14    16.0064   -2.006405 |
+ 13. |  21   13.66302    7.336983 |
+ 14. |  29   26.76196    2.238046 |
+ 15. |  16   17.26823   -1.268229 |
+     |----------------------------|
+ 16. |  22   20.33266    1.667341 |
+ 17. |  22   20.09231    1.907688 |
+ 18. |  24    22.9164    1.083605 |
+ 19. |  19   18.83049    .1695122 |
+ 20. |  30   26.70187    3.298132 |
+     +----------------------------+
+</code></pre>
+
+<p>We can see that the residuals are intact the difference between the first two columns. 
+Given that the residuals are the part of the <code>mpg</code> that is unrelated to <code>weight</code>, <code>mpg_res</code> should be uncorrelated with <code>weight</code>. Let’s check:</p>
+
+<pre><code>. corr weight mpg_res
+(obs=74)
+             |   weight  mpg_res
+-------------+------------------
+      weight |   1.0000
+     mpg_res |   0.0000   1.0000
+</code></pre>
+
+<p><img src="/assets/residual_predictor_correlation.png" alt="residual_predictor_correlation.png" /></p>
+
+<p>Magic!</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2013/08/30/resources-for-power-in-sem/">
+        Resources for Power in SEM
+      </a>
+    </h1>
+
+    <span class="post-date">30 Aug 2013</span>
+    <h1 id="references-for-power-in-structural-equation-modeling">References for Power in Structural Equation Modeling</h1>
+
+<p>Kaplan, D. (1995). Statistical power in structural equation modeling. In R. H. Hoyle (Ed.), <em>Structural Equation Modeling: Concepts, Issues, and Applications</em> (pp. 100-117). Thousand Oaks, CA: Sage.
+Kaplan, D. &amp; Wegner, R. N. (1993). Asymptotic independence and separability in covariance structure models: Implications for specification error, power, and model modification. <em>Multivariate Behavioral Research, 28,</em> 467-482.
+Loehlin, J. C. (2004). <em>Latent variable models: An introduction to factor, path, and structural equation analysis</em> (4 ed.). Mahwah, NJ: Lawrence Erlbaum. – See Chapter 2 and Appendix
+Maccallum, R. C., Browne, M. W., &amp; Sugawara, H. M. (1996). Power analysis and determination of sample size for covariance structure modeling. <em>Psychological Methods, 1,</em> 130-149.
+Muthen, L., &amp; Muthen, B. (2002). How to use a Monte Carlo study to decide on sample size and determine power. <em>Structural Equation Modeling, 9,</em> 599-620.
+Saris, W. E., &amp; Satorra, A. (1993). Power evaluations in structural equation models. In K. A. Bollen &amp; J. S. Long (Eds.), <em>Testing Structural Equation Models</em> (pp. 181-204). Newbury Park, CA: Sage.
+Satorra, A. &amp; Saris, W. E. (1985). Power of the likelihood ratio test in covariance structure analysis. <em>Psychometrika, 50,</em> 83-90.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/10/05/stata-dummy-coding-2/">
+        Stata: Dummy Coding
+      </a>
+    </h1>
+
+    <span class="post-date">05 Oct 2011</span>
+    <h2 id="introduction">Introduction</h2>
+
+<p>This post will illustrate how to:</p>
+
+<ol>
+  <li>Use the generate and replace commands to create dummy variables.</li>
+  <li>A second use of the generate command to dummy variables that is simpler that #1.</li>
+  <li>Using tabluate to create dummy variables.</li>
+</ol>
+
+<p>Dummy coding is used when you have nominal categories, meaning the groups are assigned a value for coding purposes, but the values don’t represent more or less of anything. For example, I might code three different categories of race and coded them as follows: Caucasian = 1, African American = 2, Hispanic = 3. The numbers are for coding purposes only, 3 is not actually any bigger or more than 1. But if we use these in a regression (or any other) analysis, the numbers will be treated as continuous - not categorical. So we need to create dummy variables. Generally, we create k-1 new groups, where k is the total number of groups, and one group is used as the reference sample, or the group we want to compare other groups to.</p>
+
+<p>Method 1: Using <code>generate</code> and <code>replace</code></p>
+
+<p>We’ll use the built in system data systolic.</p>
+
+<p><img src="/assets/Stata_SE-12_0-systolic_dta-1.jpg" alt="Stata_SE-12.0-systolic.dta-1.jpg" /></p>
+
+<p>The drug variable has 4 levels.</p>
+
+<p><img src="/assets/Stata_SE-12_0-systolic_dta-2.jpg" alt="Stata_SE-12.0-systolic.dta-2.jpg" /></p>
+
+<p>Consequently, we’ll need to make 3 dummy coded indicator variables to represent drug. We’ll use level 4 as the reference category. We’ll use a series of generate and replace commands to create the variables. This is definitely the brute-force way to make the variables, but it makes the logic behind creating dummy variables clear.</p>
+
+<pre><code>generate drug1=1 if drug==1
+replace drug1=0 if drug!=1
+generate drug2=1 if drug==2
+replace drug2=0 if drug!=2
+generate drug3=1 if drug==3
+replace drug3=0 if drug!=3
+</code></pre>
+
+<p>Tabulating each of the dummy variables – drug1 - drug3 – we see they match our original tabulation.</p>
+
+<p><img src="/assets/Stata_SE-12_0-systolic_dta-3.jpg" alt="Stata_SE-12.0-systolic.dta-3.jpg" /></p>
+
+<p>Method 2: Use <code>generate</code> only</p>
+
+<p>We can also use a feature of the generate command to create a new variable that takes on the values 1 and 0. So, for example, if we want to create drug1, where drug1 is equal to 1 when the drug condition equals 1, we say:</p>
+
+<pre><code>generate drug1=drug==1
+</code></pre>
+
+<p>This creates a variable that is 1 when drug equals 1 (recall that <code>==</code> is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.</p>
+
+<pre><code>generate drug2=drug==2
+generate drug3=drug==3
+</code></pre>
+
+<p>Method 3: Use the <code>generate</code> option of <code>tabulate</code></p>
+
+<p>The function tabulate has an option called generate. The generate option takes one argument called stubname, where stubname is the stub of the new variable names created by the option. In our examples so far, the stub has been drug. Unlike the examples we have done so far, this method will create as many dummy variables as there are levels of the categorical variable (4 in our case). In our example, we type:</p>
+
+<pre><code>tabulate drug, generate(drug)
+</code></pre>
+
+<p>We now have four new variables in our dataset – drug1-drug4.</p>
+
+<p><img src="/assets/dummy_gen_example.png" alt="dummy_gen_example.png" /></p>
+
+  </div>
+  
 </div>
 
-<div class="related">
-  <h2>Related Posts</h2>
-  <ul class="related-posts">
-    
-      <li>
-        <h3>
-          <a href="/2013/11/13/beginning-and-advanced-sem/">
-            Beginning and Advanced SEM
-            <small>13 Nov 2013</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
-            Predicted Scores and Residuals in Stata
-            <small>01 Oct 2013</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2013/08/30/resources-for-power-in-sem/">
-            Resources for Power in SEM
-            <small>30 Aug 2013</small>
-          </a>
-        </h3>
-      </li>
-    
-  </ul>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/blog/page2/">Older</a>
+  
+  
+    <span class="pagination-item newer">Newer</span>
+  
 </div>
 	  	
-	    <div id="disqus_thread"></div>
-	    <script type="text/javascript">
-	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
-
-	        /* * * DON'T EDIT BELOW THIS LINE * * */
-	        (function() {
-	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	        })();
-	    </script>
-	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-	
 
     </div>
 
