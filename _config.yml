@@ -12,20 +12,16 @@ name:             Psychstatistics
 tagline:          'Data Analysis in Psychology'
 description:      'Trying to be thoughtful'
 url:              psychstatistics.github.io
-baseurl:          /
+# baseurl:          /
 comments:         true
 
 author:
   name:           'Scott Baldwin'
-  url:            https://twitter.com/mdo
 
 paginate:         5
-paginate_path: "blog/page:num/"
+paginate_path:    "blog/page:num/"
 
 # Custom vars
 version:          2.1.0
-
-github:
-  repo:           https://github.com/poole/hyde
   
 excerpt_separator: <!--more-->
