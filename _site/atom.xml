@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2014-12-29T17:27:24-07:00</updated>
+ <updated>2014-12-29T20:28:14-07:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -1499,14 +1499,14 @@ print sum(answer2) #print the sum of answer 2
 &lt;pre&gt;&lt;code&gt;sysuse auto, clear
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/Results-auto.dta-1.jpg&quot; alt=&quot;Results - auto.dta-1&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-1.jpg&quot; alt=&quot;Results - auto.dta-1&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;To estimate the model we use the &lt;code&gt;regress&lt;/code&gt; command in the command window. The &lt;code&gt;regress&lt;/code&gt; command follows the general format of &lt;code&gt;regress dv iv, options&lt;/code&gt;. Type &lt;code&gt;help regress&lt;/code&gt; or visit the online help for &lt;a href=&quot;http://www.stata.com/help.cgi?regress&quot;&gt;&lt;code&gt;regress&lt;/code&gt;&lt;/a&gt; for a description of the options available for regress. For example the regression of &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;mpg&lt;/em&gt; is estimated as follows:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;regress price mpg
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/Results-auto.dta-3.jpg&quot; alt=&quot;Results-auto.dta-3&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-3.jpg&quot; alt=&quot;Results-auto.dta-3&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The output includes:&lt;/p&gt;
 
@@ -1523,7 +1523,7 @@ print sum(answer2) #print the sum of answer 2
 &lt;pre&gt;&lt;code&gt;regress price mpg, beta
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/Results-auto.dta-4.jpg&quot; alt=&quot;Results-auto.dta-4&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-4.jpg&quot; alt=&quot;Results-auto.dta-4&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;visualizing-regression-lines&quot;&gt;Visualizing Regression Lines&lt;/h2&gt;
 

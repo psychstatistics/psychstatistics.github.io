@@ -11,13 +11,13 @@ In this post we'll use the system dataset **auto**.
 
 	sysuse auto, clear
 
-![Results - auto.dta-1](/assets/Results-auto.dta-1.jpg)
+![Results - auto.dta-1](/assets/Results-auto_dta-1.jpg)
 
 To estimate the model we use the `regress` command in the command window. The `regress` command follows the general format of `regress dv iv, options`. Type `help regress` or visit the online help for [`regress`](http://www.stata.com/help.cgi?regress) for a description of the options available for regress. For example the regression of *price* on *mpg* is estimated as follows:
 
 	regress price mpg
 
-![Results-auto.dta-3](/assets/Results-auto.dta-3.jpg)
+![Results-auto.dta-3](/assets/Results-auto_dta-3.jpg)
 
 The output includes:
 
@@ -31,7 +31,7 @@ Suppose we would like Stata to report standardized coefficients. To get standard
 
 	regress price mpg, beta
 
-![Results-auto.dta-4](/assets/Results-auto.dta-4.jpg)
+![Results-auto.dta-4](/assets/Results-auto_dta-4.jpg)
 
 ## Visualizing Regression Lines
 

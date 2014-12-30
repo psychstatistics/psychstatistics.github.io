@@ -11,8 +11,8 @@ title:            Psychstatistics
 name:             Psychstatistics
 tagline:          'Data Analysis in Psychology'
 description:      'Trying to be thoughtful'
-#url:              psychstatistics.github.io
-#baseurl:          /
+url:              psychstatistics.github.io
+baseurl:          /
 comments:         true
 
 
