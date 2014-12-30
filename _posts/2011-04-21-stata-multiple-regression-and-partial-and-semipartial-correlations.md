@@ -2,7 +2,7 @@
 layout: post
 title: 'Stata: Multiple Regression and Partial and Semipartial Correlations'
 date: 2011-04-21 05:26:12.000000000 -06:00
-categories: [Stata, Tutorial]
+tags: [Stata, Tutorial]
 comments: true
 ---
 

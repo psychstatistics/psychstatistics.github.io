@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2014-12-29T20:34:26-07:00</updated>
+ <updated>2014-12-29T20:36:12-07:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -1383,9 +1383,9 @@ print sum(answer2) #print the sum of answer 2
  
  <entry>
    <title>Stata: Multiple Regression and Partial and Semipartial Correlations</title>
-   <link href="psychstatistics.github.io/stata/tutorial/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations/"/>
+   <link href="psychstatistics.github.io/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations/"/>
    <updated>2011-04-21T05:26:12-06:00</updated>
-   <id>psychstatistics.github.io/stata/tutorial/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations</id>
+   <id>psychstatistics.github.io/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations</id>
    <content type="html">&lt;h1 id=&quot;multiple-regression&quot;&gt;Multiple Regression&lt;/h1&gt;
 &lt;p&gt;This post will:&lt;/p&gt;
 
