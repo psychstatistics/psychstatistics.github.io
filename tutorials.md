@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Tutorials
-date: 2014-12-29 
 ---
 
 ## Stata
