@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Blog &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/stata/tutorial/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations/">
+        Stata: Multiple Regression and Partial and Semipartial Correlations
+      </a>
+    </h1>
+
+    <span class="post-date">21 Apr 2011</span>
+    <h1 id="multiple-regression">Multiple Regression</h1>
+<p>This post will:</p>
+
+<ol>
+  <li>Show how to extend <a href="http://www.psychstatistics.com/2011/04/19/stata-bivariate-regression/">bivariate regression</a> to include multiple predictor variables.</li>
+  <li>Show how to manually create partial and semipartial correlations using residuals from a regression model.</li>
+  <li>Show how to use the <code>pcorr</code> command to obtain partial and semipartial correlations.</li>
+</ol>
+
+<h2 id="multiple-predictors">Multiple Predictors</h2>
+
+<p>We will again use the <strong>auto</strong> dataset.</p>
+
+<pre><code>sysuse auto, clear
+</code></pre>
+
+<p><img src="/assets/autodata.jpg" alt="autodata.jpg" /></p>
+
+<p>Suppose we want to regress <em>price</em> on three variables – <em>mpg</em>, <em>weight</em>, and <em>foreign</em>. To add three predictors, we simply add the variables we want after the dependent variable.</p>
+
+<pre><code>regress price mpg weight foreign
+</code></pre>
+
+<p>This produces the following output.</p>
+
+<p><img src="/assets/multreg.jpg" alt="multreg.jpg" /></p>
+
+<h2 id="partial-and-semipartial-correlations---manual-method">Partial and Semipartial Correlations - Manual Method</h2>
+
+<p>Recall that a partial correlation is the relationship between <em>x</em> and <em>y</em> once the shared variance between <em>x</em> and <em>x2</em> has been removed from <em>x</em> and once the shared variance between <em>y</em> and <em>x2</em> has been removed from <em>y</em>. A semipartial correlation is similar except that we only remove the shared variance between <em>x</em> and <em>x2</em> (i.e., <em>y</em> remains untouched). Note: Although I’ve only referenced <em>x2</em>, we can in principle include many control variables as our example will show.</p>
+
+<p>Suppose we want to obtain the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. To do this we need the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also need the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. We can get this information with residuals.</p>
+
+<h3 id="the-part-of-price-independent-of-weight-and-foreign">The part of <em>price</em> independent of <em>weight</em> and <em>foreign</em></h3>
+
+<p>To obtain the part of <em>price</em> independent of <em>weight</em> and <em>foreign</em> we regress <em>price</em> on <em>weight</em> and <em>foreign</em>. </p>
+
+<pre><code>regress price weight foreign
+</code></pre>
+
+<p>We then save the residuals for <em>price</em>. We’ll call this <em>priceres</em></p>
+
+<pre><code>predict priceres, residuals
+</code></pre>
+
+<p>We now have a new variable in our dataset called <em>priceres</em>.</p>
+
+<pre><code>summarize priceres, detail
+</code></pre>
+
+<p><img src="/assets/priceres.jpg" alt="priceres.jpg" /></p>
+
+<h3 id="the-part-of-mpg-that-is-independent-of-weight-and-foreign">The part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em></h3>
+
+<p>At this point, we need to repeat what we did about except substitute <em>mpg</em> for price. We regress <em>mpg</em> on <em>weight</em> and <em>foreign</em>.</p>
+
+<pre><code>regress mpg weight foreign
+</code></pre>
+
+<p>We save the residuals for <em>mpg</em>. We’ll call this <em>mpgres</em> (not very original, I know).</p>
+
+<pre><code>predict mpgres, residuals
+</code></pre>
+
+<p>We now have a new variable in our dataset called <em>mpgres</em>.</p>
+
+<pre><code>summarize mpgres, detail
+</code></pre>
+
+<p><img src="/assets/mpgres.jpg" alt="mpgres.jpg" /></p>
+
+<h3 id="partial-correlation">Partial correlation</h3>
+
+<p>We know have everything we need for the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. Specifically, we have <em>priceres</em> – which is the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also have <em>mpgres</em> – which is the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. Therefore, to obtain the partial correlation we simply need to correlate <em>priceres</em> and <em>mpgres</em>. </p>
+
+<pre><code>corr priceres mpgres
+</code></pre>
+
+<p><img src="/assets/partialcorrelation.jpg" alt="partialcorrelation.jpg" /></p>
+
+<h3 id="semipartial-correlation">Semipartial correlation</h3>
+
+<p>We also already have everything we need for the semipartial correlation. Recall that for the semipartial correlation we only remove the shared relationship between <em>x</em> and the <em>x2</em> (or set of covariates). We don’t do anything with <em>y</em>. In our example <em>price</em> is our <em>y</em> variable. So to compute the semipartial correlation we correlate <em>price</em> (i.e., the “untouched” <em>y</em> variable) and <em>mpgres</em> (i.e., the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>).</p>
+
+<pre><code>corr price mpgres
+</code></pre>
+
+<p><img src="/assets/semipartialcorrelation.jpg" alt="semipartialcorrelation.jpg" /></p>
+
+<h2 id="partial-and-semipartial-correlations---pcorr">Partial and Semipartial Correlations - <code>pcorr</code></h2>
+
+<p>Thankfully Stata has a built in command for computing partial and semipartial correlations – <a href="http://www.stata.com/help.cgi?pcorr">pcorr</a>. To obtain the partial and semipartial correlations, we type:</p>
+
+<pre><code>pcorr price mpg weight foreign
+</code></pre>
+
+<p>Note that the first variable listed is considered the <em>y</em> variable. All other variables are variables are considered <em>x</em> variables. Stata reports as many partial and semipartial correlations as there are <em>x</em> variables. Additionally, Stata reports the squared partial and squared semipartial correlations. These are interpreted as the proportion of shared variance between <em>y</em> and <em>x</em> controlling for the other <em>x</em> variables. The partial and semipartial correlations listed for <em>mpg</em> are the same as what we found above.</p>
+
+<p><img src="/assets/pcorr.jpg" alt="pcorr.jpg" /></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/04/19/stata-bivariate-regression/">
+        Stata: Bivariate Regression
+      </a>
+    </h1>
+
+    <span class="post-date">19 Apr 2011</span>
+    <h1 id="bivariate-regression">Bivariate Regression</h1>
+<p>In this post we’ll use the system dataset <strong>auto</strong>.</p>
+
+<pre><code>sysuse auto, clear
+</code></pre>
+
+<p><img src="/assets/Results-auto.dta-1.jpg" alt="Results - auto.dta-1" /></p>
+
+<p>To estimate the model we use the <code>regress</code> command in the command window. The <code>regress</code> command follows the general format of <code>regress dv iv, options</code>. Type <code>help regress</code> or visit the online help for <a href="http://www.stata.com/help.cgi?regress"><code>regress</code></a> for a description of the options available for regress. For example the regression of <em>price</em> on <em>mpg</em> is estimated as follows:</p>
+
+<pre><code>regress price mpg
+</code></pre>
+
+<p><img src="/assets/Results-auto.dta-3.jpg" alt="Results-auto.dta-3" /></p>
+
+<p>The output includes:</p>
+
+<ol>
+  <li>The ANOVA source table</li>
+  <li>Descriptive statistics and effect sizes</li>
+  <li>Coefficients, hypothesis tests, and confidence intervals</li>
+</ol>
+
+<h2 id="standardized-coefficients">Standardized Coefficients</h2>
+
+<p>Suppose we would like Stata to report standardized coefficients. To get standardized coefficients we add the <code>beta</code> option to our command.</p>
+
+<pre><code>regress price mpg, beta
+</code></pre>
+
+<p><img src="/assets/Results-auto.dta-4.jpg" alt="Results-auto.dta-4" /></p>
+
+<h2 id="visualizing-regression-lines">Visualizing Regression Lines</h2>
+
+<p>We can visualize the relationship between two variables with a scatterplot. Stata’s graphics provide several useful commands for including regression lines on a scatterplot. We’ll discuss the <code>lfit</code> and <code>lfitci</code> commands.</p>
+
+<p>To produce a scatterplot between <em>price</em> (y-axis) and <em>mpg</em> (x-axis), we use the <code>graph twoway scatter</code> command.</p>
+
+<pre><code>graph twoway scatter price mpg
+</code></pre>
+
+<p><img src="/assets/Graph-Graph-1.jpg" alt="Graph-Graph-1" /></p>
+
+<p>Now let’s add the regression line to the plot. The <code>lfit</code> graph command allows us to do this (<code>lfit</code> stands for <em>linear</em> fit). However, we don’t want the regression line in isolation. We want it on top of the scatterplot. Stata lets you combine twoway graphs in one of two ways: (1) using parentheses or (2) using pipes. To add the regression line with parentheses, we type:&lt;/p&gt;</p>
+
+<pre><code>graph twoway (lfit price mpg) (scatter price mpg)	
+</code></pre>
+
+<p>The first set of parentheses is the regression line and the second is the scatterplot. This produces the following plot:</p>
+
+<p><img src="/assets/scatter2.jpg" alt="scatter2" /></p>
+
+<p>To add the regression line with pipes (this produces an identical plot as above), we type:</p>
+
+<pre><code>graph twoway lfit price mpg || scatter price mpg
+</code></pre>
+
+<p>It can be nice to include confidence intervals on the plot. To do this we simply change the <code>lfit</code> command to <code>lfitci</code>, where the <code>ci</code> refers to confidence interval.</p>
+
+<pre><code>graph twoway lfitci price mpg || scatter price mpg
+</code></pre>
+
+<p><img src="/assets/scatter3.jpg" alt="scatter3" /></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2010/11/24/stata-graphing-distributions/">
+        Stata: Graphing Distributions
+      </a>
+    </h1>
+
+    <span class="post-date">24 Nov 2010</span>
+    <h1 id="graphing-distributions">Graphing Distributions</h1>
+<p>This post will demonstrate how:</p>
+
+<ol>
+  <li>Use the `twoway function’ plotting command to visualize distributions</li>
+  <li>Add colored shading to a graph to visualize portions of a distribution</li>
+</ol>
+
+<h2 id="the-twoway-function-command">The <code>twoway function</code> command</h2>
+
+<p>The <code>twoway function</code> plotting command is used to plot functions, such as <code>y = mx + b</code>. If we want to plot the density of a normal distribution across a range of x values, we type <code>y=normalden(x)</code>. You can also include graphing options available to twoway plots (e.g., <code>xtitle</code>).  </p>
+
+<pre><code>twoway function y=normalden(x), range(-4 4) xtitle("{it: x}") ///
+ytitle("Density") title("Standard Normal Distribution")
+</code></pre>
+
+<p><img src="/assets/Stand_Normal.jpg" alt="Stand_Normal.jpg" /></p>
+
+<h2 id="add-shading-to-a-figure">Add Shading to a Figure</h2>
+
+<p>Suppose we want to shade parts of a distribution above (or below) a particular critical value. For example, we can shade a normal distribution above 1.96 and below -1.96 if we want critical values for a two-tailed test with an alpha-level of .05. To do this we will draw 3 graphs.</p>
+
+<ol>
+  <li>A normal curve from -4 to -1.96</li>
+  <li>A normal curve from -1.96 to 1.96</li>
+  <li>A normal curve from 1.96 to 4</li>
+</ol>
+
+<p>The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, <code>||</code>, between calls to the <code>twoway function</code> command. We will shade the area under the curve for #1 and #3 using the <code>recast(area)</code> option of <code>twoway function</code>. We will assign the color of the shading to dark navy blue using the <code>color(dknavy)</code> option. We will leave the area under the curve for #2 unshaded. </p>
+
+<pre><code>twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
+function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///
+function y=normalden(x), range(1.96 4) recast(area) color(dknavy) ///
+xtitle("{it: x}") ///
+ytitle("Density") title("Critial Values for Standard Normal") ///
+subtitle("Two-tailed test and {&amp;alpha}=.05") ///
+legend(off) xlabel(-1.96 0 1.96)
+</code></pre>
+
+<p><img src="/assets/twotail_normal.jpg" alt="twotail_normal.jpg" /></p>
+
+<p>We can repeat for a one-tailed test.</p>
+
+<pre><code>twoway function y=normalden(x), range(-4 1.64) color(dknavy) || ///
+function y=normalden(x), range(1.64 4) recast(area) color(dknavy) ///
+xtitle("{it: x}") ///
+ytitle("Density") title("Critial Values for Standard Normal") ///
+subtitle("One-tailed test and {&amp;alpha}=.05") ///
+legend(off) xlabel(0 1.64)
+</code></pre>
+
+<p><img src="/assets/onetailed_normal.jpg" alt="onetailed_normal.jpg" /></p>
+
+<p>We can also visualize other distributions available in Stata. Below, I provide an example of a <em>t</em>-distribution with 20 degrees of freedom</p>
+
+<pre><code>twoway function y=tden(20,x), range(-2.09 2.09) color(dknavy) || ///
+function y=tden(20,x), range(-4 -2.09) recast(area) color(dknavy) || ///
+function y=tden(20,x), range(2.09 4) recast(area) color(dknavy) ///
+xtitle("{it: x}") ///
+ytitle("Density") title("Critial Values for {it: t}-distribution with 20 df") ///
+subtitle("Two-tailed test and {&amp;alpha}=.05") ///
+legend(off) xlabel(-2.09 0 2.09)
+</code></pre>
+
+<p><img src="/assets/tdist20df.jpg" alt="tdist20df.jpg" /></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2010/11/16/stata-repeated-measures-anova/">
+        Stata: Repeated Measures ANOVA
+      </a>
+    </h1>
+
+    <span class="post-date">16 Nov 2010</span>
+    <h1 id="analyzing-repeated-measures">Analyzing Repeated Measures</h1>
+<p>The example for this post comes from Warner, R.M. (2008) <em>Applied Statistics: From Bivariate to Multivariate Techniques.</em> Thousand Oaks, CA: Sage – Chapter 20. The example data come from an experiment in which a researcher examines the effects of four stress conditions on heart rate on N=24 subjects. The four stress conditions are:</p>
+
+<ol>
+  <li>Baseline</li>
+  <li>Pain Induction</li>
+  <li>Mental Arithmetic</li>
+  <li>Social Role Play</li>
+</ol>
+
+<p>We will consider 2 ways to analyze this data.</p>
+
+<ol>
+  <li>Using the built-in command <code>anova</code>.</li>
+  <li>Using the user-written command <code>wsanova</code>.</li>
+</ol>
+
+<p>But first let’s look at the structure of the data. The data are in “long” format (i.e., there are multiple lines of data for every person). The <code>anova</code> and <code>wsanova</code> commands expect the data to be in long format.</p>
+
+<p>We can also create a table of the data using the tabdisp command.</p>
+
+<pre><code>tabdisp person stress, cellvar(hr) center cellwidth(9)
+</code></pre>
+
+<p><img src="/assets/Stata_SE-12.0.jpg" alt="Stata_SE-12.0.jpg" /></p>
+
+<p>This shows us each person’s score in all conditions.</p>
+
+<p>You can also use the table command to specify any other data you want to look at.</p>
+
+<pre><code>table stress, contents(n hr mean hr sd hr)
+</code></pre>
+
+<p><img src="/assets/Stata_SE-12.0-1.jpg" alt="Stata_SE 12.0-1.jpg" /></p>
+
+<p>This shows us the observations, mean and standard deviation for each condition.</p>
+
+<h2 id="method-1-anova">Method 1: <code>anova</code></h2>
+
+<p>To specify a repeated measures anova using the anova command, we’ll use the repeated option. I’ve found the repeated option to be a bit confusing sometimes, because I initially thought the repeated option meant the variable for which there are multiple measures – namely, person in our example. Instead, the repeated option expects the factor on which persons were repeatedly observed. In our case, this is stress. Thus, the syntax is:</p>
+
+<pre><code>anova hr person stress, repeated(stress)
+</code></pre>
+
+<p><img src="/assets/Stata_SE-12.0-2.jpg" alt="Stata_SE-12.0-2.jpg" /></p>
+
+<p>The output at the bottom provides the corrected p-values for each of the three epsilons.</p>
+
+<h2 id="method-2-wsanova">Method 2: <code>wsanova</code></h2>
+
+<p>A second method for estimating a repeated measures anova is to use the user-written command <code>wsanova</code> (type <code>findit wsanova</code> and install after clicking “sg103”). The syntax is different and I believe it is a bit more intuitive because we specify the variable that identifies the subjects we repeatedly observe using the id option. To get the corrected p-values, we also need to specify the epsilon option.</p>
+
+<pre><code>wsanova hr stress, id(person) epsilon
+</code></pre>
+
+<p><img src="/assets/Stata_SE-12.0-3.jpg" alt="Stata_SE-12.0-3.jpg" /></p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2010/11/16/amos-introduction/">
+        AMOS: Introduction
+      </a>
+    </h1>
+
+    <span class="post-date">16 Nov 2010</span>
+    <h1 id="introduction-to-amos">Introduction to AMOS</h1>
+
+<p>These screencasts will introduce you to the basic interface of AMOS.</p>
+
+<h2 id="part-i">Part I</h2>
+<p><object width="560" height="340"><param name="movie" value="http://www.youtube.com/v/GA2hco5604M?fs=1&amp;hl=en_US&amp;hd=1" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="http://www.youtube.com/v/GA2hco5604M?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="560" height="340" /></object></p>
+
+<h2 id="part-ii">Part II</h2>
+
+<p><object width="560" height="340"><param name="movie" value="http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;hl=en_US&amp;hd=1" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="560" height="340" /></object></p>
+
+  </div>
+  
+</div>
+
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/blog/page6/">Older</a>
+  
+  
+    
+      <a class="/blog/page4/">Newer</a>
+    
+  
+</div>
+	  	
+
+    </div>
+
+  </body>
+</html>

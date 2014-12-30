@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Stata: Scatterplots and Histograms &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Stata: Scatterplots and Histograms</h1>
+  <span class="post-date">23 Apr 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="scatterplots-and-histograms">Scatterplots and Histograms</h1>
+<p>In this post I’ll show you how to:</p>
+
+<ol>
+  <li>Create a basic scatterplot for examining the relationship between two variables.</li>
+  <li>Add a lowess smoother to a scatterplot to help visualize the relationship between two variables.</li>
+  <li>Create a histogram to look at your data.</li>
+</ol>
+
+<h2 id="basic-scatterplots">Basic Scatterplots</h2>
+
+<p>In this post we’ll use the <strong>auto</strong> dataset.</p>
+
+<pre><code>sysuse auto, clear
+</code></pre>
+
+<p><img src="/assets/autoscatter.jpg" alt="autoscatter.jpg" /></p>
+
+<h2 id="creating-a-scatterplot">Creating a Scatterplot</h2>
+
+<p>Creating scatterplots is easy in Stata. We’ll use the <code>graph twoway scatter</code> command (we can just type <code>scatter</code> but I like to use the <code>graph twoway</code> syntax to make things more consistent across graph types. We’ll visualize the relationship between <em>price</em> and <em>length</em>. When using <code>graph twoway scatter</code> we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.</p>
+
+<pre><code>graph twoway scatter price length, title("Scatterplot of price and length")
+</code></pre>
+
+<p><img src="/assets/scatter1.jpg" alt="scatter1.jpg" /></p>
+
+<h2 id="adding-a-lowess-smoother">Adding a Lowess Smoother</h2>
+
+<p>Adding the lowess smoother is easy as well. To do this we are going to append two <code>graph twoway</code> plots. Specifically, we are going to append <code>scatter</code> and <code>lowess</code>. We append two plots by using double-pipes – <code>||</code>. The pipe is found on the key directly above return or enter on most keyboards (you need to hold shift).</p>
+
+<p>So to get the scatterplot of <em>price</em> and <em>length</em> with a lowess smoother, we type:</p>
+
+<pre><code>graph twoway scatter price length || lowess price length, title("Scatterplot of price and length")
+</code></pre>
+
+<p><img src="/assets/lowess1.jpg" alt="lowess1.jpg" /></p>
+
+<h2 id="histograms">Histograms</h2>
+
+<p>You can also use a histogram to look at your data. To create a histogram using drop-down menus, you will go to Graphics -&gt; Histogram. In this dialogue box you need to specify which variable you are looking at in the “Variable” box. You can make any other changes or specifications you need within this window. For example, if I wanted to create a histogram of price, with the y-axis reflecting frequency, I would enter “price” in the “Variable” box and click on the “Frequency” option under the Y axis.</p>
+
+<p><img src="/assets/Picture-61.jpg" alt="Picture-61.jpg" /></p>
+
+<p>To create a histogram using commands, just type “histogram (your variable).” For example, to look at miles per gallon, you would type:</p>
+
+<pre><code>histogram mpg
+</code></pre>
+
+<p><img src="/assets/Picture-7.png" alt="Picture-7.png" /></p>
+
+<p>Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the <code>histogram</code> command, including <code>width</code> with allows you to specify bin width, <code>frequency</code> which changes the y-axis to reflect frequency instead of density and <code>normal</code> which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.</p>
+
+<pre><code>histogram mpg, width(2) frequency normal title(mpg histogram)
+</code></pre>
+
+<p><img src="/assets/Picture-11.png" alt="Picture-11.png" /></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2104/12/27/d-lkj-priors/">
+            LKJ Priors
+            <small>27 Dec 2104</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>

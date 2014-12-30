@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Stata: Labeling & Recoding Data &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Stata: Labeling & Recoding Data</h1>
+  <span class="post-date">29 Aug 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="labeling-variables">Labeling Variables</h1>
+<p>In order to assign labels to values of your variable, you can use either the variables manager or command syntax. For example, if you wanted to assign labels to each condition, where 1 represents No treatment, 2 represents Treatment A, 3 represents Treatment B &amp; 4 represents Treatment C, you could double-click on the variable manager &amp; click on “condition” and then “Manage.”</p>
+
+<p><img src="/assets/pic1.png" alt="pic1.png" /></p>
+
+<p>When the Manage Value Label box appears, click “Create Labels” and it will open a new dialogue box where you can give a label name to the variable and then assign labels for particular values. After you assign all of your values, be sure to click “Apply” back in your Variables Manager window.</p>
+
+<p><img src="/assets/pic2.png" alt="pic2.png" /></p>
+
+<p>To create labels using commands, you would use the <code>label</code> command. The syntax is:</p>
+
+<pre><code>label define labelname value "name"
+label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
+</code></pre>
+
+<p>To apply your labels, use the <code>label</code> command again. The syntax is <code>label value variable labelname</code></p>
+
+<pre><code>label value condition cond
+</code></pre>
+
+<h1 id="recoding-data">Recoding Data</h1>
+
+<p>You will often need to recode values in your data for a number of reasons. For example, you may need to reverse-score items negatively-worded items on a measure. To do this via point and click, Go to Data -&gt; Create or Change Data -&gt; Other Variable Transformation Commands -&gt; Recode Categorical Variable. In the Main tab, you will enter the variable(s) you want recoded and in the “Required” window, you will enter how you want them recoded. This is an example of how you might reverse score a 5-pt Likert item.</p>
+
+<p><img src="/assets/pic3.png" alt="pic3.png" /></p>
+
+<p>If you’re done, click “Ok”. If you want to retain your original variable and create a new variable for the reverse-scored item, go to the “Options” tab and enter the name of the new variable(s).</p>
+
+<p><img src="/assets/pic4.png" alt="pic4.png" /></p>
+
+<p>It is also quick and easy to recode variables using the <code>recode</code> command:\</p>
+
+<pre><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+</code></pre>
+
+<p>If you wanted to create a new variable with the recoded values, just use the <code>clonevar</code> command <em>first</em>, which will create a new variable with identical values to the first one. Then run the <code>recode</code> command on your new variable. The syntax is <code>clonevar newvariable = variabletoclone</code></p>
+
+<pre><code>clonevar item2_reverse = item2	
+</code></pre>
+
+<p>If you wanted to rename your new variable later, you would simply use the <code>rename</code> command. The syntax is <code>rename oldname newname</code>.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2104/12/27/d-lkj-priors/">
+            LKJ Priors
+            <small>27 Dec 2104</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>

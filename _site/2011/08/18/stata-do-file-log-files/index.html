@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Stata: Do-files and Log-files &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Stata: Do-files and Log-files</h1>
+  <span class="post-date">18 Aug 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <p>As you begin to work with datasets, there are two record and save your commands and actions in Stata.</p>
+
+<h2 id="creating-do-files">Creating do-files</h2>
+
+<p>Do-files allow you to record all of your commands. There are a number of benefits to using do-files. By using do-files to run your commands, you have a copy of what you did, which allows you and other researchers to replicate your analyses exactly. It also allows you to run analyses without changing your original data file until you are ready to save out a clean data set. Many researchers will keep a do-file recording data management (addressing missing data, reverse-scoring if necessary, etc) and may have separate do-files for analyses for the final clean data set or subsets of the data. To create a do-file, you can either go to “File”-&gt;“New Do File” or you can use this icon on the toolbar in the Stata window.</p>
+
+<p><img src="/assets/Picture-131.png" alt="Picture-131.png" /></p>
+
+<p>You’re new do file should open in a separate window that looks like this:</p>
+
+<p><img src="/assets/blank.dofile.png" alt="blank.dofile.png" /></p>
+
+<p>One optional step that can be helpful in creating do-files is placing a comment at the top of the file denoting which data you’re using and any other notes you want. To separate notes and comments from commands in do-files, begin the line with an asterisk. If it is a longer note, you can set it apart by typing /* before your comment and */ after the comment. For example, if I were using a data set called “relate”, I might begin my data file like this:</p>
+
+<p><img src="/assets/Picture-14.png" alt="Picture-14.png" /></p>
+
+<p>The first command you will need is the <code>use</code> command to specify the file you want Stata to use. If the file is not in the working directory that you are currently in, just specify which directory you want to pull the file from. Here are three examples of the <code>use</code> command, one from a data set in the current working directly, one from the internet and one from a jump drive in a different working directory. Notice that on the end of each command, I add the option <code>clear</code>. This is to clear any data that Stata is currently working with.</p>
+
+<pre><code>use relate.dta, clear
+use http://www.stata-press.com/data/agis3/relate, clear
+use "E:\relate.dta", clear
+</code></pre>
+
+<p>After I specify the data file, I enter the rest of the commands I want to run. Within this file, Stata will assume that each line is a new command unless you tell it otherwise. If you have a long command that you need on separate lines, add /// at the end of each line. That tells Stata that the next line is part of the same command. When I am ready to run the analyses, I select the commands I would like to run (you don’t have to select any text if you want to run them all) and click on the last icon on the toolbar in the do-file window:</p>
+
+<p><img src="/assets/do.file_.toolbar.run_.png" alt="do.file_.toolbar.run_.png" /></p>
+
+<p>To save your do-file, you can either use the icon on the toolbar or use the “File”-&gt;“Save As” menu while the do-file editor is active.</p>
+
+<h2 id="creating-log-files">Creating log files</h2>
+
+<p>In addition to recording all of your commands in a do-file, you can also have Stata create a copy of everything that is sent to the Results window, with the exception of graphs. This is called a log file and can be helpful for you to save all of your output. This will also retain your commands, although it will not save them in the same way a do-file does (they will be embedded in the output). To create a log file, go to “File” -&gt; “Log” -&gt; “Begin.” This will bring up a dialogue box where you will save your log file. The default in Stata is to save the file with the extension .smcl. This will allow you to open the log file in Stata, but other programs will not read this type of file. The other extension available is .log. This file format will allow you to open your log file in other programs and may be easier to manage than the .smcl files. To save it as a .log file, just select the Stata Log option under the “File Format” menu in the dialogue box.</p>
+
+<p><img src="/assets/log.dialogue.choose.png" alt="log.dialogue.choose.png" /></p>
+
+<p>Once you begin a log file, you can suspend it at any time and resume later. You can do this by going to the “File” -&gt; “Log” -&gt; “Suspend” (or “Resume”). You can also close your log using this menu.</p>
+
+<p>You can also start, suspend, resume and close logs using the log command. I will use this command to begin a log file, specify the name and location of the file as well as the extension. If I were going to create a log file called “creatinglogfiles” in a file on my desktop called “501” (filepath: /Desktop/501), I would type:</p>
+
+<pre><code>log using "/Desktop/501/creatinglogfiles", text
+</code></pre>
+
+<p>I included <code>text</code> because I want the file to be a .log file, not an .smcl file. If I wanted to overwrite a file that already existed, I would add <code>replace</code> after <code>text</code>.</p>
+
+<p>After the log file is open, typing <code>log off</code> will suspend the log file, <code>log on</code> will resume the log file and <code>log close</code> will close your log file.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2104/12/27/d-lkj-priors/">
+            LKJ Priors
+            <small>27 Dec 2104</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>

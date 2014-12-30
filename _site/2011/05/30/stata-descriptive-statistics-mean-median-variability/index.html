@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Stata: Descriptive Statistics - Mean, median, variability &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Stata: Descriptive Statistics - Mean, median, variability</h1>
+  <span class="post-date">30 May 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h2 id="descriptive-statistics">Descriptive Statistics</h2>
+<p>For this tutorial we are going to use the <code>auto</code> dataset that comes with Stata. To load this data type</p>
+
+<pre><code>sysuse auto, clear
+</code></pre>
+
+<p>The auto dataset has the following variables.</p>
+
+<pre><code>describe
+</code></pre>
+
+<p><img src="/assets/describe_stata.jpg" alt="describe_stata.jpg" /></p>
+
+<p>Suppose we want to get some summarize statistics for price such as the mean, standard deviation, and range. We’ll use the <code>summarize</code> command.</p>
+
+<pre><code>summarize price
+</code></pre>
+
+<p><img src="/assets/summarize_price.jpg" alt="summarize_price.jpg" /></p>
+
+<p>Now let’s add the option <code>detail</code> to <code>summarize</code>. This will give us lots more information, including the median and other percentiles.</p>
+
+<pre><code>summarize price, detail
+</code></pre>
+
+<p><img src="/assets/summ_detail.jpg" alt="summ_detail.jpg" /></p>
+
+<h2 id="multiple-variables-at-once">Multiple Variables at Once</h2>
+
+<p>To get descriptives for multiple variables at once just add the variable names after <code>summarize</code>.</p>
+
+<pre><code>summarize price mpg
+</code></pre>
+
+<p><img src="/assets/summ_mult.jpg" alt="summ_mult.jpg" /></p>
+
+<p>Adding the <code>detail</code> option.</p>
+
+<pre><code>summarize price mpg, detail
+</code></pre>
+
+<p><img src="/assets/summ_mult_detail.jpg" alt="summ_mult_detail.jpg" /></p>
+
+<h2 id="using-by-processing">Using <code>by</code> processing</h2>
+
+<p>Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called <code>by</code> processing.</p>
+
+<pre><code>by foreign: summarize price
+</code></pre>
+
+<p><img src="/assets/summ_by.jpg" alt="summ_by.jpg" /></p>
+
+<p>When using the by command, the variable of interest needs to be sorted in the data set. For example, in the previous example the variable “foreign” is already sorted within our data set. If we wanted to examine the price by mpg, we would need to sort miles per gallon. One way to sort data is using a simple sort command followed by the variable name. Stata will sort the data in ascending order by default.</p>
+
+<pre><code>sort mpg
+</code></pre>
+
+<p>After we sort the data, we can then use the standard by mpg: command. In <code>by</code> processing, we can also sort the data and execute the <code>by</code> command at the same time using the <code>bysort</code> command:</p>
+
+<pre><code>bysort mpg: summarize price
+</code></pre>
+
+<p>The <code>by</code> command can also be used in other commands, such as creating graphics. For example, if we wanted to examine histograms of mpg by the make of the car, we would use the <code>by</code> command as an option. The make of car does not have to be sorted for this command.</p>
+
+<pre><code>histogram(mpg), by(foreign)
+</code></pre>
+
+<p><img src="/assets/histogram_by_foreign.png" alt="histogram_by_foreign.png" /></p>
+
+<h2 id="using-if">Using <code>if</code></h2>
+
+<p>The <code>by</code> statement will give us descriptives for all levels of the <code>by</code> variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the <code>by</code> variable. We can use the <code>if</code> statement for that. For foreign cars (i.e., <code>foreign == 1</code>):</p>
+
+<pre><code>summarize price if foreign == 1
+</code></pre>
+
+<p><img src="/assets/sum_if_1.jpg" alt="sum_if_1.jpg" /></p>
+
+<p>For domestic cars (i.e., <code>foreign == 0</code>)</p>
+
+<pre><code>summarize price if foreign == 0
+</code></pre>
+
+<p><img src="/assets/sum_if_11.jpg" alt="sum_if_11.jpg" /></p>
+
+<p>This table is to help in determining how to specify what levels of the variable you want to use.</p>
+
+<table width="241" border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="95">
+<h3>Symbol</h3>
+</td>
+<td valign="top" width="194">
+<h3>Meaning</h3>
+</td>
+</tr>
+<tr>
+<td valign="top" width="95">==</td>
+<td valign="top" width="194">is or is equal to</td>
+</tr>
+<tr>
+<td valign="top" width="95">!= or ~=</td>
+<td valign="top" width="194">is not or is not equal to</td>
+</tr>
+<tr>
+<td valign="top" width="95">&gt;</td>
+<td valign="top" width="194">is greater than</td>
+</tr>
+<tr>
+<td valign="top" width="95">&gt;=</td>
+<td valign="top" width="194">is greater than or equal to</td>
+</tr>
+<tr>
+<td valign="top" width="95">&lt;</td>
+<td valign="top" width="194">is less than</td>
+</tr>
+<tr>
+<td valign="top" width="95">&lt;=</td>
+<td valign="top" width="194">is less than or equal to</td>
+</tr>
+<tr>
+<td colspan="2" valign="top" width="289">*From pg. 74 of <em>A Gentle Introduction to Stata</em> by Alan Acock</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="using-in">Using <code>in</code></h2>
+
+<p>The <code>in</code> qualifier specifies a particular subset of cases based on their order in the dataset. For example, if we want to examine the mpg in the 10 least expensive cars, we would use the <code>in</code> command.</p>
+
+<pre><code>sort price
+summarize mpg in 1/10
+</code></pre>
+
+<p><img src="/assets/summarize_mpg_in.png" alt="summarize_mpg_in.png" /></p>
+
+<p>As a helpful hint for any of these processes, if your variables are labeled (showing the label instead of the numeric value) and you need to find the numeric values to examine levels of the variable, you can use the <code>nolabel</code> option.</p>
+
+<pre><code>browse, nolabel
+</code></pre>
+
+<p>This will show you the number values for variables. You can also find those values by double-clicking on them in the data browser.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2104/12/27/d-lkj-priors/">
+            LKJ Priors
+            <small>27 Dec 2104</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>

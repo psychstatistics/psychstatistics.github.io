@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Things I Love About Stata -- egen mean &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2014. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Things I Love About Stata -- egen mean</h1>
+  <span class="post-date">30 May 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="egen-mean">egen mean</h1>
+
+<p>I work a lot with clustered data, including group psychotherapy data (people clustered in groups), individual psychotherapy data (people clustered within therapists), and longitudinal data (observations clustered within people). Consequently, I often need to create cluster-level means and grand means for graphing and modeling. The <code>egen mean</code> function makes creating means easy. Combining <code>egen mean</code> with <code>by</code> processing in Stata makes this a breeze, even when cluster sizes differ.</p>
+
+<h2 id="egen-mean-for-grand-means"><code>egen mean</code> for grand means</h2>
+
+<p>The <code>egen</code> function is used to create new variables. To create a mean with <code>egen</code> we use the following syntax:</p>
+
+<pre><code>egen nameofnewvariable=mean(nameofoldvariable)
+</code></pre>
+
+<p>We can download the the pig data from the <code>xtmixed</code> help.</p>
+
+<pre><code>webuse pig, clear
+</code></pre>
+
+<p>The variables are <strong>id</strong>, <strong>week</strong>, and <strong>weight</strong>.</p>
+
+<pre><code>list in 1/15, clean
+id week weight
+1. 1 1 24
+2. 1 2 32
+3. 1 3 39
+4. 1 4 42.5
+5. 1 5 48
+6. 1 6 54.5
+7. 1 7 61
+8. 1 8 65
+9. 1 9 72
+10. 2 1 22.5
+11. 2 2 30.5
+12. 2 3 40.5
+13. 2 4 45
+14. 2 5 51
+15. 2 6 58.5
+</code></pre>
+
+<p>We can create a grand mean (say, for creating centered variables) of <strong>weight</strong> using <code>egen</code>.</p>
+
+<pre><code>egen grandweight=mean(weight)
+</code></pre>
+
+<p>This creates a new variable that is equal to the grand mean for weight (it is a constant across all variables)</p>
+
+<pre><code>list in 1/15, clean
+id week weight grandw~t
+1. 1 1 24 50.40509
+2. 1 2 32 50.40509
+3. 1 3 39 50.40509
+4. 1 4 42.5 50.40509
+5. 1 5 48 50.40509
+6. 1 6 54.5 50.40509
+7. 1 7 61 50.40509
+8. 1 8 65 50.40509
+9. 1 9 72 50.40509
+10. 2 1 22.5 50.40509
+11. 2 2 30.5 50.40509
+12. 2 3 40.5 50.40509
+13. 2 4 45 50.40509
+14. 2 5 51 50.40509
+15. 2 6 58.5 50.40509
+</code></pre>
+
+<h2 id="egen-mean-for-cluster-means"><code>egen mean</code> for cluster means</h2>
+
+<p>We can combine <code>egen mean</code> with <code>by</code> to compute cluster means. (Remember that <strong>id</strong> is the cluster id variable.)</p>
+
+<pre><code>by id: egen groupweight=mean(weight)
+</code></pre>
+
+<p>If the <strong>id</strong> variable isn’t sorted, then you can change the code to:</p>
+
+<pre><code>by id, sort: egen groupweight=mean(weight)
+</code></pre>
+
+<p>This creates a variable that is equal to the cluster mean for each cluster. That is, its value is constant within clusters but varies across clusters.</p>
+
+<pre><code>list in 1/15, clean
+id week weight grandw~t groupw~t
+1. 1 1 24 50.40509 48.66667
+2. 1 2 32 50.40509 48.66667
+3. 1 3 39 50.40509 48.66667
+4. 1 4 42.5 50.40509 48.66667
+5. 1 5 48 50.40509 48.66667
+6. 1 6 54.5 50.40509 48.66667
+7. 1 7 61 50.40509 48.66667
+8. 1 8 65 50.40509 48.66667
+9. 1 9 72 50.40509 48.66667
+10. 2 1 22.5 50.40509 51.33333
+11. 2 2 30.5 50.40509 51.33333
+12. 2 3 40.5 50.40509 51.33333
+13. 2 4 45 50.40509 51.33333
+14. 2 5 51 50.40509 51.33333
+15. 2 6 58.5 50.40509 51.33333
+</code></pre>
+
+<h2 id="looking-at-missing-data">Looking at missing data</h2>
+
+<p>You can also use <code>egen</code> to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use <code>egen</code> combined with <code>rowmiss</code> to create a missing variable to examine this:</p>
+
+<pre><code>egen missing = rowmiss(weight weight2)
+</code></pre>
+
+<p>Then you can use the tabulate command to identify if any values are missing:</p>
+
+<pre><code>tabulate missing
+</code></pre>
+
+<p><img src="/assets/tabulate_missing1.png" alt="tabulate.missing1.png" /></p>
+
+<p>Take a look at the other functions of <code>egen</code>–they’re remarkably useful.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2104/12/27/d-lkj-priors/">
+            LKJ Priors
+            <small>27 Dec 2104</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>
