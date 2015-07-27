@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2015-07-26T19:46:53-06:00</updated>
+ <updated>2015-07-26T19:48:45-06:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>LKJ Priors</title>
-   <link href="psychstatistics.github.io/2104/12/27/d-lkj-priors/"/>
-   <updated>2104-12-27T00:00:00-07:00</updated>
-   <id>psychstatistics.github.io/2104/12/27/d-lkj-priors</id>
+   <link href="psychstatistics.github.io/2014/12/27/d-lkj-priors/"/>
+   <updated>2014-12-27T00:00:00-07:00</updated>
+   <id>psychstatistics.github.io/2014/12/27/d-lkj-priors</id>
    <content type="html">&lt;h2 id=&quot;visualizing-the-lkj-correlation-distribution&quot;&gt;Visualizing the LKJ Correlation Distribution&lt;/h2&gt;
 
 &lt;p&gt;I use multilevel models a lot. I’ve transitioned from using software like &lt;a href=&quot;http://cran.r-project.org/web/packages/lme4/index.html&quot;&gt;&lt;code&gt;lme4&lt;/code&gt;&lt;/a&gt; in R or &lt;a href=&quot;http://www.stata.com/manuals13/me.pdf&quot;&gt;&lt;code&gt;mixed&lt;/code&gt;&lt;/a&gt; in Stata, which use maximum likelihood methods, to using Bayesian software like &lt;a href=&quot;http://mc-stan.org&quot;&gt;Stan&lt;/a&gt; or &lt;a href=&quot;http://mcmc-jags.sourceforge.net&quot;&gt;JAGS&lt;/a&gt; to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.  &lt;/p&gt;
