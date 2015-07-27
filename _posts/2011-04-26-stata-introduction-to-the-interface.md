@@ -7,6 +7,7 @@ comments: true
 ---
 
 # Stata's Interface
+
 ## Part 1
 
 <iframe width="640" height="480" src="//www.youtube.com/embed/Kh0XGoz0ppA" frameborder="0" allowfullscreen="allowfullscreen"> </iframe>
