@@ -25,6 +25,7 @@ title: Tutorials
 * [Using `generate` to create new variables]({{ site.baseurl }}2011/07/06/stata-using-generate-to-create-new-variables)
 
 
+
 ## AMOS
 
 * [Introduction]({{ site.baseurl }}2010/11/16/amos-introduction)

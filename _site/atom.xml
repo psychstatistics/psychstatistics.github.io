@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2015-03-16T19:58:46-06:00</updated>
+ <updated>2015-07-26T19:46:53-06:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -1255,10 +1255,13 @@ print sum(answer2) #print the sum of answer 2
    <updated>2011-04-26T02:56:12-06:00</updated>
    <id>psychstatistics.github.io/2011/04/26/stata-introduction-to-the-interface</id>
    <content type="html">&lt;h1 id=&quot;statas-interface&quot;&gt;Stata’s Interface&lt;/h1&gt;
-&lt;p&gt;## Part 1
-&amp;lt;iframe width=&quot;640&quot; height=&quot;480&quot; src=&quot;//www.youtube.com/embed/Kh0XGoz0ppA&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
-## Part 2
-&amp;lt;iframe width=&quot;640&quot; height=&quot;480&quot; src=&quot;//www.youtube.com/embed/NWRl9QRnZHI&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/p&gt;
+&lt;p&gt;## Part 1&lt;/p&gt;
+
+&lt;iframe width=&quot;640&quot; height=&quot;480&quot; src=&quot;//www.youtube.com/embed/Kh0XGoz0ppA&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;allowfullscreen&quot;&gt; &lt;/iframe&gt;
+
+&lt;h2 id=&quot;part-2&quot;&gt;Part 2&lt;/h2&gt;
+
+&lt;iframe width=&quot;640&quot; height=&quot;480&quot; src=&quot;//www.youtube.com/embed/NWRl9QRnZHI&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;allowfullscreen&quot;&gt; &lt;/iframe&gt;
 
 </content>
  </entry>
