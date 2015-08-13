@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'Stata: Using generate to create new variables'
-date: 2011-07-06 22:42:54.000000000 -06:00
 tags: [Stata, Tutorial]
 comments: true
 ---

@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2015-08-13T15:12:06-06:00</updated>
+ <updated>2015-08-13T15:22:34-06:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -576,9 +576,97 @@ use &quot;E:\relate.dta&quot;, clear
  </entry>
  
  <entry>
+   <title>Stata: Planned Comparisons with the test command</title>
+   <link href="psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command/"/>
+   <updated>2011-07-06T18:31:33-06:00</updated>
+   <id>psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command</id>
+   <content type="html">&lt;h1 id=&quot;planned-comparisons&quot;&gt;Planned Comparisons&lt;/h1&gt;
+
+&lt;p&gt;This post will show you how to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Run a one-way ANOVA using an independent variable with four levels.&lt;/li&gt;
+  &lt;li&gt;Use planned comparisons to contrast levels of the independent variable.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We will use the built-in dataset &lt;strong&gt;systolic&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;webuse systolic
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;examining-the-data&quot;&gt;Examining the data&lt;/h2&gt;
+
+&lt;p&gt;We will treat the &lt;em&gt;systolic&lt;/em&gt; variable as the outcome and &lt;em&gt;drug&lt;/em&gt; as the independent variable. Let’s look at descriptive statistics for &lt;em&gt;systolic&lt;/em&gt; and frequencies for &lt;em&gt;drug&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize systolic, detail
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-1.jpg&quot; alt=&quot;Results-systolic.dta-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;table drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta.jpg&quot; alt=&quot;Results-systolic.dta_.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s also look at a boxplot of systolic by drug.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph box systolic, by(drug)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/NewImage.png&quot; alt=&quot;NewImage.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Thus, it appears there are some differences between drug levels and systolic blood pressure.&lt;/p&gt;
+
+&lt;h2 id=&quot;oneway-anova&quot;&gt;Oneway ANOVA&lt;/h2&gt;
+
+&lt;p&gt;Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;anova systolic drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We reject the null hypothesis.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-2.jpg&quot; alt=&quot;Results-systolic.dta-2.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;using-the-test-command-to-perform-planned-comparisons&quot;&gt;Using the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons&lt;/h2&gt;
+
+&lt;p&gt;In Stata, once we have completed the ANOVA, we can use the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons. Note two important things about the &lt;code&gt;test&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;You can only use it &lt;strong&gt;after&lt;/strong&gt; you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.&lt;/li&gt;
+  &lt;li&gt;The &lt;code&gt;test&lt;/code&gt; command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the &lt;code&gt;test&lt;/code&gt; command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that &lt;code&gt;test&lt;/code&gt; needs will not be available if you run another model.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-3.jpg&quot; alt=&quot;Results-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We reject the null hypothesis that they are not different. Note that to reference levels of the variable &lt;em&gt;drug&lt;/em&gt; we type &lt;code&gt;1.drug&lt;/code&gt; or &lt;code&gt;2.drug&lt;/code&gt;, etc. We put the level number, then a period, then the variabl ename.
+See if you can figure out why the following statement is equivalent&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Suppose we want to know if level 1 of drug is different from level 2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test 1.drug = 2.drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-5.jpg&quot; alt=&quot;Results-systolic.dta-5.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We cannot reject reject the null.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;test&lt;/code&gt; command is really quite flexible. Fiddle around with it to better learn the syntax.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>Stata: Using generate to create new variables</title>
    <link href="psychstatistics.github.io/2011/07/06/stata-using-generate-to-create-new-variables/"/>
-   <updated>2011-07-06T22:42:54-06:00</updated>
+   <updated>2011-07-06T00:00:00-06:00</updated>
    <id>psychstatistics.github.io/2011/07/06/stata-using-generate-to-create-new-variables</id>
    <content type="html">&lt;h1 id=&quot;generating-new-variables&quot;&gt;Generating New Variables&lt;/h1&gt;
 &lt;p&gt;The primary method for creating new variables in Stata is the &lt;code&gt;generate&lt;/code&gt; command. Load the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
@@ -672,94 +760,6 @@ generate meanweight = r(mean)
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;I’ve just touched on the ways you can create new variables. You can also use the &lt;code&gt;egen&lt;/code&gt; command to create new variables. Try new ways to create variables and be sure to read the help files.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Stata: Planned Comparisons with the test command</title>
-   <link href="psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command/"/>
-   <updated>2011-07-06T18:31:33-06:00</updated>
-   <id>psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command</id>
-   <content type="html">&lt;h1 id=&quot;planned-comparisons&quot;&gt;Planned Comparisons&lt;/h1&gt;
-
-&lt;p&gt;This post will show you how to:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Run a one-way ANOVA using an independent variable with four levels.&lt;/li&gt;
-  &lt;li&gt;Use planned comparisons to contrast levels of the independent variable.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;We will use the built-in dataset &lt;strong&gt;systolic&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;webuse systolic
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;examining-the-data&quot;&gt;Examining the data&lt;/h2&gt;
-
-&lt;p&gt;We will treat the &lt;em&gt;systolic&lt;/em&gt; variable as the outcome and &lt;em&gt;drug&lt;/em&gt; as the independent variable. Let’s look at descriptive statistics for &lt;em&gt;systolic&lt;/em&gt; and frequencies for &lt;em&gt;drug&lt;/em&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;summarize systolic, detail
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-1.jpg&quot; alt=&quot;Results-systolic.dta-1.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;table drug
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta.jpg&quot; alt=&quot;Results-systolic.dta_.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Let’s also look at a boxplot of systolic by drug.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;graph box systolic, by(drug)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/NewImage.png&quot; alt=&quot;NewImage.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Thus, it appears there are some differences between drug levels and systolic blood pressure.&lt;/p&gt;
-
-&lt;h2 id=&quot;oneway-anova&quot;&gt;Oneway ANOVA&lt;/h2&gt;
-
-&lt;p&gt;Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;anova systolic drug
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We reject the null hypothesis.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-2.jpg&quot; alt=&quot;Results-systolic.dta-2.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;using-the-test-command-to-perform-planned-comparisons&quot;&gt;Using the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons&lt;/h2&gt;
-
-&lt;p&gt;In Stata, once we have completed the ANOVA, we can use the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons. Note two important things about the &lt;code&gt;test&lt;/code&gt; command:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;You can only use it &lt;strong&gt;after&lt;/strong&gt; you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.&lt;/li&gt;
-  &lt;li&gt;The &lt;code&gt;test&lt;/code&gt; command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the &lt;code&gt;test&lt;/code&gt; command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that &lt;code&gt;test&lt;/code&gt; needs will not be available if you run another model.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-3.jpg&quot; alt=&quot;Results-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We reject the null hypothesis that they are not different. Note that to reference levels of the variable &lt;em&gt;drug&lt;/em&gt; we type &lt;code&gt;1.drug&lt;/code&gt; or &lt;code&gt;2.drug&lt;/code&gt;, etc. We put the level number, then a period, then the variabl ename.
-See if you can figure out why the following statement is equivalent&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Suppose we want to know if level 1 of drug is different from level 2.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;test 1.drug = 2.drug
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-5.jpg&quot; alt=&quot;Results-systolic.dta-5.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We cannot reject reject the null.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;test&lt;/code&gt; command is really quite flexible. Fiddle around with it to better learn the syntax.&lt;/p&gt;
 </content>
  </entry>
  
