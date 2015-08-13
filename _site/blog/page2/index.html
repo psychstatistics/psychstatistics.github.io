@@ -271,97 +271,6 @@ use "E:\relate.dta", clear
   
   <div class="post">
     <h1 class="post-title">
-      <a href="/2011/07/06/stata-planned-comparisons-with-the-test-command/">
-        Stata: Planned Comparisons with the test command
-      </a>
-    </h1>
-
-    <span class="post-date">06 Jul 2011</span>
-    <h1 id="planned-comparisons">Planned Comparisons</h1>
-
-<p>This post will show you how to:</p>
-
-<ol>
-  <li>Run a one-way ANOVA using an independent variable with four levels.</li>
-  <li>Use planned comparisons to contrast levels of the independent variable.</li>
-</ol>
-
-<p>We will use the built-in dataset <strong>systolic</strong>.</p>
-
-<pre><code>webuse systolic
-</code></pre>
-
-<h2 id="examining-the-data">Examining the data</h2>
-
-<p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
-
-<pre><code>summarize systolic, detail
-</code></pre>
-
-<p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
-
-<pre><code>table drug
-</code></pre>
-
-<p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
-
-<p>Let’s also look at a boxplot of systolic by drug.</p>
-
-<pre><code>graph box systolic, by(drug)
-</code></pre>
-
-<p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
-
-<p>Thus, it appears there are some differences between drug levels and systolic blood pressure.</p>
-
-<h2 id="oneway-anova">Oneway ANOVA</h2>
-
-<p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
-
-<pre><code>anova systolic drug
-</code></pre>
-
-<p>We reject the null hypothesis.</p>
-
-<p><img src="/assets/Results-systolic_dta-2.jpg" alt="Results-systolic.dta-2.jpg" /></p>
-
-<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code>test</code> command to perform planned comparisons</h2>
-
-<p>In Stata, once we have completed the ANOVA, we can use the <code>test</code> command to perform planned comparisons. Note two important things about the <code>test</code> command:</p>
-
-<ol>
-  <li>You can only use it <strong>after</strong> you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.</li>
-  <li>The <code>test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code>test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code>test</code> needs will not be available if you run another model.</li>
-</ol>
-
-<p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
-
-<pre><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
-</code></pre>
-
-<p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
-
-<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code>1.drug</code> or <code>2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
-See if you can figure out why the following statement is equivalent</p>
-
-<pre><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
-</code></pre>
-
-<p>Suppose we want to know if level 1 of drug is different from level 2.</p>
-
-<pre><code>test 1.drug = 2.drug
-</code></pre>
-
-<p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
-
-<p>We cannot reject reject the null.</p>
-
-<p>The <code>test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
       <a href="/2011/07/06/stata-using-generate-to-create-new-variables/">
         Stata: Using generate to create new variables
       </a>
@@ -460,6 +369,97 @@ generate meanweight = r(mean)
 <h2 id="conclusion">Conclusion</h2>
 
 <p>I’ve just touched on the ways you can create new variables. You can also use the <code>egen</code> command to create new variables. Try new ways to create variables and be sure to read the help files.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/07/06/stata-planned-comparisons-with-the-test-command/">
+        Stata: Planned Comparisons with the test command
+      </a>
+    </h1>
+
+    <span class="post-date">06 Jul 2011</span>
+    <h1 id="planned-comparisons">Planned Comparisons</h1>
+
+<p>This post will show you how to:</p>
+
+<ol>
+  <li>Run a one-way ANOVA using an independent variable with four levels.</li>
+  <li>Use planned comparisons to contrast levels of the independent variable.</li>
+</ol>
+
+<p>We will use the built-in dataset <strong>systolic</strong>.</p>
+
+<pre><code>webuse systolic
+</code></pre>
+
+<h2 id="examining-the-data">Examining the data</h2>
+
+<p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
+
+<pre><code>summarize systolic, detail
+</code></pre>
+
+<p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
+
+<pre><code>table drug
+</code></pre>
+
+<p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
+
+<p>Let’s also look at a boxplot of systolic by drug.</p>
+
+<pre><code>graph box systolic, by(drug)
+</code></pre>
+
+<p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
+
+<p>Thus, it appears there are some differences between drug levels and systolic blood pressure.</p>
+
+<h2 id="oneway-anova">Oneway ANOVA</h2>
+
+<p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
+
+<pre><code>anova systolic drug
+</code></pre>
+
+<p>We reject the null hypothesis.</p>
+
+<p><img src="/assets/Results-systolic_dta-2.jpg" alt="Results-systolic.dta-2.jpg" /></p>
+
+<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code>test</code> command to perform planned comparisons</h2>
+
+<p>In Stata, once we have completed the ANOVA, we can use the <code>test</code> command to perform planned comparisons. Note two important things about the <code>test</code> command:</p>
+
+<ol>
+  <li>You can only use it <strong>after</strong> you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.</li>
+  <li>The <code>test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code>test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code>test</code> needs will not be available if you run another model.</li>
+</ol>
+
+<p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
+
+<pre><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+</code></pre>
+
+<p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
+
+<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code>1.drug</code> or <code>2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
+See if you can figure out why the following statement is equivalent</p>
+
+<pre><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+</code></pre>
+
+<p>Suppose we want to know if level 1 of drug is different from level 2.</p>
+
+<pre><code>test 1.drug = 2.drug
+</code></pre>
+
+<p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
+
+<p>We cannot reject reject the null.</p>
+
+<p>The <code>test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
 
   </div>
   

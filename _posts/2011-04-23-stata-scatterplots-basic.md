@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'Stata: Scatterplots and Histograms'
-date: 2011-04-23 22:40:27.000000000 -06:00
 tags: [Stata, Tutorial]
 comments: true
 ---

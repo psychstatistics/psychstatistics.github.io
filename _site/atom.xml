@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2015-08-13T15:22:34-06:00</updated>
+ <updated>2015-08-13T15:27:14-06:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -375,7 +375,7 @@ Satorra, A. &amp;amp; Saris, W. E. (1985). Power of the likelihood ratio test in
  <entry>
    <title>Stata: Dummy Coding</title>
    <link href="psychstatistics.github.io/2011/10/05/stata-dummy-coding/"/>
-   <updated>2011-10-05T18:55:18-06:00</updated>
+   <updated>2011-10-05T00:00:00-06:00</updated>
    <id>psychstatistics.github.io/2011/10/05/stata-dummy-coding</id>
    <content type="html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -576,94 +576,6 @@ use &quot;E:\relate.dta&quot;, clear
  </entry>
  
  <entry>
-   <title>Stata: Planned Comparisons with the test command</title>
-   <link href="psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command/"/>
-   <updated>2011-07-06T18:31:33-06:00</updated>
-   <id>psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command</id>
-   <content type="html">&lt;h1 id=&quot;planned-comparisons&quot;&gt;Planned Comparisons&lt;/h1&gt;
-
-&lt;p&gt;This post will show you how to:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Run a one-way ANOVA using an independent variable with four levels.&lt;/li&gt;
-  &lt;li&gt;Use planned comparisons to contrast levels of the independent variable.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;We will use the built-in dataset &lt;strong&gt;systolic&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;webuse systolic
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;examining-the-data&quot;&gt;Examining the data&lt;/h2&gt;
-
-&lt;p&gt;We will treat the &lt;em&gt;systolic&lt;/em&gt; variable as the outcome and &lt;em&gt;drug&lt;/em&gt; as the independent variable. Let’s look at descriptive statistics for &lt;em&gt;systolic&lt;/em&gt; and frequencies for &lt;em&gt;drug&lt;/em&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;summarize systolic, detail
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-1.jpg&quot; alt=&quot;Results-systolic.dta-1.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;table drug
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta.jpg&quot; alt=&quot;Results-systolic.dta_.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Let’s also look at a boxplot of systolic by drug.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;graph box systolic, by(drug)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/NewImage.png&quot; alt=&quot;NewImage.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Thus, it appears there are some differences between drug levels and systolic blood pressure.&lt;/p&gt;
-
-&lt;h2 id=&quot;oneway-anova&quot;&gt;Oneway ANOVA&lt;/h2&gt;
-
-&lt;p&gt;Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;anova systolic drug
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We reject the null hypothesis.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-2.jpg&quot; alt=&quot;Results-systolic.dta-2.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;using-the-test-command-to-perform-planned-comparisons&quot;&gt;Using the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons&lt;/h2&gt;
-
-&lt;p&gt;In Stata, once we have completed the ANOVA, we can use the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons. Note two important things about the &lt;code&gt;test&lt;/code&gt; command:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;You can only use it &lt;strong&gt;after&lt;/strong&gt; you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.&lt;/li&gt;
-  &lt;li&gt;The &lt;code&gt;test&lt;/code&gt; command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the &lt;code&gt;test&lt;/code&gt; command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that &lt;code&gt;test&lt;/code&gt; needs will not be available if you run another model.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-3.jpg&quot; alt=&quot;Results-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We reject the null hypothesis that they are not different. Note that to reference levels of the variable &lt;em&gt;drug&lt;/em&gt; we type &lt;code&gt;1.drug&lt;/code&gt; or &lt;code&gt;2.drug&lt;/code&gt;, etc. We put the level number, then a period, then the variabl ename.
-See if you can figure out why the following statement is equivalent&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Suppose we want to know if level 1 of drug is different from level 2.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;test 1.drug = 2.drug
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-5.jpg&quot; alt=&quot;Results-systolic.dta-5.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We cannot reject reject the null.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;test&lt;/code&gt; command is really quite flexible. Fiddle around with it to better learn the syntax.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
    <title>Stata: Using generate to create new variables</title>
    <link href="psychstatistics.github.io/2011/07/06/stata-using-generate-to-create-new-variables/"/>
    <updated>2011-07-06T00:00:00-06:00</updated>
@@ -764,6 +676,94 @@ generate meanweight = r(mean)
  </entry>
  
  <entry>
+   <title>Stata: Planned Comparisons with the test command</title>
+   <link href="psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command/"/>
+   <updated>2011-07-06T00:00:00-06:00</updated>
+   <id>psychstatistics.github.io/2011/07/06/stata-planned-comparisons-with-the-test-command</id>
+   <content type="html">&lt;h1 id=&quot;planned-comparisons&quot;&gt;Planned Comparisons&lt;/h1&gt;
+
+&lt;p&gt;This post will show you how to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Run a one-way ANOVA using an independent variable with four levels.&lt;/li&gt;
+  &lt;li&gt;Use planned comparisons to contrast levels of the independent variable.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We will use the built-in dataset &lt;strong&gt;systolic&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;webuse systolic
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;examining-the-data&quot;&gt;Examining the data&lt;/h2&gt;
+
+&lt;p&gt;We will treat the &lt;em&gt;systolic&lt;/em&gt; variable as the outcome and &lt;em&gt;drug&lt;/em&gt; as the independent variable. Let’s look at descriptive statistics for &lt;em&gt;systolic&lt;/em&gt; and frequencies for &lt;em&gt;drug&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;summarize systolic, detail
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-1.jpg&quot; alt=&quot;Results-systolic.dta-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;table drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta.jpg&quot; alt=&quot;Results-systolic.dta_.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s also look at a boxplot of systolic by drug.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;graph box systolic, by(drug)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/NewImage.png&quot; alt=&quot;NewImage.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Thus, it appears there are some differences between drug levels and systolic blood pressure.&lt;/p&gt;
+
+&lt;h2 id=&quot;oneway-anova&quot;&gt;Oneway ANOVA&lt;/h2&gt;
+
+&lt;p&gt;Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;anova systolic drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We reject the null hypothesis.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-2.jpg&quot; alt=&quot;Results-systolic.dta-2.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;using-the-test-command-to-perform-planned-comparisons&quot;&gt;Using the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons&lt;/h2&gt;
+
+&lt;p&gt;In Stata, once we have completed the ANOVA, we can use the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons. Note two important things about the &lt;code&gt;test&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;You can only use it &lt;strong&gt;after&lt;/strong&gt; you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.&lt;/li&gt;
+  &lt;li&gt;The &lt;code&gt;test&lt;/code&gt; command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the &lt;code&gt;test&lt;/code&gt; command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that &lt;code&gt;test&lt;/code&gt; needs will not be available if you run another model.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-3.jpg&quot; alt=&quot;Results-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We reject the null hypothesis that they are not different. Note that to reference levels of the variable &lt;em&gt;drug&lt;/em&gt; we type &lt;code&gt;1.drug&lt;/code&gt; or &lt;code&gt;2.drug&lt;/code&gt;, etc. We put the level number, then a period, then the variabl ename.
+See if you can figure out why the following statement is equivalent&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Suppose we want to know if level 1 of drug is different from level 2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test 1.drug = 2.drug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-5.jpg&quot; alt=&quot;Results-systolic.dta-5.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We cannot reject reject the null.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;test&lt;/code&gt; command is really quite flexible. Fiddle around with it to better learn the syntax.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>Stata: Oneway ANOVA</title>
    <link href="psychstatistics.github.io/2011/07/01/stata-oneway-anova/"/>
    <updated>2011-07-01T03:24:36-06:00</updated>
@@ -801,158 +801,6 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-2.jpg&quot; alt=&quot;Results-auto_dta-2.jpg&quot; /&gt;&lt;/p&gt;
 
-</content>
- </entry>
- 
- <entry>
-   <title>Things I Love About Stata -- egen mean</title>
-   <link href="psychstatistics.github.io/2011/05/30/things-i-love-about-stata-egen-mean/"/>
-   <updated>2011-05-30T22:10:29-06:00</updated>
-   <id>psychstatistics.github.io/2011/05/30/things-i-love-about-stata-egen-mean</id>
-   <content type="html">&lt;h1 id=&quot;egen-mean&quot;&gt;egen mean&lt;/h1&gt;
-
-&lt;p&gt;I work a lot with clustered data, including group psychotherapy data (people clustered in groups), individual psychotherapy data (people clustered within therapists), and longitudinal data (observations clustered within people). Consequently, I often need to create cluster-level means and grand means for graphing and modeling. The &lt;code&gt;egen mean&lt;/code&gt; function makes creating means easy. Combining &lt;code&gt;egen mean&lt;/code&gt; with &lt;code&gt;by&lt;/code&gt; processing in Stata makes this a breeze, even when cluster sizes differ.&lt;/p&gt;
-
-&lt;h2 id=&quot;egen-mean-for-grand-means&quot;&gt;&lt;code&gt;egen mean&lt;/code&gt; for grand means&lt;/h2&gt;
-
-&lt;p&gt;The &lt;code&gt;egen&lt;/code&gt; function is used to create new variables. To create a mean with &lt;code&gt;egen&lt;/code&gt; we use the following syntax:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;egen nameofnewvariable=mean(nameofoldvariable)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can download the the pig data from the &lt;code&gt;xtmixed&lt;/code&gt; help.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;webuse pig, clear
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The variables are &lt;strong&gt;id&lt;/strong&gt;, &lt;strong&gt;week&lt;/strong&gt;, and &lt;strong&gt;weight&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;list in 1/15, clean
-id week weight
-1. 1 1 24
-2. 1 2 32
-3. 1 3 39
-4. 1 4 42.5
-5. 1 5 48
-6. 1 6 54.5
-7. 1 7 61
-8. 1 8 65
-9. 1 9 72
-10. 2 1 22.5
-11. 2 2 30.5
-12. 2 3 40.5
-13. 2 4 45
-14. 2 5 51
-15. 2 6 58.5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can create a grand mean (say, for creating centered variables) of &lt;strong&gt;weight&lt;/strong&gt; using &lt;code&gt;egen&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;egen grandweight=mean(weight)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This creates a new variable that is equal to the grand mean for weight (it is a constant across all variables)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;list in 1/15, clean
-id week weight grandw~t
-1. 1 1 24 50.40509
-2. 1 2 32 50.40509
-3. 1 3 39 50.40509
-4. 1 4 42.5 50.40509
-5. 1 5 48 50.40509
-6. 1 6 54.5 50.40509
-7. 1 7 61 50.40509
-8. 1 8 65 50.40509
-9. 1 9 72 50.40509
-10. 2 1 22.5 50.40509
-11. 2 2 30.5 50.40509
-12. 2 3 40.5 50.40509
-13. 2 4 45 50.40509
-14. 2 5 51 50.40509
-15. 2 6 58.5 50.40509
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;egen-mean-for-cluster-means&quot;&gt;&lt;code&gt;egen mean&lt;/code&gt; for cluster means&lt;/h2&gt;
-
-&lt;p&gt;We can combine &lt;code&gt;egen mean&lt;/code&gt; with &lt;code&gt;by&lt;/code&gt; to compute cluster means. (Remember that &lt;strong&gt;id&lt;/strong&gt; is the cluster id variable.)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;by id: egen groupweight=mean(weight)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If the &lt;strong&gt;id&lt;/strong&gt; variable isn’t sorted, then you can change the code to:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;by id, sort: egen groupweight=mean(weight)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This creates a variable that is equal to the cluster mean for each cluster. That is, its value is constant within clusters but varies across clusters.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;list in 1/15, clean
-id week weight grandw~t groupw~t
-1. 1 1 24 50.40509 48.66667
-2. 1 2 32 50.40509 48.66667
-3. 1 3 39 50.40509 48.66667
-4. 1 4 42.5 50.40509 48.66667
-5. 1 5 48 50.40509 48.66667
-6. 1 6 54.5 50.40509 48.66667
-7. 1 7 61 50.40509 48.66667
-8. 1 8 65 50.40509 48.66667
-9. 1 9 72 50.40509 48.66667
-10. 2 1 22.5 50.40509 51.33333
-11. 2 2 30.5 50.40509 51.33333
-12. 2 3 40.5 50.40509 51.33333
-13. 2 4 45 50.40509 51.33333
-14. 2 5 51 50.40509 51.33333
-15. 2 6 58.5 50.40509 51.33333
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;looking-at-missing-data&quot;&gt;Looking at missing data&lt;/h2&gt;
-
-&lt;p&gt;You can also use &lt;code&gt;egen&lt;/code&gt; to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use &lt;code&gt;egen&lt;/code&gt; combined with &lt;code&gt;rowmiss&lt;/code&gt; to create a missing variable to examine this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;egen missing = rowmiss(weight weight2)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then you can use the tabulate command to identify if any values are missing:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;tabulate missing
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/tabulate_missing1.png&quot; alt=&quot;tabulate.missing1.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Take a look at the other functions of &lt;code&gt;egen&lt;/code&gt;–they’re remarkably useful.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Stata: Reading in Comma Separated Files</title>
-   <link href="psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files/"/>
-   <updated>2011-05-30T22:03:37-06:00</updated>
-   <id>psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files</id>
-   <content type="html">&lt;h1 id=&quot;reading-in-comma-separated-files&quot;&gt;Reading in Comma Separated Files&lt;/h1&gt;
-
-&lt;p&gt;This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.&lt;/p&gt;
-
-&lt;h2 id=&quot;syntax&quot;&gt;Syntax&lt;/h2&gt;
-&lt;p&gt;You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;insheet using &quot;auto.csv&quot;, comma clear
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;using auto.csv&lt;/code&gt; statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or &lt;code&gt;cd&lt;/code&gt; to the directory with the csv file. I typically include the option &lt;code&gt;comma&lt;/code&gt;. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the &lt;code&gt;insheet&lt;/code&gt; command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the &lt;code&gt;clear&lt;/code&gt; option to clear out any data that are currently in memory.&lt;/p&gt;
-
-&lt;h2 id=&quot;point-and-click&quot;&gt;Point-and-Click&lt;/h2&gt;
-
-&lt;p&gt;We can import csv files by using the &lt;strong&gt;Import&lt;/strong&gt; submenu under the &lt;strong&gt;File&lt;/strong&gt; menu. We’ll select ASCII data created by a spreadsheet under the &lt;strong&gt;Import&lt;/strong&gt; submenu.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/import_pointclick-1.jpg&quot; alt=&quot;import_pointclick-1&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This will open the following dialog menu.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/insheet-Import-ASCII-data.jpg&quot; alt=&quot;insheet-Import-ASCII-data&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Click on &lt;strong&gt;Browse&lt;/strong&gt; to select the csv file saved on your computer. Select &lt;strong&gt;Comma-delimited data&lt;/strong&gt;. I’ve also selected &lt;strong&gt;Replace data in memory&lt;/strong&gt; to clear out any data loaded into Stata already. If you need to add variable names, you can add them in the dialog box.&lt;/p&gt;
-
-&lt;p&gt;Now your data will be read into Stata and ready to use.&lt;/p&gt;
 </content>
  </entry>
  
@@ -1104,6 +952,158 @@ summarize mpg in 1/10
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This will show you the number values for variables. You can also find those values by double-clicking on them in the data browser.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Things I Love About Stata -- egen mean</title>
+   <link href="psychstatistics.github.io/2011/05/30/things-i-love-about-stata-egen-mean/"/>
+   <updated>2011-05-30T00:00:00-06:00</updated>
+   <id>psychstatistics.github.io/2011/05/30/things-i-love-about-stata-egen-mean</id>
+   <content type="html">&lt;h1 id=&quot;egen-mean&quot;&gt;egen mean&lt;/h1&gt;
+
+&lt;p&gt;I work a lot with clustered data, including group psychotherapy data (people clustered in groups), individual psychotherapy data (people clustered within therapists), and longitudinal data (observations clustered within people). Consequently, I often need to create cluster-level means and grand means for graphing and modeling. The &lt;code&gt;egen mean&lt;/code&gt; function makes creating means easy. Combining &lt;code&gt;egen mean&lt;/code&gt; with &lt;code&gt;by&lt;/code&gt; processing in Stata makes this a breeze, even when cluster sizes differ.&lt;/p&gt;
+
+&lt;h2 id=&quot;egen-mean-for-grand-means&quot;&gt;&lt;code&gt;egen mean&lt;/code&gt; for grand means&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;egen&lt;/code&gt; function is used to create new variables. To create a mean with &lt;code&gt;egen&lt;/code&gt; we use the following syntax:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;egen nameofnewvariable=mean(nameofoldvariable)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can download the the pig data from the &lt;code&gt;xtmixed&lt;/code&gt; help.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;webuse pig, clear
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The variables are &lt;strong&gt;id&lt;/strong&gt;, &lt;strong&gt;week&lt;/strong&gt;, and &lt;strong&gt;weight&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;list in 1/15, clean
+id week weight
+1. 1 1 24
+2. 1 2 32
+3. 1 3 39
+4. 1 4 42.5
+5. 1 5 48
+6. 1 6 54.5
+7. 1 7 61
+8. 1 8 65
+9. 1 9 72
+10. 2 1 22.5
+11. 2 2 30.5
+12. 2 3 40.5
+13. 2 4 45
+14. 2 5 51
+15. 2 6 58.5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can create a grand mean (say, for creating centered variables) of &lt;strong&gt;weight&lt;/strong&gt; using &lt;code&gt;egen&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;egen grandweight=mean(weight)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This creates a new variable that is equal to the grand mean for weight (it is a constant across all variables)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;list in 1/15, clean
+id week weight grandw~t
+1. 1 1 24 50.40509
+2. 1 2 32 50.40509
+3. 1 3 39 50.40509
+4. 1 4 42.5 50.40509
+5. 1 5 48 50.40509
+6. 1 6 54.5 50.40509
+7. 1 7 61 50.40509
+8. 1 8 65 50.40509
+9. 1 9 72 50.40509
+10. 2 1 22.5 50.40509
+11. 2 2 30.5 50.40509
+12. 2 3 40.5 50.40509
+13. 2 4 45 50.40509
+14. 2 5 51 50.40509
+15. 2 6 58.5 50.40509
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;egen-mean-for-cluster-means&quot;&gt;&lt;code&gt;egen mean&lt;/code&gt; for cluster means&lt;/h2&gt;
+
+&lt;p&gt;We can combine &lt;code&gt;egen mean&lt;/code&gt; with &lt;code&gt;by&lt;/code&gt; to compute cluster means. (Remember that &lt;strong&gt;id&lt;/strong&gt; is the cluster id variable.)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;by id: egen groupweight=mean(weight)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the &lt;strong&gt;id&lt;/strong&gt; variable isn’t sorted, then you can change the code to:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;by id, sort: egen groupweight=mean(weight)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This creates a variable that is equal to the cluster mean for each cluster. That is, its value is constant within clusters but varies across clusters.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;list in 1/15, clean
+id week weight grandw~t groupw~t
+1. 1 1 24 50.40509 48.66667
+2. 1 2 32 50.40509 48.66667
+3. 1 3 39 50.40509 48.66667
+4. 1 4 42.5 50.40509 48.66667
+5. 1 5 48 50.40509 48.66667
+6. 1 6 54.5 50.40509 48.66667
+7. 1 7 61 50.40509 48.66667
+8. 1 8 65 50.40509 48.66667
+9. 1 9 72 50.40509 48.66667
+10. 2 1 22.5 50.40509 51.33333
+11. 2 2 30.5 50.40509 51.33333
+12. 2 3 40.5 50.40509 51.33333
+13. 2 4 45 50.40509 51.33333
+14. 2 5 51 50.40509 51.33333
+15. 2 6 58.5 50.40509 51.33333
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;looking-at-missing-data&quot;&gt;Looking at missing data&lt;/h2&gt;
+
+&lt;p&gt;You can also use &lt;code&gt;egen&lt;/code&gt; to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use &lt;code&gt;egen&lt;/code&gt; combined with &lt;code&gt;rowmiss&lt;/code&gt; to create a missing variable to examine this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;egen missing = rowmiss(weight weight2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then you can use the tabulate command to identify if any values are missing:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tabulate missing
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/tabulate_missing1.png&quot; alt=&quot;tabulate.missing1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Take a look at the other functions of &lt;code&gt;egen&lt;/code&gt;–they’re remarkably useful.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Stata: Reading in Comma Separated Files</title>
+   <link href="psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files/"/>
+   <updated>2011-05-30T00:00:00-06:00</updated>
+   <id>psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files</id>
+   <content type="html">&lt;h1 id=&quot;reading-in-comma-separated-files&quot;&gt;Reading in Comma Separated Files&lt;/h1&gt;
+
+&lt;p&gt;This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.&lt;/p&gt;
+
+&lt;h2 id=&quot;syntax&quot;&gt;Syntax&lt;/h2&gt;
+&lt;p&gt;You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;insheet using &quot;auto.csv&quot;, comma clear
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;using auto.csv&lt;/code&gt; statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or &lt;code&gt;cd&lt;/code&gt; to the directory with the csv file. I typically include the option &lt;code&gt;comma&lt;/code&gt;. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the &lt;code&gt;insheet&lt;/code&gt; command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the &lt;code&gt;clear&lt;/code&gt; option to clear out any data that are currently in memory.&lt;/p&gt;
+
+&lt;h2 id=&quot;point-and-click&quot;&gt;Point-and-Click&lt;/h2&gt;
+
+&lt;p&gt;We can import csv files by using the &lt;strong&gt;Import&lt;/strong&gt; submenu under the &lt;strong&gt;File&lt;/strong&gt; menu. We’ll select ASCII data created by a spreadsheet under the &lt;strong&gt;Import&lt;/strong&gt; submenu.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/import_pointclick-1.jpg&quot; alt=&quot;import_pointclick-1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This will open the following dialog menu.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/insheet-Import-ASCII-data.jpg&quot; alt=&quot;insheet-Import-ASCII-data&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click on &lt;strong&gt;Browse&lt;/strong&gt; to select the csv file saved on your computer. Select &lt;strong&gt;Comma-delimited data&lt;/strong&gt;. I’ve also selected &lt;strong&gt;Replace data in memory&lt;/strong&gt; to clear out any data loaded into Stata already. If you need to add variable names, you can add them in the dialog box.&lt;/p&gt;
+
+&lt;p&gt;Now your data will be read into Stata and ready to use.&lt;/p&gt;
 </content>
  </entry>
  
@@ -1270,7 +1270,7 @@ print sum(answer2) #print the sum of answer 2
  <entry>
    <title>Stata: Scatterplots and Histograms</title>
    <link href="psychstatistics.github.io/2011/04/23/stata-scatterplots-basic/"/>
-   <updated>2011-04-23T22:40:27-06:00</updated>
+   <updated>2011-04-23T00:00:00-06:00</updated>
    <id>psychstatistics.github.io/2011/04/23/stata-scatterplots-basic</id>
    <content type="html">&lt;h1 id=&quot;scatterplots-and-histograms&quot;&gt;Scatterplots and Histograms&lt;/h1&gt;
 &lt;p&gt;In this post I’ll show you how to:&lt;/p&gt;
@@ -1637,9 +1637,59 @@ legend(off) xlabel(-2.09 0 2.09)
  </entry>
  
  <entry>
+   <title>AMOS: Introduction</title>
+   <link href="psychstatistics.github.io/2010/11/16/amos-introduction/"/>
+   <updated>2010-11-16T04:47:22-07:00</updated>
+   <id>psychstatistics.github.io/2010/11/16/amos-introduction</id>
+   <content type="html">&lt;h1 id=&quot;introduction-to-amos&quot;&gt;Introduction to AMOS&lt;/h1&gt;
+
+&lt;p&gt;These screencasts will introduce you to the basic interface of AMOS.&lt;/p&gt;
+
+&lt;h2 id=&quot;part-i&quot;&gt;Part I&lt;/h2&gt;
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
+
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>AMOS: Multiple Group Analysis</title>
+   <link href="psychstatistics.github.io/2010/11/16/amos-multiple-group-analysis/"/>
+   <updated>2010-11-16T04:45:35-07:00</updated>
+   <id>psychstatistics.github.io/2010/11/16/amos-multiple-group-analysis</id>
+   <content type="html">&lt;h1 id=&quot;multiple-group-analysis-in-amos&quot;&gt;Multiple Group Analysis in AMOS&lt;/h1&gt;
+
+&lt;p&gt;This screencast will introduce how to perform a multiple group analysis in AMOS.&lt;/p&gt;
+
+&lt;p&gt;&lt;object width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;425&quot; height=&quot;344&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>AMOS: Model Comparisons</title>
+   <link href="psychstatistics.github.io/2010/11/16/amos-model-comparisons/"/>
+   <updated>2010-11-16T04:32:54-07:00</updated>
+   <id>psychstatistics.github.io/2010/11/16/amos-model-comparisons</id>
+   <content type="html">&lt;h1 id=&quot;model-comparisons-in-amos&quot;&gt;Model Comparisons in AMOS&lt;/h1&gt;
+
+&lt;p&gt;This two-part screencast will demonstrate how to conduct model comparisons in AMOS.&lt;/p&gt;
+
+&lt;h2 id=&quot;part-i&quot;&gt;Part I&lt;/h2&gt;
+
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
+
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>Stata: Repeated Measures ANOVA</title>
    <link href="psychstatistics.github.io/2010/11/16/stata-repeated-measures-anova/"/>
-   <updated>2010-11-16T18:37:20-07:00</updated>
+   <updated>2010-11-16T00:00:00-07:00</updated>
    <id>psychstatistics.github.io/2010/11/16/stata-repeated-measures-anova</id>
    <content type="html">&lt;h1 id=&quot;analyzing-repeated-measures&quot;&gt;Analyzing Repeated Measures&lt;/h1&gt;
 &lt;p&gt;The example for this post comes from Warner, R.M. (2008) &lt;em&gt;Applied Statistics: From Bivariate to Multivariate Techniques.&lt;/em&gt; Thousand Oaks, CA: Sage – Chapter 20. The example data come from an experiment in which a researcher examines the effects of four stress conditions on heart rate on N=24 subjects. The four stress conditions are:&lt;/p&gt;
@@ -1698,56 +1748,6 @@ legend(off) xlabel(-2.09 0 2.09)
 
 &lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0-3.jpg&quot; alt=&quot;Stata_SE-12.0-3.jpg&quot; /&gt;&lt;/p&gt;
 
-</content>
- </entry>
- 
- <entry>
-   <title>AMOS: Introduction</title>
-   <link href="psychstatistics.github.io/2010/11/16/amos-introduction/"/>
-   <updated>2010-11-16T04:47:22-07:00</updated>
-   <id>psychstatistics.github.io/2010/11/16/amos-introduction</id>
-   <content type="html">&lt;h1 id=&quot;introduction-to-amos&quot;&gt;Introduction to AMOS&lt;/h1&gt;
-
-&lt;p&gt;These screencasts will introduce you to the basic interface of AMOS.&lt;/p&gt;
-
-&lt;h2 id=&quot;part-i&quot;&gt;Part I&lt;/h2&gt;
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
-
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>AMOS: Multiple Group Analysis</title>
-   <link href="psychstatistics.github.io/2010/11/16/amos-multiple-group-analysis/"/>
-   <updated>2010-11-16T04:45:35-07:00</updated>
-   <id>psychstatistics.github.io/2010/11/16/amos-multiple-group-analysis</id>
-   <content type="html">&lt;h1 id=&quot;multiple-group-analysis-in-amos&quot;&gt;Multiple Group Analysis in AMOS&lt;/h1&gt;
-
-&lt;p&gt;This screencast will introduce how to perform a multiple group analysis in AMOS.&lt;/p&gt;
-
-&lt;p&gt;&lt;object width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;425&quot; height=&quot;344&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>AMOS: Model Comparisons</title>
-   <link href="psychstatistics.github.io/2010/11/16/amos-model-comparisons/"/>
-   <updated>2010-11-16T04:32:54-07:00</updated>
-   <id>psychstatistics.github.io/2010/11/16/amos-model-comparisons</id>
-   <content type="html">&lt;h1 id=&quot;model-comparisons-in-amos&quot;&gt;Model Comparisons in AMOS&lt;/h1&gt;
-
-&lt;p&gt;This two-part screencast will demonstrate how to conduct model comparisons in AMOS.&lt;/p&gt;
-
-&lt;h2 id=&quot;part-i&quot;&gt;Part I&lt;/h2&gt;
-
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
-
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
 </content>
  </entry>
  

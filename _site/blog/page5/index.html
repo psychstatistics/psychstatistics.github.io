@@ -386,74 +386,6 @@ legend(off) xlabel(-2.09 0 2.09)
   
   <div class="post">
     <h1 class="post-title">
-      <a href="/2010/11/16/stata-repeated-measures-anova/">
-        Stata: Repeated Measures ANOVA
-      </a>
-    </h1>
-
-    <span class="post-date">16 Nov 2010</span>
-    <h1 id="analyzing-repeated-measures">Analyzing Repeated Measures</h1>
-<p>The example for this post comes from Warner, R.M. (2008) <em>Applied Statistics: From Bivariate to Multivariate Techniques.</em> Thousand Oaks, CA: Sage – Chapter 20. The example data come from an experiment in which a researcher examines the effects of four stress conditions on heart rate on N=24 subjects. The four stress conditions are:</p>
-
-<ol>
-  <li>Baseline</li>
-  <li>Pain Induction</li>
-  <li>Mental Arithmetic</li>
-  <li>Social Role Play</li>
-</ol>
-
-<p>We will consider 2 ways to analyze this data.</p>
-
-<ol>
-  <li>Using the built-in command <code>anova</code>.</li>
-  <li>Using the user-written command <code>wsanova</code>.</li>
-</ol>
-
-<p>But first let’s look at the structure of the data. The data are in “long” format (i.e., there are multiple lines of data for every person). The <code>anova</code> and <code>wsanova</code> commands expect the data to be in long format.</p>
-
-<p>We can also create a table of the data using the tabdisp command.</p>
-
-<pre><code>tabdisp person stress, cellvar(hr) center cellwidth(9)
-</code></pre>
-
-<p><img src="/assets/Stata_SE-12.0.jpg" alt="Stata_SE-12.0.jpg" /></p>
-
-<p>This shows us each person’s score in all conditions.</p>
-
-<p>You can also use the table command to specify any other data you want to look at.</p>
-
-<pre><code>table stress, contents(n hr mean hr sd hr)
-</code></pre>
-
-<p><img src="/assets/Stata_SE-12.0-1.jpg" alt="Stata_SE 12.0-1.jpg" /></p>
-
-<p>This shows us the observations, mean and standard deviation for each condition.</p>
-
-<h2 id="method-1-anova">Method 1: <code>anova</code></h2>
-
-<p>To specify a repeated measures anova using the anova command, we’ll use the repeated option. I’ve found the repeated option to be a bit confusing sometimes, because I initially thought the repeated option meant the variable for which there are multiple measures – namely, person in our example. Instead, the repeated option expects the factor on which persons were repeatedly observed. In our case, this is stress. Thus, the syntax is:</p>
-
-<pre><code>anova hr person stress, repeated(stress)
-</code></pre>
-
-<p><img src="/assets/Stata_SE-12.0-2.jpg" alt="Stata_SE-12.0-2.jpg" /></p>
-
-<p>The output at the bottom provides the corrected p-values for each of the three epsilons.</p>
-
-<h2 id="method-2-wsanova">Method 2: <code>wsanova</code></h2>
-
-<p>A second method for estimating a repeated measures anova is to use the user-written command <code>wsanova</code> (type <code>findit wsanova</code> and install after clicking “sg103”). The syntax is different and I believe it is a bit more intuitive because we specify the variable that identifies the subjects we repeatedly observe using the id option. To get the corrected p-values, we also need to specify the epsilon option.</p>
-
-<pre><code>wsanova hr stress, id(person) epsilon
-</code></pre>
-
-<p><img src="/assets/Stata_SE-12.0-3.jpg" alt="Stata_SE-12.0-3.jpg" /></p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
       <a href="/2010/11/16/amos-introduction/">
         AMOS: Introduction
       </a>
@@ -470,6 +402,22 @@ legend(off) xlabel(-2.09 0 2.09)
 <h2 id="part-ii">Part II</h2>
 
 <p><object width="560" height="340"><param name="movie" value="http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;hl=en_US&amp;hd=1" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="560" height="340" /></object></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2010/11/16/amos-multiple-group-analysis/">
+        AMOS: Multiple Group Analysis
+      </a>
+    </h1>
+
+    <span class="post-date">16 Nov 2010</span>
+    <h1 id="multiple-group-analysis-in-amos">Multiple Group Analysis in AMOS</h1>
+
+<p>This screencast will introduce how to perform a multiple group analysis in AMOS.</p>
+
+<p><object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;hl=en_US&amp;hd=1" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344" /></object></p>
 
   </div>
   

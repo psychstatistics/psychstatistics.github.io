@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'Stata: Dummy Coding'
-date: 2011-10-05 18:55:18.000000000 -06:00
 tags: [Stata, Tutorial]
 comments: true
 ---

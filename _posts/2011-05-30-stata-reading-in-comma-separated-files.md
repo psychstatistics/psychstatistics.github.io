@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'Stata: Reading in Comma Separated Files'
-date: 2011-05-30 22:03:37.000000000 -06:00
 tags: [Stata, Tutorials]
 comments: true
 ---

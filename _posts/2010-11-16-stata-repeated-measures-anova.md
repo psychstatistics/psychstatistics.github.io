@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'Stata: Repeated Measures ANOVA'
-date: 2010-11-16 18:37:20.000000000 -07:00
 tags: [ANOVA, Stata, Tutorial]
 comments: true
 ---

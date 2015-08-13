@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'Stata: Planned Comparisons with the test command'
-date: 2011-07-06 18:31:33.000000000 -06:00
 tags: [Stata, Tutorial]
 comments: true
 ---

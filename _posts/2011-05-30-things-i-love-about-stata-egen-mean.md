@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Things I Love About Stata -- egen mean
-date: 2011-05-30 22:10:29.000000000 -06:00
 tags: [Stata, Tutorial]
 comments: true
 ---
