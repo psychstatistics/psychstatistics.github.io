@@ -11,7 +11,8 @@ title: Current Research
 4. Non-parametric Bayesian models for the analysis of longitudinal physical activity data.
 5. Meta-analysis of intraclass correlations.
 
-## Book
+## Books
 
 1. Writing a Research Paper (APA Press). Part of a broader series of short books aimed at introductory, lower division psychology courses. This book will walk the reader through the process of writing a research paper.
+2. Psychological Statistics using Stata (Stata Press). Data analysis and statistics commonly used by psychologists. Topics include regression, logistic regression, psychometrics, multilevel models, and structural equation models.
 
