@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2016. All rights reserved.</p>
   </div>
 </div>
 
@@ -161,7 +161,7 @@
 
 <h3 id="the-part-of-price-independent-of-weight-and-foreign">The part of <em>price</em> independent of <em>weight</em> and <em>foreign</em></h3>
 
-<p>To obtain the part of <em>price</em> independent of <em>weight</em> and <em>foreign</em> we regress <em>price</em> on <em>weight</em> and <em>foreign</em>. </p>
+<p>To obtain the part of <em>price</em> independent of <em>weight</em> and <em>foreign</em> we regress <em>price</em> on <em>weight</em> and <em>foreign</em>.</p>
 
 <pre><code>regress price weight foreign
 </code></pre>
@@ -199,7 +199,7 @@
 
 <h3 id="partial-correlation">Partial correlation</h3>
 
-<p>We know have everything we need for the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. Specifically, we have <em>priceres</em> – which is the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also have <em>mpgres</em> – which is the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. Therefore, to obtain the partial correlation we simply need to correlate <em>priceres</em> and <em>mpgres</em>. </p>
+<p>We know have everything we need for the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. Specifically, we have <em>priceres</em> – which is the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also have <em>mpgres</em> – which is the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. Therefore, to obtain the partial correlation we simply need to correlate <em>priceres</em> and <em>mpgres</em>.</p>
 
 <pre><code>corr priceres mpgres
 </code></pre>

@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2016. All rights reserved.</p>
   </div>
 </div>
 
@@ -130,7 +130,7 @@
 
 <p>As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the <code>auto</code> dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation</p>
 
-<script type="math/tex; mode=display"> mpg^\prime = b_0 + b_1weight </script>
+<script type="math/tex; mode=display">mpg^\prime = b_0 + b_1weight</script>
 
 <pre><code>sysuse auto
 regress mpg weight
@@ -189,7 +189,7 @@ regress mpg weight
 
 <p>Recall the a residual in regression is defined as the difference between the actual value of <script type="math/tex">Y</script> and the predicted value of <script type="math/tex">Y</script> (or <script type="math/tex">Y^\prime</script>):</p>
 
-<script type="math/tex; mode=display"> Y - Y^\prime </script>
+<script type="math/tex; mode=display">Y - Y^\prime</script>
 
 <p>Thus, to compute residuals we can just subtract <code>mpg_pred</code> from <code>mpg</code>. Stata will do this for us using the predict command:</p>
 

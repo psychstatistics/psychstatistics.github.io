@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2016. All rights reserved.</p>
   </div>
 </div>
 
@@ -167,7 +167,7 @@
 
 <h3 id="the-part-of-price-independent-of-weight-and-foreign">The part of <em>price</em> independent of <em>weight</em> and <em>foreign</em></h3>
 
-<p>To obtain the part of <em>price</em> independent of <em>weight</em> and <em>foreign</em> we regress <em>price</em> on <em>weight</em> and <em>foreign</em>. </p>
+<p>To obtain the part of <em>price</em> independent of <em>weight</em> and <em>foreign</em> we regress <em>price</em> on <em>weight</em> and <em>foreign</em>.</p>
 
 <pre><code>regress price weight foreign
 </code></pre>
@@ -205,7 +205,7 @@
 
 <h3 id="partial-correlation">Partial correlation</h3>
 
-<p>We know have everything we need for the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. Specifically, we have <em>priceres</em> – which is the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also have <em>mpgres</em> – which is the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. Therefore, to obtain the partial correlation we simply need to correlate <em>priceres</em> and <em>mpgres</em>. </p>
+<p>We know have everything we need for the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. Specifically, we have <em>priceres</em> – which is the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also have <em>mpgres</em> – which is the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. Therefore, to obtain the partial correlation we simply need to correlate <em>priceres</em> and <em>mpgres</em>.</p>
 
 <pre><code>corr priceres mpgres
 </code></pre>
@@ -326,7 +326,7 @@
 
 <h2 id="the-twoway-function-command">The <code>twoway function</code> command</h2>
 
-<p>The <code>twoway function</code> plotting command is used to plot functions, such as <code>y = mx + b</code>. If we want to plot the density of a normal distribution across a range of x values, we type <code>y=normalden(x)</code>. You can also include graphing options available to twoway plots (e.g., <code>xtitle</code>).  </p>
+<p>The <code>twoway function</code> plotting command is used to plot functions, such as <code>y = mx + b</code>. If we want to plot the density of a normal distribution across a range of x values, we type <code>y=normalden(x)</code>. You can also include graphing options available to twoway plots (e.g., <code>xtitle</code>).</p>
 
 <pre><code>twoway function y=normalden(x), range(-4 4) xtitle("{it: x}") ///
 ytitle("Density") title("Standard Normal Distribution")
@@ -344,7 +344,7 @@ ytitle("Density") title("Standard Normal Distribution")
   <li>A normal curve from 1.96 to 4</li>
 </ol>
 
-<p>The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, <code>||</code>, between calls to the <code>twoway function</code> command. We will shade the area under the curve for #1 and #3 using the <code>recast(area)</code> option of <code>twoway function</code>. We will assign the color of the shading to dark navy blue using the <code>color(dknavy)</code> option. We will leave the area under the curve for #2 unshaded. </p>
+<p>The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, <code>||</code>, between calls to the <code>twoway function</code> command. We will shade the area under the curve for #1 and #3 using the <code>recast(area)</code> option of <code>twoway function</code>. We will assign the color of the shading to dark navy blue using the <code>color(dknavy)</code> option. We will leave the area under the curve for #2 unshaded.</p>
 
 <pre><code>twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
 function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///

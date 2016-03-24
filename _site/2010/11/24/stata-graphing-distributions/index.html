@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2015. All rights reserved.</p>
+    <p>&copy; 2016. All rights reserved.</p>
   </div>
 </div>
 
@@ -136,7 +136,7 @@
 
 <h2 id="the-twoway-function-command">The <code>twoway function</code> command</h2>
 
-<p>The <code>twoway function</code> plotting command is used to plot functions, such as <code>y = mx + b</code>. If we want to plot the density of a normal distribution across a range of x values, we type <code>y=normalden(x)</code>. You can also include graphing options available to twoway plots (e.g., <code>xtitle</code>).  </p>
+<p>The <code>twoway function</code> plotting command is used to plot functions, such as <code>y = mx + b</code>. If we want to plot the density of a normal distribution across a range of x values, we type <code>y=normalden(x)</code>. You can also include graphing options available to twoway plots (e.g., <code>xtitle</code>).</p>
 
 <pre><code>twoway function y=normalden(x), range(-4 4) xtitle("{it: x}") ///
 ytitle("Density") title("Standard Normal Distribution")
@@ -154,7 +154,7 @@ ytitle("Density") title("Standard Normal Distribution")
   <li>A normal curve from 1.96 to 4</li>
 </ol>
 
-<p>The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, <code>||</code>, between calls to the <code>twoway function</code> command. We will shade the area under the curve for #1 and #3 using the <code>recast(area)</code> option of <code>twoway function</code>. We will assign the color of the shading to dark navy blue using the <code>color(dknavy)</code> option. We will leave the area under the curve for #2 unshaded. </p>
+<p>The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, <code>||</code>, between calls to the <code>twoway function</code> command. We will shade the area under the curve for #1 and #3 using the <code>recast(area)</code> option of <code>twoway function</code>. We will assign the color of the shading to dark navy blue using the <code>color(dknavy)</code> option. We will leave the area under the curve for #2 unshaded.</p>
 
 <pre><code>twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
 function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///

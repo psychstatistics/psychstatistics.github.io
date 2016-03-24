@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2015-08-13T15:27:14-06:00</updated>
+ <updated>2016-03-23T20:09:53-06:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -19,18 +19,15 @@
    <id>psychstatistics.github.io/2014/12/27/d-lkj-priors</id>
    <content type="html">&lt;h2 id=&quot;visualizing-the-lkj-correlation-distribution&quot;&gt;Visualizing the LKJ Correlation Distribution&lt;/h2&gt;
 
-&lt;p&gt;I use multilevel models a lot. I’ve transitioned from using software like &lt;a href=&quot;http://cran.r-project.org/web/packages/lme4/index.html&quot;&gt;&lt;code&gt;lme4&lt;/code&gt;&lt;/a&gt; in R or &lt;a href=&quot;http://www.stata.com/manuals13/me.pdf&quot;&gt;&lt;code&gt;mixed&lt;/code&gt;&lt;/a&gt; in Stata, which use maximum likelihood methods, to using Bayesian software like &lt;a href=&quot;http://mc-stan.org&quot;&gt;Stan&lt;/a&gt; or &lt;a href=&quot;http://mcmc-jags.sourceforge.net&quot;&gt;JAGS&lt;/a&gt; to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.  &lt;/p&gt;
+&lt;p&gt;I use multilevel models a lot. I’ve transitioned from using software like &lt;a href=&quot;http://cran.r-project.org/web/packages/lme4/index.html&quot;&gt;&lt;code&gt;lme4&lt;/code&gt;&lt;/a&gt; in R or &lt;a href=&quot;http://www.stata.com/manuals13/me.pdf&quot;&gt;&lt;code&gt;mixed&lt;/code&gt;&lt;/a&gt; in Stata, which use maximum likelihood methods, to using Bayesian software like &lt;a href=&quot;http://mc-stan.org&quot;&gt;Stan&lt;/a&gt; or &lt;a href=&quot;http://mcmc-jags.sourceforge.net&quot;&gt;JAGS&lt;/a&gt; to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.&lt;/p&gt;
 
-&lt;p&gt;Consider a simple growth-curve model for longitudinal data.  &lt;/p&gt;
+&lt;p&gt;Consider a simple growth-curve model for longitudinal data.&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;
-y_{ij} = b_0 + b_1time_{ij} + u_{0j} + u_{1j}time_{ij} + e_{ij}
-&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;y_{ij} = b_0 + b_1time_{ij} + u_{0j} + u_{1j}time_{ij} + e_{ij}&lt;/script&gt;
 
 &lt;p&gt;Where &lt;script type=&quot;math/tex&quot;&gt;b_0&lt;/script&gt; is the overall intercept, &lt;script type=&quot;math/tex&quot;&gt;b_1&lt;/script&gt; is the effect of time, &lt;script type=&quot;math/tex&quot;&gt;u_{0j}&lt;/script&gt; is a person-specific intercept, &lt;script type=&quot;math/tex&quot;&gt;u_{1j}&lt;/script&gt; is a person-specific effect of time. The &lt;script type=&quot;math/tex&quot;&gt;u&lt;/script&gt;’s are the random effects, which we typically assume follow a multivariate normal distribution:&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-
 \left [\
         \begin{array}{c}
             u_{0j} \\
@@ -50,8 +47,7 @@ y_{ij} = b_0 + b_1time_{ij} + u_{0j} + u_{1j}time_{ij} + e_{ij}
             \sigma^2_{u0} &amp; \sigma_{u0u1} \\
             \sigma_{u0u1} &amp; \sigma^2_{u1}
         \end{array}
-    \right ]\  
- %]]&gt;&lt;/script&gt;
+    \right ]\ %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;Unfortunately, choosing a prior for the covariance matrix can be difficult and, frankly, occassionally maddening. Usually I have to use an inverse-Wishart distribution, which seems easy enough. However, they can be tricky to specify once the covariance matrix gets pretty big. Further, in software like JAGS, the multivariate normal distribution is parameterized with a precision matrix, so you have to use the Wishart distribution. Finally, it is downright hard to choose a sensible prior for a covariance matrix.&lt;/p&gt;
 
@@ -92,11 +88,11 @@ beta distribution.&lt;/p&gt;
 
 &lt;p&gt;To see what this looks like we are going to simulate correlation matrices for &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; = .5, 1, 2, 5, 10, and 50. We’ll then plot the density of one correlation from each of the simulated matrices to see how they look. Stan requires that you input some data, so I simulated some data out of poisson distribution to fit in Stan. We don’t care about those and they could be anything.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;rstan&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;rstan&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;reshape2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ggplot2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;kp&quot;&gt;set.seed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;123&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-sim_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; rpois&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; N &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; R &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+sim_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; rpois&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; N &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; R &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;First, I load the required libraries for this post. Then I set the seed and create the data needed to pass into Stan. &lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt; is 30 random draws from a poisson with a rate parameter = 5, &lt;script type=&quot;math/tex&quot;&gt;N&lt;/script&gt; is the sample size for the poisson data, and &lt;script type=&quot;math/tex&quot;&gt;R&lt;/script&gt; is the number of correlations we are dealing with (recall we have the correlations among the random intercept and 2 random slopes).&lt;/p&gt;
 
@@ -104,7 +100,7 @@ sim_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&
 
 &lt;p&gt;Next I write the Stan model. The key part of this code is &lt;code&gt;generated quantities&lt;/code&gt; block. This block creates 6 correlation matrices named &lt;code&gt;Omega&lt;/code&gt;. The number after &lt;code&gt;Omega&lt;/code&gt; describes the size of &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_stan &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_stan &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;data {&lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;  int&amp;lt;lower=0&amp;gt; N; // number of observations&lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;  int&amp;lt;lower=0&amp;gt; x[N]; // outcome variable&lt;/span&gt;
@@ -130,22 +126,22 @@ sim_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&
 &lt;span class=&quot;s&quot;&gt;  Omega10 &amp;lt;- lkj_corr_rng(R,10);&lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;  Omega50 &amp;lt;- lkj_corr_rng(R,50);&lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;using-rstan-to-fit-the-model&quot;&gt;Using rstan to fit the model&lt;/h3&gt;
 
 &lt;p&gt;Next, I fit the model in R through the &lt;code&gt;rstan&lt;/code&gt; package.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_parms &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Omega0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_parms &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Omega0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
 			   &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega5&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Omega10&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega50&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 fit_sim &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; stan&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;model_code &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_stan&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; pars &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_parms&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_data&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; chains &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; iter &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+                data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_data&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; chains &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; iter &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;processing-the-mcmc-draws-and-getting-them-prepped-for-ggplot&quot;&gt;Processing the MCMC draws and getting them prepped for ggplot&lt;/h3&gt;
 
-&lt;p&gt;Finally, I process the data and transform it so that I can plot the density in &lt;code&gt;ggplot2&lt;/code&gt;. &lt;/p&gt;
+&lt;p&gt;Finally, I process the data and transform it so that I can plot the density in &lt;code&gt;ggplot2&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;res_sim &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fit_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;res_sim &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fit_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\[&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;_&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\,&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;_&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
@@ -164,13 +160,13 @@ plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;eta &lt;span class=&quot;o
 			  &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = .9&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 my.labs &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
 		&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-		&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+		&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;creating-the-plot&quot;&gt;Creating the Plot&lt;/h3&gt;
 
 &lt;p&gt;Here’s the code for the plot.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;p &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; ggplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; value&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; colour &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; eta&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;p &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; ggplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; value&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; colour &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; eta&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 p &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; geom_density&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
   scale_colour_manual&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;values&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; breaks &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;eta&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
                       labels &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; my.labs&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; name &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Shape&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
@@ -179,7 +175,7 @@ p &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; geom_density&lt;span class=&quo
   ggtitle&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Visualization of a correlation from the &lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;  		   lkj_corr density in Stan \n for various &lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;		   values of the shape parameter&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
-  theme_bw&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+  theme_bw&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;visualizing-the-density&quot;&gt;Visualizing the Density&lt;/h3&gt;
 
@@ -240,7 +236,7 @@ The slides for the presentation can be downloaded here:  &lt;a href=&quot;http:/
 
 &lt;p&gt;As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the &lt;code&gt;auto&lt;/code&gt; dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt; mpg^\prime = b_0 + b_1weight &lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;mpg^\prime = b_0 + b_1weight&lt;/script&gt;
 
 &lt;pre&gt;&lt;code&gt;sysuse auto
 regress mpg weight
@@ -299,7 +295,7 @@ regress mpg weight
 
 &lt;p&gt;Recall the a residual in regression is defined as the difference between the actual value of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; and the predicted value of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; (or &lt;script type=&quot;math/tex&quot;&gt;Y^\prime&lt;/script&gt;):&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt; Y - Y^\prime &lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Y - Y^\prime&lt;/script&gt;
 
 &lt;p&gt;Thus, to compute residuals we can just subtract &lt;code&gt;mpg_pred&lt;/code&gt; from &lt;code&gt;mpg&lt;/code&gt;. Stata will do this for us using the predict command:&lt;/p&gt;
 
@@ -1366,7 +1362,7 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;h2 id=&quot;covariance-matrix&quot;&gt;Covariance Matrix&lt;/h2&gt;
 
-&lt;p&gt;If we want to create of covariance matrix, we simply add the &lt;code&gt;covariance&lt;/code&gt; option to the &lt;code&gt;correlation&lt;/code&gt; command. &lt;/p&gt;
+&lt;p&gt;If we want to create of covariance matrix, we simply add the &lt;code&gt;covariance&lt;/code&gt; option to the &lt;code&gt;correlation&lt;/code&gt; command.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;correlation price mpg weigh length, covariance
 &lt;/code&gt;&lt;/pre&gt;
@@ -1425,7 +1421,7 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;h3 id=&quot;the-part-of-price-independent-of-weight-and-foreign&quot;&gt;The part of &lt;em&gt;price&lt;/em&gt; independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;&lt;/h3&gt;
 
-&lt;p&gt;To obtain the part of &lt;em&gt;price&lt;/em&gt; independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt; we regress &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. &lt;/p&gt;
+&lt;p&gt;To obtain the part of &lt;em&gt;price&lt;/em&gt; independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt; we regress &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;regress price weight foreign
 &lt;/code&gt;&lt;/pre&gt;
@@ -1463,7 +1459,7 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;h3 id=&quot;partial-correlation&quot;&gt;Partial correlation&lt;/h3&gt;
 
-&lt;p&gt;We know have everything we need for the partial correlation between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;mpg&lt;/em&gt; controlling for &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Specifically, we have &lt;em&gt;priceres&lt;/em&gt; – which is the part of &lt;em&gt;price&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. We also have &lt;em&gt;mpgres&lt;/em&gt; – which is the part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Therefore, to obtain the partial correlation we simply need to correlate &lt;em&gt;priceres&lt;/em&gt; and &lt;em&gt;mpgres&lt;/em&gt;. &lt;/p&gt;
+&lt;p&gt;We know have everything we need for the partial correlation between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;mpg&lt;/em&gt; controlling for &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Specifically, we have &lt;em&gt;priceres&lt;/em&gt; – which is the part of &lt;em&gt;price&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. We also have &lt;em&gt;mpgres&lt;/em&gt; – which is the part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Therefore, to obtain the partial correlation we simply need to correlate &lt;em&gt;priceres&lt;/em&gt; and &lt;em&gt;mpgres&lt;/em&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;corr priceres mpgres
 &lt;/code&gt;&lt;/pre&gt;
@@ -1578,7 +1574,7 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;h2 id=&quot;the-twoway-function-command&quot;&gt;The &lt;code&gt;twoway function&lt;/code&gt; command&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;twoway function&lt;/code&gt; plotting command is used to plot functions, such as &lt;code&gt;y = mx + b&lt;/code&gt;. If we want to plot the density of a normal distribution across a range of x values, we type &lt;code&gt;y=normalden(x)&lt;/code&gt;. You can also include graphing options available to twoway plots (e.g., &lt;code&gt;xtitle&lt;/code&gt;).  &lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;twoway function&lt;/code&gt; plotting command is used to plot functions, such as &lt;code&gt;y = mx + b&lt;/code&gt;. If we want to plot the density of a normal distribution across a range of x values, we type &lt;code&gt;y=normalden(x)&lt;/code&gt;. You can also include graphing options available to twoway plots (e.g., &lt;code&gt;xtitle&lt;/code&gt;).&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-4 4) xtitle(&quot;{it: x}&quot;) ///
 ytitle(&quot;Density&quot;) title(&quot;Standard Normal Distribution&quot;)
@@ -1596,7 +1592,7 @@ ytitle(&quot;Density&quot;) title(&quot;Standard Normal Distribution&quot;)
   &lt;li&gt;A normal curve from 1.96 to 4&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, &lt;code&gt;||&lt;/code&gt;, between calls to the &lt;code&gt;twoway function&lt;/code&gt; command. We will shade the area under the curve for #1 and #3 using the &lt;code&gt;recast(area)&lt;/code&gt; option of &lt;code&gt;twoway function&lt;/code&gt;. We will assign the color of the shading to dark navy blue using the &lt;code&gt;color(dknavy)&lt;/code&gt; option. We will leave the area under the curve for #2 unshaded. &lt;/p&gt;
+&lt;p&gt;The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, &lt;code&gt;||&lt;/code&gt;, between calls to the &lt;code&gt;twoway function&lt;/code&gt; command. We will shade the area under the curve for #1 and #3 using the &lt;code&gt;recast(area)&lt;/code&gt; option of &lt;code&gt;twoway function&lt;/code&gt;. We will assign the color of the shading to dark navy blue using the &lt;code&gt;color(dknavy)&lt;/code&gt; option. We will leave the area under the curve for #2 unshaded.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
 function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///
