@@ -189,7 +189,7 @@ id week weight grandw~t
 15. 2 6 58.5 50.40509
 </code></pre>
 
-<h2 id="egen-mean-for-cluster-means"><code>egen mean</code> for cluster means</h2>
+<p>##<code>egen mean</code> for cluster means##</p>
 
 <p>We can combine <code>egen mean</code> with <code>by</code> to compute cluster means. (Remember that <strong>id</strong> is the cluster id variable.)</p>
 
@@ -222,7 +222,7 @@ id week weight grandw~t groupw~t
 15. 2 6 58.5 50.40509 51.33333
 </code></pre>
 
-<h2 id="looking-at-missing-data">Looking at missing data</h2>
+<p>##Looking at missing data##</p>
 
 <p>You can also use <code>egen</code> to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use <code>egen</code> combined with <code>rowmiss</code> to create a missing variable to examine this:</p>
 

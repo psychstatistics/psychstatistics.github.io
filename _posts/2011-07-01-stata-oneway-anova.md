@@ -24,7 +24,7 @@ The `anova` command is simple and follows the standard Stata syntax -- Command D
 
 Viola -- you've got an ANOVA source table.
 
-![Results-auto.dta-1.jpg](/assets/Results-auto_dta-1.jpg)
+![anova_oneway_auto.png](/assets/anova_oneway_auto.png)
 
 Looks like the difference in price is not statistically significant. The advantage of using `anova` is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the `loneway` command.
 

@@ -152,7 +152,7 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p>Viola – you’ve got an ANOVA source table.</p>
 
-<p><img src="/assets/Results-auto_dta-1.jpg" alt="Results-auto.dta-1.jpg" /></p>
+<p><img src="/assets/anova_oneway_auto.png" alt="anova_oneway_auto.png" /></p>
 
 <p>Looks like the difference in price is not statistically significant. The advantage of using <code>anova</code> is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the <code>loneway</code> command.</p>
 
@@ -176,8 +176,8 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
     </h1>
 
     <span class="post-date">30 May 2011</span>
-    <h2 id="descriptive-statistics">Descriptive Statistics</h2>
-<p>For this tutorial we are going to use the <code>auto</code> dataset that comes with Stata. To load this data type</p>
+    <p>##Descriptive Statistics##
+For this tutorial we are going to use the <code>auto</code> dataset that comes with Stata. To load this data type</p>
 
 <pre><code>sysuse auto, clear
 </code></pre>
@@ -203,7 +203,7 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p><img src="/assets/summ_detail.jpg" alt="summ_detail.jpg" /></p>
 
-<h2 id="multiple-variables-at-once">Multiple Variables at Once</h2>
+<p>##Multiple Variables at Once##</p>
 
 <p>To get descriptives for multiple variables at once just add the variable names after <code>summarize</code>.</p>
 
@@ -219,7 +219,7 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p><img src="/assets/summ_mult_detail.jpg" alt="summ_mult_detail.jpg" /></p>
 
-<h2 id="using-by-processing">Using <code>by</code> processing</h2>
+<p>##Using <code>by</code> processing##</p>
 
 <p>Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called <code>by</code> processing.</p>
 
@@ -245,7 +245,7 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p><img src="/assets/histogram_by_foreign.png" alt="histogram_by_foreign.png" /></p>
 
-<h2 id="using-if">Using <code>if</code></h2>
+<p>##Using <code>if</code>##</p>
 
 <p>The <code>by</code> statement will give us descriptives for all levels of the <code>by</code> variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the <code>by</code> variable. We can use the <code>if</code> statement for that. For foreign cars (i.e., <code>foreign == 1</code>):</p>
 
@@ -393,7 +393,7 @@ id week weight grandw~t
 15. 2 6 58.5 50.40509
 </code></pre>
 
-<h2 id="egen-mean-for-cluster-means"><code>egen mean</code> for cluster means</h2>
+<p>##<code>egen mean</code> for cluster means##</p>
 
 <p>We can combine <code>egen mean</code> with <code>by</code> to compute cluster means. (Remember that <strong>id</strong> is the cluster id variable.)</p>
 
@@ -426,7 +426,7 @@ id week weight grandw~t groupw~t
 15. 2 6 58.5 50.40509 51.33333
 </code></pre>
 
-<h2 id="looking-at-missing-data">Looking at missing data</h2>
+<p>##Looking at missing data##</p>
 
 <p>You can also use <code>egen</code> to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use <code>egen</code> combined with <code>rowmiss</code> to create a missing variable to examine this:</p>
 
@@ -452,19 +452,19 @@ id week weight grandw~t groupw~t
     </h1>
 
     <span class="post-date">30 May 2011</span>
-    <h1 id="reading-in-comma-separated-files">Reading in Comma Separated Files</h1>
+    <p>#Reading in Comma Separated Files#</p>
 
 <p>This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.</p>
 
-<h2 id="syntax">Syntax</h2>
-<p>You can import csv files using the <code>insheet</code> command.</p>
+<p>##Syntax##
+You can import csv files using the <code>insheet</code> command.</p>
 
 <pre><code>insheet using "auto.csv", comma clear
 </code></pre>
 
 <p>The <code>using auto.csv</code> statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or <code>cd</code> to the directory with the csv file. I typically include the option <code>comma</code>. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the <code>insheet</code> command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the <code>clear</code> option to clear out any data that are currently in memory.</p>
 
-<h2 id="point-and-click">Point-and-Click</h2>
+<p>##Point-and-Click##</p>
 
 <p>We can import csv files by using the <strong>Import</strong> submenu under the <strong>File</strong> menu. We’ll select ASCII data created by a spreadsheet under the <strong>Import</strong> submenu.</p>
 
@@ -510,14 +510,13 @@ id week weight grandw~t groupw~t
     return [i for i in candidates[2:] if i]
 </code></pre>
 
-<h2 id="a-function-for-returning-prime-factors-of-n">A function for returning prime factors of n</h2>
-<pre><code>def largeprime(n):
-    for i in sieve(n):
-        if n % i == 0:
-            yield i
-</code></pre>
+<p>##A function for returning prime factors of n
+	def largeprime(n):
+	    for i in sieve(n):
+	        if n % i == 0:
+	            yield i</p>
 
-<h2 id="return-the-prime-factors-as-a-list-and-print-the-last-number">Return the prime factors as a list and print the last number</h2>
+<p>##Return the prime factors as a list and print the last number</p>
 
 <pre><code>div = list(largeprime(n))
 print div[-1]

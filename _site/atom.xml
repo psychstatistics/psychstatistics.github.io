@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2016-03-23T20:09:53-06:00</updated>
+ <updated>2016-10-24T08:19:30-06:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -784,7 +784,7 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
 
 &lt;p&gt;Viola – you’ve got an ANOVA source table.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-1.jpg&quot; alt=&quot;Results-auto.dta-1.jpg&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/anova_oneway_auto.png&quot; alt=&quot;anova_oneway_auto.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Looks like the difference in price is not statistically significant. The advantage of using &lt;code&gt;anova&lt;/code&gt; is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the &lt;code&gt;loneway&lt;/code&gt; command.&lt;/p&gt;
 
@@ -805,8 +805,8 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
    <link href="psychstatistics.github.io/2011/05/30/stata-descriptive-statistics-mean-median-variability/"/>
    <updated>2011-05-30T16:02:33-06:00</updated>
    <id>psychstatistics.github.io/2011/05/30/stata-descriptive-statistics-mean-median-variability</id>
-   <content type="html">&lt;h2 id=&quot;descriptive-statistics&quot;&gt;Descriptive Statistics&lt;/h2&gt;
-&lt;p&gt;For this tutorial we are going to use the &lt;code&gt;auto&lt;/code&gt; dataset that comes with Stata. To load this data type&lt;/p&gt;
+   <content type="html">&lt;p&gt;##Descriptive Statistics##
+For this tutorial we are going to use the &lt;code&gt;auto&lt;/code&gt; dataset that comes with Stata. To load this data type&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;sysuse auto, clear
 &lt;/code&gt;&lt;/pre&gt;
@@ -832,7 +832,7 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
 
 &lt;p&gt;&lt;img src=&quot;/assets/summ_detail.jpg&quot; alt=&quot;summ_detail.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;multiple-variables-at-once&quot;&gt;Multiple Variables at Once&lt;/h2&gt;
+&lt;p&gt;##Multiple Variables at Once##&lt;/p&gt;
 
 &lt;p&gt;To get descriptives for multiple variables at once just add the variable names after &lt;code&gt;summarize&lt;/code&gt;.&lt;/p&gt;
 
@@ -848,7 +848,7 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
 
 &lt;p&gt;&lt;img src=&quot;/assets/summ_mult_detail.jpg&quot; alt=&quot;summ_mult_detail.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;using-by-processing&quot;&gt;Using &lt;code&gt;by&lt;/code&gt; processing&lt;/h2&gt;
+&lt;p&gt;##Using &lt;code&gt;by&lt;/code&gt; processing##&lt;/p&gt;
 
 &lt;p&gt;Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called &lt;code&gt;by&lt;/code&gt; processing.&lt;/p&gt;
 
@@ -874,7 +874,7 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
 
 &lt;p&gt;&lt;img src=&quot;/assets/histogram_by_foreign.png&quot; alt=&quot;histogram_by_foreign.png&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;using-if&quot;&gt;Using &lt;code&gt;if&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;##Using &lt;code&gt;if&lt;/code&gt;##&lt;/p&gt;
 
 &lt;p&gt;The &lt;code&gt;by&lt;/code&gt; statement will give us descriptives for all levels of the &lt;code&gt;by&lt;/code&gt; variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the &lt;code&gt;by&lt;/code&gt; variable. We can use the &lt;code&gt;if&lt;/code&gt; statement for that. For foreign cars (i.e., &lt;code&gt;foreign == 1&lt;/code&gt;):&lt;/p&gt;
 
@@ -1019,7 +1019,7 @@ id week weight grandw~t
 15. 2 6 58.5 50.40509
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;egen-mean-for-cluster-means&quot;&gt;&lt;code&gt;egen mean&lt;/code&gt; for cluster means&lt;/h2&gt;
+&lt;p&gt;##&lt;code&gt;egen mean&lt;/code&gt; for cluster means##&lt;/p&gt;
 
 &lt;p&gt;We can combine &lt;code&gt;egen mean&lt;/code&gt; with &lt;code&gt;by&lt;/code&gt; to compute cluster means. (Remember that &lt;strong&gt;id&lt;/strong&gt; is the cluster id variable.)&lt;/p&gt;
 
@@ -1052,7 +1052,7 @@ id week weight grandw~t groupw~t
 15. 2 6 58.5 50.40509 51.33333
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;looking-at-missing-data&quot;&gt;Looking at missing data&lt;/h2&gt;
+&lt;p&gt;##Looking at missing data##&lt;/p&gt;
 
 &lt;p&gt;You can also use &lt;code&gt;egen&lt;/code&gt; to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use &lt;code&gt;egen&lt;/code&gt; combined with &lt;code&gt;rowmiss&lt;/code&gt; to create a missing variable to examine this:&lt;/p&gt;
 
@@ -1075,19 +1075,19 @@ id week weight grandw~t groupw~t
    <link href="psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files/"/>
    <updated>2011-05-30T00:00:00-06:00</updated>
    <id>psychstatistics.github.io/2011/05/30/stata-reading-in-comma-separated-files</id>
-   <content type="html">&lt;h1 id=&quot;reading-in-comma-separated-files&quot;&gt;Reading in Comma Separated Files&lt;/h1&gt;
+   <content type="html">&lt;p&gt;#Reading in Comma Separated Files#&lt;/p&gt;
 
 &lt;p&gt;This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.&lt;/p&gt;
 
-&lt;h2 id=&quot;syntax&quot;&gt;Syntax&lt;/h2&gt;
-&lt;p&gt;You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;##Syntax##
+You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;insheet using &quot;auto.csv&quot;, comma clear
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;code&gt;using auto.csv&lt;/code&gt; statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or &lt;code&gt;cd&lt;/code&gt; to the directory with the csv file. I typically include the option &lt;code&gt;comma&lt;/code&gt;. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the &lt;code&gt;insheet&lt;/code&gt; command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the &lt;code&gt;clear&lt;/code&gt; option to clear out any data that are currently in memory.&lt;/p&gt;
 
-&lt;h2 id=&quot;point-and-click&quot;&gt;Point-and-Click&lt;/h2&gt;
+&lt;p&gt;##Point-and-Click##&lt;/p&gt;
 
 &lt;p&gt;We can import csv files by using the &lt;strong&gt;Import&lt;/strong&gt; submenu under the &lt;strong&gt;File&lt;/strong&gt; menu. We’ll select ASCII data created by a spreadsheet under the &lt;strong&gt;Import&lt;/strong&gt; submenu.&lt;/p&gt;
 
@@ -1130,14 +1130,13 @@ id week weight grandw~t groupw~t
     return [i for i in candidates[2:] if i]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;a-function-for-returning-prime-factors-of-n&quot;&gt;A function for returning prime factors of n&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;def largeprime(n):
-    for i in sieve(n):
-        if n % i == 0:
-            yield i
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;##A function for returning prime factors of n
+	def largeprime(n):
+	    for i in sieve(n):
+	        if n % i == 0:
+	            yield i&lt;/p&gt;
 
-&lt;h2 id=&quot;return-the-prime-factors-as-a-list-and-print-the-last-number&quot;&gt;Return the prime factors as a list and print the last number&lt;/h2&gt;
+&lt;p&gt;##Return the prime factors as a list and print the last number&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;div = list(largeprime(n))
 print div[-1]
@@ -1235,7 +1234,7 @@ print sum(set(answer)) #print the sum of the unique values
 &lt;p&gt;This solution uses a &lt;code&gt;for&lt;/code&gt; loop and take advantage of the mod operator in python – &lt;code&gt;%&lt;/code&gt; – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;answer2 = [] #empty list
-for i in range(1000): #iterate from 0 to 999 -- 1000 isn&#39;t included
+for i in range(1000): #iterate from 0 to 999 -- 1000 isn't included
 	if i % 3 == 0 or i % 5 == 0: #identify whether i is divisible by 3 or 5
     	answer2.append(i) #if divisible, then append it to the answer2 list
 print sum(answer2) #print the sum of answer 2
@@ -1642,11 +1641,11 @@ legend(off) xlabel(-2.09 0 2.09)
 &lt;p&gt;These screencasts will introduce you to the basic interface of AMOS.&lt;/p&gt;
 
 &lt;h2 id=&quot;part-i&quot;&gt;Part I&lt;/h2&gt;
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/GA2hco5604M?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&amp;lt;/embed&amp;gt;&lt;/object&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
 
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&amp;lt;/embed&amp;gt;&lt;/object&gt;&lt;/p&gt;
 </content>
  </entry>
  
@@ -1659,7 +1658,7 @@ legend(off) xlabel(-2.09 0 2.09)
 
 &lt;p&gt;This screencast will introduce how to perform a multiple group analysis in AMOS.&lt;/p&gt;
 
-&lt;p&gt;&lt;object width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;425&quot; height=&quot;344&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+&lt;p&gt;&lt;object width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;425&quot; height=&quot;344&quot; /&gt;&amp;lt;/embed&amp;gt;&lt;/object&gt;&lt;/p&gt;
 </content>
  </entry>
  
@@ -1674,11 +1673,11 @@ legend(off) xlabel(-2.09 0 2.09)
 
 &lt;h2 id=&quot;part-i&quot;&gt;Part I&lt;/h2&gt;
 
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/Rqm7Mmsj3yM?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&amp;lt;/embed&amp;gt;&lt;/object&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;part-ii&quot;&gt;Part II&lt;/h2&gt;
 
-&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&lt;/object&gt;&lt;/p&gt;
+&lt;p&gt;&lt;object width=&quot;560&quot; height=&quot;340&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; /&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;&lt;embed src=&quot;http://www.youtube.com/v/0egDHklZdhI?fs=1&amp;amp;hl=en_US&amp;amp;hd=1&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;560&quot; height=&quot;340&quot; /&gt;&amp;lt;/embed&amp;gt;&lt;/object&gt;&lt;/p&gt;
 </content>
  </entry>
  

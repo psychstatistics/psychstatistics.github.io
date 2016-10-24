@@ -126,8 +126,8 @@
   <h1 class="post-title">Stata: Descriptive Statistics - Mean, median, variability</h1>
   <span class="post-date">30 May 2011</span>
   <span class="post-tags">Tags: Stata and Tutorial</span>
-  <h2 id="descriptive-statistics">Descriptive Statistics</h2>
-<p>For this tutorial we are going to use the <code>auto</code> dataset that comes with Stata. To load this data type</p>
+  <p>##Descriptive Statistics##
+For this tutorial we are going to use the <code>auto</code> dataset that comes with Stata. To load this data type</p>
 
 <pre><code>sysuse auto, clear
 </code></pre>
@@ -153,7 +153,7 @@
 
 <p><img src="/assets/summ_detail.jpg" alt="summ_detail.jpg" /></p>
 
-<h2 id="multiple-variables-at-once">Multiple Variables at Once</h2>
+<p>##Multiple Variables at Once##</p>
 
 <p>To get descriptives for multiple variables at once just add the variable names after <code>summarize</code>.</p>
 
@@ -169,7 +169,7 @@
 
 <p><img src="/assets/summ_mult_detail.jpg" alt="summ_mult_detail.jpg" /></p>
 
-<h2 id="using-by-processing">Using <code>by</code> processing</h2>
+<p>##Using <code>by</code> processing##</p>
 
 <p>Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called <code>by</code> processing.</p>
 
@@ -195,7 +195,7 @@
 
 <p><img src="/assets/histogram_by_foreign.png" alt="histogram_by_foreign.png" /></p>
 
-<h2 id="using-if">Using <code>if</code></h2>
+<p>##Using <code>if</code>##</p>
 
 <p>The <code>by</code> statement will give us descriptives for all levels of the <code>by</code> variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the <code>by</code> variable. We can use the <code>if</code> statement for that. For foreign cars (i.e., <code>foreign == 1</code>):</p>
 

@@ -148,14 +148,13 @@
     return [i for i in candidates[2:] if i]
 </code></pre>
 
-<h2 id="a-function-for-returning-prime-factors-of-n">A function for returning prime factors of n</h2>
-<pre><code>def largeprime(n):
-    for i in sieve(n):
-        if n % i == 0:
-            yield i
-</code></pre>
+<p>##A function for returning prime factors of n
+	def largeprime(n):
+	    for i in sieve(n):
+	        if n % i == 0:
+	            yield i</p>
 
-<h2 id="return-the-prime-factors-as-a-list-and-print-the-last-number">Return the prime factors as a list and print the last number</h2>
+<p>##Return the prime factors as a list and print the last number</p>
 
 <pre><code>div = list(largeprime(n))
 print div[-1]
