@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -136,11 +136,11 @@
 
 <h2 id="python-solution-1">Python Solution 1</h2>
 
-<p>This solution creates a function <code>fibon</code> that takes a single argument – <code>maximum</code>. The value of <code>maximum</code> will be 4,000,000 in this example. The function first initializes an iterator (<code>i</code>), a list with two entries (<code>fib</code>), and a variable (<code>n</code>) that will be used to tell Python when to stop the <code>while</code> loop. The <code>while</code> loop creates the next entry in the sequence (<code>fibtemp</code>), makes it a list, and adds it to the <code>fib</code> list. Then it alters the value of <code>n</code> and adds 1 to the iterator.</p>
+<p>This solution creates a function <code class="highlighter-rouge">fibon</code> that takes a single argument – <code class="highlighter-rouge">maximum</code>. The value of <code class="highlighter-rouge">maximum</code> will be 4,000,000 in this example. The function first initializes an iterator (<code class="highlighter-rouge">i</code>), a list with two entries (<code class="highlighter-rouge">fib</code>), and a variable (<code class="highlighter-rouge">n</code>) that will be used to tell Python when to stop the <code class="highlighter-rouge">while</code> loop. The <code class="highlighter-rouge">while</code> loop creates the next entry in the sequence (<code class="highlighter-rouge">fibtemp</code>), makes it a list, and adds it to the <code class="highlighter-rouge">fib</code> list. Then it alters the value of <code class="highlighter-rouge">n</code> and adds 1 to the iterator.</p>
 
-<p>Next it creates another empty list to hold the even numbers of the sequence (<code>fibeven</code>). The it uses a <code>for</code> loop over the elements of <code>fib</code> to identify whether a particular element is even. If it is even, it adds that element to <code>fibeven</code>. The function then returns the sum of <code>fibeven</code>.</p>
+<p>Next it creates another empty list to hold the even numbers of the sequence (<code class="highlighter-rouge">fibeven</code>). The it uses a <code class="highlighter-rouge">for</code> loop over the elements of <code class="highlighter-rouge">fib</code> to identify whether a particular element is even. If it is even, it adds that element to <code class="highlighter-rouge">fibeven</code>. The function then returns the sum of <code class="highlighter-rouge">fibeven</code>.</p>
 
-<pre><code>def fibon(maximum):
+<div class="highlighter-rouge"><pre class="highlight"><code>def fibon(maximum):
     i = 2
     fib = [1,2,]
     n=0
@@ -159,12 +159,13 @@
 
 print fibon(4000000)
 </code></pre>
+</div>
 
 <h2 id="python-solution-2">Python Solution 2</h2>
 
-<p>This solution uses a generator function to create the sequence. You can tell it is a generator function because of the <code>yield</code> keyword in it. Then I used NumPy arrays to process the sequence and identify the even numbers. I’ve been using NumPy quite a bit lately, so I wanted to come up with a solution that involved NumPy.</p>
+<p>This solution uses a generator function to create the sequence. You can tell it is a generator function because of the <code class="highlighter-rouge">yield</code> keyword in it. Then I used NumPy arrays to process the sequence and identify the even numbers. I’ve been using NumPy quite a bit lately, so I wanted to come up with a solution that involved NumPy.</p>
 
-<pre><code>import numpy as np
+<div class="highlighter-rouge"><pre class="highlight"><code>import numpy as np
 
 def fibfun(maxnum):
     x = 0
@@ -178,6 +179,7 @@ npall = np.array(allnum)
 npeven = npall[np.where(npall % 2 == 0)]
 print np.sum(npeven)
 </code></pre>
+</div>
 
 
 </div>

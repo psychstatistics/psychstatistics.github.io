@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -130,44 +130,48 @@
 <p>This post will illustrate how to:</p>
 
 <ol>
-  <li>Create a correlation matrix of variables using the <a href="http://www.stata.com/help.cgi?correlate"><code>correlate</code></a> command.</li>
+  <li>Create a correlation matrix of variables using the <a href="http://www.stata.com/help.cgi?correlate"><code class="highlighter-rouge">correlate</code></a> command.</li>
   <li>Display a correlation matrix as a covariance matrix.</li>
-  <li>Obtain the statistical significance of a correlation using the <a href="http://www.stata.com/help.cgi?pwcorr"><code>pwcorr</code></a> command.</li>
+  <li>Obtain the statistical significance of a correlation using the <a href="http://www.stata.com/help.cgi?pwcorr"><code class="highlighter-rouge">pwcorr</code></a> command.</li>
 </ol>
 
 <h2 id="correlation-matrix">Correlation Matrix</h2>
 
 <p>We’ll use the <strong>auto</strong> dataset for this tutorial.</p>
 
-<pre><code>sysuse auto, clear 
+<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear 
 </code></pre>
+</div>
 
 <p><img src="/assets/auto.jpg" alt="auto.jpg" /></p>
 
 <p>We’ll create a correlation matrix of four variables – <em>price</em>, <em>mpg</em>, <em>weight</em>, and <em>length</em>.</p>
 
-<pre><code>correlation price mpg weight length
+<div class="highlighter-rouge"><pre class="highlight"><code>correlation price mpg weight length
 </code></pre>
+</div>
 
 <p><img src="/assets/corr.jpg" alt="corr.jpg" /></p>
 
-<p>Note: We can shorten the <code>correlation</code> command to <code>corr</code> for convenience.</p>
+<p>Note: We can shorten the <code class="highlighter-rouge">correlation</code> command to <code class="highlighter-rouge">corr</code> for convenience.</p>
 
 <h2 id="covariance-matrix">Covariance Matrix</h2>
 
-<p>If we want to create of covariance matrix, we simply add the <code>covariance</code> option to the <code>correlation</code> command.</p>
+<p>If we want to create of covariance matrix, we simply add the <code class="highlighter-rouge">covariance</code> option to the <code class="highlighter-rouge">correlation</code> command.</p>
 
-<pre><code>correlation price mpg weigh length, covariance
+<div class="highlighter-rouge"><pre class="highlight"><code>correlation price mpg weigh length, covariance
 </code></pre>
+</div>
 
 <p><img src="/assets/covariance.jpg" alt="covariance.jpg" /></p>
 
 <h2 id="statistical-significance-of-a-correlation">Statistical Significance of a Correlation</h2>
 
-<p>The <code>correlation</code> command produces a clean correlation matrix (or covariance matrix with the <code>covariance</code> option). If we want to see the statistical significance of a correlation, we need to use the <code>pwcorr</code> command with the <code>sig</code> option.</p>
+<p>The <code class="highlighter-rouge">correlation</code> command produces a clean correlation matrix (or covariance matrix with the <code class="highlighter-rouge">covariance</code> option). If we want to see the statistical significance of a correlation, we need to use the <code class="highlighter-rouge">pwcorr</code> command with the <code class="highlighter-rouge">sig</code> option.</p>
 
-<pre><code>pwcorr price mpg weight length, sig
+<div class="highlighter-rouge"><pre class="highlight"><code>pwcorr price mpg weight length, sig
 </code></pre>
+</div>
 
 <p><img src="/assets/pwcorr.jpg" alt="pwcorr.jpg" /></p>
 

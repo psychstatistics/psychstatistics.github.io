@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -134,7 +134,7 @@
     <span class="post-date">27 Dec 2014</span>
     <h2 id="visualizing-the-lkj-correlation-distribution">Visualizing the LKJ Correlation Distribution</h2>
 
-<p>I use multilevel models a lot. I’ve transitioned from using software like <a href="http://cran.r-project.org/web/packages/lme4/index.html"><code>lme4</code></a> in R or <a href="http://www.stata.com/manuals13/me.pdf"><code>mixed</code></a> in Stata, which use maximum likelihood methods, to using Bayesian software like <a href="http://mc-stan.org">Stan</a> or <a href="http://mcmc-jags.sourceforge.net">JAGS</a> to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.</p>
+<p>I use multilevel models a lot. I’ve transitioned from using software like <a href="http://cran.r-project.org/web/packages/lme4/index.html"><code class="highlighter-rouge">lme4</code></a> in R or <a href="http://www.stata.com/manuals13/me.pdf"><code class="highlighter-rouge">mixed</code></a> in Stata, which use maximum likelihood methods, to using Bayesian software like <a href="http://mc-stan.org">Stan</a> or <a href="http://mcmc-jags.sourceforge.net">JAGS</a> to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.</p>
 
 <p>Consider a simple growth-curve model for longitudinal data.</p>
 
@@ -203,94 +203,94 @@ beta distribution.</p>
 
 <p>To see what this looks like we are going to simulate correlation matrices for <script type="math/tex">\eta</script> = .5, 1, 2, 5, 10, and 50. We’ll then plot the density of one correlation from each of the simulated matrices to see how they look. Stan requires that you input some data, so I simulated some data out of poisson distribution to fit in Stan. We don’t care about those and they could be anything.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>rstan<span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>reshape2<span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>ggplot2<span class="p">)</span>
-<span class="kp">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
-sim_data <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span>x <span class="o">=</span> rpois<span class="p">(</span><span class="m">30</span><span class="p">,</span> <span class="m">5</span><span class="p">),</span> N <span class="o">=</span> <span class="m">30</span><span class="p">,</span> R <span class="o">=</span> <span class="m">3</span><span class="p">)</span> </code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">rstan</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span><span class="w">
+</span><span class="n">sim_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpois</span><span class="p">(</span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"> </span></code></pre></figure>
 
 <p>First, I load the required libraries for this post. Then I set the seed and create the data needed to pass into Stan. <script type="math/tex">x</script> is 30 random draws from a poisson with a rate parameter = 5, <script type="math/tex">N</script> is the sample size for the poisson data, and <script type="math/tex">R</script> is the number of correlations we are dealing with (recall we have the correlations among the random intercept and 2 random slopes).</p>
 
 <h3 id="stan-model">Stan Model</h3>
 
-<p>Next I write the Stan model. The key part of this code is <code>generated quantities</code> block. This block creates 6 correlation matrices named <code>Omega</code>. The number after <code>Omega</code> describes the size of <script type="math/tex">\eta</script> in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with <script type="math/tex">\eta</script> values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.</p>
+<p>Next I write the Stan model. The key part of this code is <code class="highlighter-rouge">generated quantities</code> block. This block creates 6 correlation matrices named <code class="highlighter-rouge">Omega</code>. The number after <code class="highlighter-rouge">Omega</code> describes the size of <script type="math/tex">\eta</script> in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with <script type="math/tex">\eta</script> values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">sim_stan <span class="o">&lt;-</span> <span class="s">&quot;</span>
-<span class="s">data {</span>
-<span class="s">  int&lt;lower=0&gt; N; // number of observations</span>
-<span class="s">  int&lt;lower=0&gt; x[N]; // outcome variable</span>
-<span class="s">  int R;</span>
-<span class="s">  }</span>
-<span class="s">parameters {</span>
-<span class="s">  real lambda;</span>
-<span class="s">}</span>
-<span class="s">model {</span>
-<span class="s">  x ~ poisson_log(lambda);  </span>
-<span class="s">}</span>
-<span class="s">generated quantities {</span>
-<span class="s">  corr_matrix[R] Omega0;</span>
-<span class="s">  corr_matrix[R] Omega1;</span>
-<span class="s">  corr_matrix[R] Omega2;</span>
-<span class="s">  corr_matrix[R] Omega5;</span>
-<span class="s">  corr_matrix[R] Omega10;</span>
-<span class="s">  corr_matrix[R] Omega50;</span>
-<span class="s">  Omega0 &lt;- lkj_corr_rng(R,.9);</span>
-<span class="s">  Omega1 &lt;- lkj_corr_rng(R,1);</span>
-<span class="s">  Omega2 &lt;- lkj_corr_rng(R,2);</span>
-<span class="s">  Omega5 &lt;- lkj_corr_rng(R,5);</span>
-<span class="s">  Omega10 &lt;- lkj_corr_rng(R,10);</span>
-<span class="s">  Omega50 &lt;- lkj_corr_rng(R,50);</span>
-<span class="s">}</span>
-<span class="s">&quot;</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sim_stan</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"
+data {
+  int&lt;lower=0&gt; N; // number of observations
+  int&lt;lower=0&gt; x[N]; // outcome variable
+  int R;
+  }
+parameters {
+  real lambda;
+}
+model {
+  x ~ poisson_log(lambda);  
+}
+generated quantities {
+  corr_matrix[R] Omega0;
+  corr_matrix[R] Omega1;
+  corr_matrix[R] Omega2;
+  corr_matrix[R] Omega5;
+  corr_matrix[R] Omega10;
+  corr_matrix[R] Omega50;
+  Omega0 &lt;- lkj_corr_rng(R,.9);
+  Omega1 &lt;- lkj_corr_rng(R,1);
+  Omega2 &lt;- lkj_corr_rng(R,2);
+  Omega5 &lt;- lkj_corr_rng(R,5);
+  Omega10 &lt;- lkj_corr_rng(R,10);
+  Omega50 &lt;- lkj_corr_rng(R,50);
+}
+"</span></code></pre></figure>
 
 <h3 id="using-rstan-to-fit-the-model">Using rstan to fit the model</h3>
 
-<p>Next, I fit the model in R through the <code>rstan</code> package.</p>
+<p>Next, I fit the model in R through the <code class="highlighter-rouge">rstan</code> package.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">sim_parms <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;Omega0&#39;</span><span class="p">,</span> <span class="s">&#39;Omega1&#39;</span><span class="p">,</span> <span class="s">&#39;Omega2&#39;</span><span class="p">,</span>
-			   <span class="s">&#39;Omega5&#39;</span><span class="p">,</span><span class="s">&#39;Omega10&#39;</span><span class="p">,</span> <span class="s">&#39;Omega50&#39;</span><span class="p">)</span>
-fit_sim <span class="o">&lt;-</span> stan<span class="p">(</span>model_code <span class="o">=</span> sim_stan<span class="p">,</span> pars <span class="o">=</span> sim_parms<span class="p">,</span>
-                data <span class="o">=</span> sim_data<span class="p">,</span> chains <span class="o">=</span> <span class="m">1</span><span class="p">,</span> iter <span class="o">=</span> <span class="m">10000</span><span class="p">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sim_parms</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'Omega0'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega2'</span><span class="p">,</span><span class="w">
+			   </span><span class="s1">'Omega5'</span><span class="p">,</span><span class="s1">'Omega10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega50'</span><span class="p">)</span><span class="w">
+</span><span class="n">fit_sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stan</span><span class="p">(</span><span class="n">model_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_stan</span><span class="p">,</span><span class="w"> </span><span class="n">pars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_parms</span><span class="p">,</span><span class="w">
+                </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_data</span><span class="p">,</span><span class="w"> </span><span class="n">chains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000</span><span class="p">)</span></code></pre></figure>
 
 <h3 id="processing-the-mcmc-draws-and-getting-them-prepped-for-ggplot">Processing the MCMC draws and getting them prepped for ggplot</h3>
 
-<p>Finally, I process the data and transform it so that I can plot the density in <code>ggplot2</code>.</p>
+<p>Finally, I process the data and transform it so that I can plot the density in <code class="highlighter-rouge">ggplot2</code>.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">res_sim <span class="o">&lt;-</span> <span class="kp">as.data.frame</span><span class="p">(</span>fit_sim<span class="p">)</span>
-<span class="kp">names</span><span class="p">(</span>res_sim<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;\\[&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">,</span> <span class="kp">names</span><span class="p">(</span>res_sim<span class="p">))</span>
-<span class="kp">names</span><span class="p">(</span>res_sim<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;\\,&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">,</span> <span class="kp">names</span><span class="p">(</span>res_sim<span class="p">))</span>
-<span class="kp">names</span><span class="p">(</span>res_sim<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;\\]&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="kp">names</span><span class="p">(</span>res_sim<span class="p">))</span>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">res_sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">fit_sim</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\["</span><span class="p">,</span><span class="w"> </span><span class="s2">"_"</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\,"</span><span class="p">,</span><span class="w"> </span><span class="s2">"_"</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\]"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
 
-smalldata <span class="o">&lt;-</span> res_sim<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Omega50_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega10_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega5_3_1&quot;</span><span class="p">,</span>
-                         <span class="s">&quot;Omega2_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega1_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega0_3_1&quot;</span><span class="p">)]</span>
+</span><span class="n">smalldata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">res_sim</span><span class="p">[,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Omega50_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega10_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega5_3_1"</span><span class="p">,</span><span class="w">
+                         </span><span class="s2">"Omega2_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega1_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega0_3_1"</span><span class="p">)]</span><span class="w">
 
-smalldata<span class="o">$</span>draw <span class="o">&lt;-</span> <span class="kp">seq</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="kp">length</span><span class="p">(</span>smalldata<span class="o">$</span>Omega50_3_1<span class="p">))</span>
+</span><span class="n">smalldata</span><span class="o">$</span><span class="n">draw</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">smalldata</span><span class="o">$</span><span class="n">Omega50_3_1</span><span class="p">))</span><span class="w">
 
-plotdata <span class="o">&lt;-</span> melt<span class="p">(</span>smalldata<span class="p">,</span> id <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;draw&quot;</span><span class="p">))</span>
+</span><span class="n">plotdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">smalldata</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"draw"</span><span class="p">))</span><span class="w">
 
-plotdata<span class="o">$</span>eta <span class="o">&lt;-</span> <span class="kp">factor</span><span class="p">(</span>plotdata<span class="o">$</span>variable<span class="p">,</span> 
-		levels <span class="o">=</span> <span class="kp">levels</span><span class="p">(</span>plotdata<span class="o">$</span>variable<span class="p">),</span> 
-		label <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;eta = 50&quot;</span><span class="p">,</span> <span class="s">&quot;eta = 10&quot;</span><span class="p">,</span> 
-			  <span class="s">&quot;eta = 5&quot;</span><span class="p">,</span> <span class="s">&quot;eta = 2&quot;</span><span class="p">,</span> 
-			  <span class="s">&quot;eta = 1&quot;</span><span class="p">,</span> <span class="s">&quot;eta = .9&quot;</span><span class="p">))</span>
-my.labs <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span><span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">50</span><span class="p">),</span> <span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">10</span><span class="p">),</span>
-		<span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">5</span><span class="p">),</span> <span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">2</span><span class="p">),</span>
-		<span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">1</span><span class="p">),</span> <span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">.9</span><span class="p">))</span></code></pre></figure>
+</span><span class="n">plotdata</span><span class="o">$</span><span class="n">eta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">variable</span><span class="p">,</span><span class="w"> 
+		</span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">levels</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">variable</span><span class="p">),</span><span class="w"> 
+		</span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"eta = 50"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = 10"</span><span class="p">,</span><span class="w"> 
+			  </span><span class="s2">"eta = 5"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = 2"</span><span class="p">,</span><span class="w"> 
+			  </span><span class="s2">"eta = 1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = .9"</span><span class="p">))</span><span class="w">
+</span><span class="n">my.labs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">50</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">10</span><span class="p">),</span><span class="w">
+		</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w">
+		</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">.9</span><span class="p">))</span></code></pre></figure>
 
 <h3 id="creating-the-plot">Creating the Plot</h3>
 
 <p>Here’s the code for the plot.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">p <span class="o">&lt;-</span> ggplot<span class="p">(</span>plotdata<span class="p">,</span> aes<span class="p">(</span>x <span class="o">=</span> value<span class="p">,</span> colour <span class="o">=</span> eta<span class="p">))</span>
-p <span class="o">+</span> geom_density<span class="p">()</span> <span class="o">+</span>
-  scale_colour_manual<span class="p">(</span>values<span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">6</span><span class="p">,</span> breaks <span class="o">=</span> <span class="kp">levels</span><span class="p">(</span>plotdata<span class="o">$</span>eta<span class="p">),</span>
-                      labels <span class="o">=</span> my.labs<span class="p">,</span> name <span class="o">=</span> <span class="s">&quot;Shape&quot;</span><span class="p">)</span> <span class="o">+</span>
-  xlab<span class="p">(</span><span class="s">&quot;Correlation Value&quot;</span><span class="p">)</span> <span class="o">+</span>
-  ylab<span class="p">(</span><span class="s">&quot;Density&quot;</span><span class="p">)</span> <span class="o">+</span>
-  ggtitle<span class="p">(</span><span class="s">&quot;Visualization of a correlation from the </span>
-<span class="s">  		   lkj_corr density in Stan \n for various </span>
-<span class="s">		   values of the shape parameter&quot;</span><span class="p">)</span> <span class="o">+</span> 
-  theme_bw<span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">plotdata</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eta</span><span class="p">))</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_density</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_colour_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">levels</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">eta</span><span class="p">),</span><span class="w">
+                      </span><span class="n">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">my.labs</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Shape"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Correlation Value"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Density"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Visualization of a correlation from the 
+  		   lkj_corr density in Stan \n for various 
+		   values of the shape parameter"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">theme_bw</span><span class="p">()</span></code></pre></figure>
 
 <h3 id="visualizing-the-density">Visualizing the Density</h3>
 
@@ -355,11 +355,11 @@ The slides for the presentation can be downloaded here:  <a href="http://www.psy
     <span class="post-date">01 Oct 2013</span>
     <h2 id="predicted-scores-in-stata">Predicted Scores in Stata</h2>
 
-<p>As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the <code>auto</code> dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation</p>
+<p>As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the <code class="highlighter-rouge">auto</code> dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation</p>
 
 <script type="math/tex; mode=display">mpg^\prime = b_0 + b_1weight</script>
 
-<pre><code>sysuse auto
+<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto
 regress mpg weight
       Source |       SS       df       MS              Number of obs =      74
 -------------+------------------------------           F(  1,    72) =  134.62
@@ -374,15 +374,17 @@ regress mpg weight
        _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
 ------------------------------------------------------------------------------
 </code></pre>
+</div>
 
-<p>Thus, we see a negative relationship between <code>weight</code> and <code>mpg</code>. For every 1 unit increase in <code>weight</code>, <code>mpg</code> goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:</p>
+<p>Thus, we see a negative relationship between <code class="highlighter-rouge">weight</code> and <code class="highlighter-rouge">mpg</code>. For every 1 unit increase in <code class="highlighter-rouge">weight</code>, <code class="highlighter-rouge">mpg</code> goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:</p>
 
-<pre><code>predict mpg_pred		
+<div class="highlighter-rouge"><pre class="highlight"><code>predict mpg_pred		
 </code></pre>
+</div>
 
-<p>This creates a new variable called <code>mpg_pred</code> with the predicted <code>mpg</code> for all the <code>weight</code> values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.</p>
+<p>This creates a new variable called <code class="highlighter-rouge">mpg_pred</code> with the predicted <code class="highlighter-rouge">mpg</code> for all the <code class="highlighter-rouge">weight</code> values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.</p>
 
-<pre><code>list mpg mpg_pred in 1/20
+<div class="highlighter-rouge"><pre class="highlight"><code>list mpg mpg_pred in 1/20
      +----------------+
      | mpg   mpg_pred |
      |----------------|
@@ -411,6 +413,7 @@ regress mpg weight
  20. |  30   26.70187 |
      +----------------+
 </code></pre>
+</div>
 
 <h2 id="residuals-in-stata">Residuals in Stata</h2>
 
@@ -418,14 +421,15 @@ regress mpg weight
 
 <script type="math/tex; mode=display">Y - Y^\prime</script>
 
-<p>Thus, to compute residuals we can just subtract <code>mpg_pred</code> from <code>mpg</code>. Stata will do this for us using the predict command:</p>
+<p>Thus, to compute residuals we can just subtract <code class="highlighter-rouge">mpg_pred</code> from <code class="highlighter-rouge">mpg</code>. Stata will do this for us using the predict command:</p>
 
-<pre><code>predict mpg_res, residuals
+<div class="highlighter-rouge"><pre class="highlight"><code>predict mpg_res, residuals
 </code></pre>
+</div>
 
 <p>Here’s 20 of the actual mpg values, 20 of the predicted values, and 20 of the residuals.</p>
 
-<pre><code> list mpg mpg_pred mpg_res in 1/20
+<div class="highlighter-rouge"><pre class="highlight"><code> list mpg mpg_pred mpg_res in 1/20
      +----------------------------+
      | mpg   mpg_pred     mpg_res |
      |----------------------------|
@@ -454,17 +458,19 @@ regress mpg weight
  20. |  30   26.70187    3.298132 |
      +----------------------------+
 </code></pre>
+</div>
 
 <p>We can see that the residuals are intact the difference between the first two columns. 
-Given that the residuals are the part of the <code>mpg</code> that is unrelated to <code>weight</code>, <code>mpg_res</code> should be uncorrelated with <code>weight</code>. Let’s check:</p>
+Given that the residuals are the part of the <code class="highlighter-rouge">mpg</code> that is unrelated to <code class="highlighter-rouge">weight</code>, <code class="highlighter-rouge">mpg_res</code> should be uncorrelated with <code class="highlighter-rouge">weight</code>. Let’s check:</p>
 
-<pre><code>. corr weight mpg_res
+<div class="highlighter-rouge"><pre class="highlight"><code>. corr weight mpg_res
 (obs=74)
              |   weight  mpg_res
 -------------+------------------
       weight |   1.0000
      mpg_res |   0.0000   1.0000
 </code></pre>
+</div>
 
 <p><img src="/assets/residual_predictor_correlation.png" alt="residual_predictor_correlation.png" /></p>
 
@@ -512,7 +518,7 @@ Satorra, A. &amp; Saris, W. E. (1985). Power of the likelihood ratio test in cov
 
 <p>Dummy coding is used when you have nominal categories, meaning the groups are assigned a value for coding purposes, but the values don’t represent more or less of anything. For example, I might code three different categories of race and coded them as follows: Caucasian = 1, African American = 2, Hispanic = 3. The numbers are for coding purposes only, 3 is not actually any bigger or more than 1. But if we use these in a regression (or any other) analysis, the numbers will be treated as continuous - not categorical. So we need to create dummy variables. Generally, we create k-1 new groups, where k is the total number of groups, and one group is used as the reference sample, or the group we want to compare other groups to.</p>
 
-<p>Method 1: Using <code>generate</code> and <code>replace</code></p>
+<p>Method 1: Using <code class="highlighter-rouge">generate</code> and <code class="highlighter-rouge">replace</code></p>
 
 <p>We’ll use the built in system data systolic.</p>
 
@@ -524,37 +530,41 @@ Satorra, A. &amp; Saris, W. E. (1985). Power of the likelihood ratio test in cov
 
 <p>Consequently, we’ll need to make 3 dummy coded indicator variables to represent drug. We’ll use level 4 as the reference category. We’ll use a series of generate and replace commands to create the variables. This is definitely the brute-force way to make the variables, but it makes the logic behind creating dummy variables clear.</p>
 
-<pre><code>generate drug1=1 if drug==1
+<div class="highlighter-rouge"><pre class="highlight"><code>generate drug1=1 if drug==1
 replace drug1=0 if drug!=1
 generate drug2=1 if drug==2
 replace drug2=0 if drug!=2
 generate drug3=1 if drug==3
 replace drug3=0 if drug!=3
 </code></pre>
+</div>
 
 <p>Tabulating each of the dummy variables – drug1 - drug3 – we see they match our original tabulation.</p>
 
 <p><img src="/assets/Stata_SE-12_0-systolic_dta-3.jpg" alt="Stata_SE-12.0-systolic.dta-3.jpg" /></p>
 
-<p>Method 2: Use <code>generate</code> only</p>
+<p>Method 2: Use <code class="highlighter-rouge">generate</code> only</p>
 
 <p>We can also use a feature of the generate command to create a new variable that takes on the values 1 and 0. So, for example, if we want to create drug1, where drug1 is equal to 1 when the drug condition equals 1, we say:</p>
 
-<pre><code>generate drug1=drug==1
+<div class="highlighter-rouge"><pre class="highlight"><code>generate drug1=drug==1
 </code></pre>
+</div>
 
-<p>This creates a variable that is 1 when drug equals 1 (recall that <code>==</code> is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.</p>
+<p>This creates a variable that is 1 when drug equals 1 (recall that <code class="highlighter-rouge">==</code> is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.</p>
 
-<pre><code>generate drug2=drug==2
+<div class="highlighter-rouge"><pre class="highlight"><code>generate drug2=drug==2
 generate drug3=drug==3
 </code></pre>
+</div>
 
-<p>Method 3: Use the <code>generate</code> option of <code>tabulate</code></p>
+<p>Method 3: Use the <code class="highlighter-rouge">generate</code> option of <code class="highlighter-rouge">tabulate</code></p>
 
 <p>The function tabulate has an option called generate. The generate option takes one argument called stubname, where stubname is the stub of the new variable names created by the option. In our examples so far, the stub has been drug. Unlike the examples we have done so far, this method will create as many dummy variables as there are levels of the categorical variable (4 in our case). In our example, we type:</p>
 
-<pre><code>tabulate drug, generate(drug)
+<div class="highlighter-rouge"><pre class="highlight"><code>tabulate drug, generate(drug)
 </code></pre>
+</div>
 
 <p>We now have four new variables in our dataset – drug1-drug4.</p>
 

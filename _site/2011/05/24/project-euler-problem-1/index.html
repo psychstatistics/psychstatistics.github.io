@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -132,9 +132,9 @@
 
 <h2 id="python-solution-1">Python Solution #1</h2>
 
-<p>This uses the built in <code>range()</code> function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using <code>extend()</code>) and identify the unique values with the <code>set()</code> function. I also sorted them because I like it better that way.</p>
+<p>This uses the built in <code class="highlighter-rouge">range()</code> function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using <code class="highlighter-rouge">extend()</code>) and identify the unique values with the <code class="highlighter-rouge">set()</code> function. I also sorted them because I like it better that way.</p>
 
-<pre><code>answer =[] # empty list
+<div class="highlighter-rouge"><pre class="highlight"><code>answer =[] # empty list
 three = range(0,1000,3) #list of multiples of 3
 five = range(0,1000,5) #list of multiples of 5
 answer.extend(three) # add three to the answer list
@@ -142,17 +142,19 @@ answer.extend(five) #add five to the answer list
 answer.sort() #sort the list
 print sum(set(answer)) #print the sum of the unique values
 </code></pre>
+</div>
 
 <h2 id="python-solution-2">Python Solution #2</h2>
 
-<p>This solution uses a <code>for</code> loop and take advantage of the mod operator in python – <code>%</code> – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).</p>
+<p>This solution uses a <code class="highlighter-rouge">for</code> loop and take advantage of the mod operator in python – <code class="highlighter-rouge">%</code> – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).</p>
 
-<pre><code>answer2 = [] #empty list
+<div class="highlighter-rouge"><pre class="highlight"><code>answer2 = [] #empty list
 for i in range(1000): #iterate from 0 to 999 -- 1000 isn't included
 	if i % 3 == 0 or i % 5 == 0: #identify whether i is divisible by 3 or 5
     	answer2.append(i) #if divisible, then append it to the answer2 list
 print sum(answer2) #print the sum of answer 2
 </code></pre>
+</div>
 
 <p>This will produce the correct answer. It is a bit slower than Solution #1 but both are very fast.</p>
 

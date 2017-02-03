@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -136,19 +136,21 @@
 
 <p><img src="/assets/Reshaping_wideformat.png" alt="Reshaping.wideformat.png" /></p>
 
-<p>However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the <code>reshape</code> command, specifying that you’re reshaping to the long format. The syntax is <code>reshape long/wide stubname, i(i) j(j)</code> where the stubname is the stub of your variables (in this case, it is “cond”), <em>i</em> is the id variable and <em>j</em> is the new variable you’ll create (or the existing variable if reshaping the data into wide format).</p>
+<p>However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the <code class="highlighter-rouge">reshape</code> command, specifying that you’re reshaping to the long format. The syntax is <code class="highlighter-rouge">reshape long/wide stubname, i(i) j(j)</code> where the stubname is the stub of your variables (in this case, it is “cond”), <em>i</em> is the id variable and <em>j</em> is the new variable you’ll create (or the existing variable if reshaping the data into wide format).</p>
 
-<pre><code>reshape long cond, i(id) j(condition)
+<div class="highlighter-rouge"><pre class="highlight"><code>reshape long cond, i(id) j(condition)
 </code></pre>
+</div>
 
 <p>Now my data looks like this:</p>
 
 <p><img src="/assets/Reshaping_longformat-176x300.png" alt="Reshaping.longformat-176x300.png" /></p>
 
-<p>Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the <code>rename</code> command.</p>
+<p>Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the <code class="highlighter-rouge">rename</code> command.</p>
 
-<pre><code>rename cond mood
+<div class="highlighter-rouge"><pre class="highlight"><code>rename cond mood
 </code></pre>
+</div>
 
 <p><img src="/assets/rename_condition.png" alt="rename.condition.png" /></p>
 

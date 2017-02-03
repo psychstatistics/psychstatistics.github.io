@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -134,7 +134,7 @@
 
 <p>I started trying to solve this problem by writing a function for identifying prime numbers. I found an entry on Wikipedia for the “<a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>.” The entry also included Python code for implementing the sieve. I’ve reproduced an adapted version of the Wikipedia code. I had to change it because my computer ran out of memory when creating the candidate list. I had to change it so the candidate list had an upper limit of the square root of 600851475143. In any case, here is the solution with the sieve function first and then a function for actually solving the problem.</p>
 
-<pre><code>def sieve(n): 
+<div class="highlighter-rouge"><pre class="highlight"><code>def sieve(n): 
     fin = int(n**0.5) ##candidates below sqrt of n -- this is the upper limit
     candidates = list(range(fin+1)) ##This is an change of the wiki code
 
@@ -147,6 +147,7 @@
     # Filter out non-primes and return the list.
     return [i for i in candidates[2:] if i]
 </code></pre>
+</div>
 
 <p>##A function for returning prime factors of n
 	def largeprime(n):
@@ -156,9 +157,10 @@
 
 <p>##Return the prime factors as a list and print the last number</p>
 
-<pre><code>div = list(largeprime(n))
+<div class="highlighter-rouge"><pre class="highlight"><code>div = list(largeprime(n))
 print div[-1]
 </code></pre>
+</div>
 
 <p>This solution takes .38 seconds.</p>
 

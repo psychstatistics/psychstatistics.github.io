@@ -4,7 +4,7 @@
  <title>Psychstatistics</title>
  <link href="psychstatistics.github.io/atom.xml" rel="self"/>
  <link href="psychstatistics.github.io/"/>
- <updated>2016-10-24T08:19:30-06:00</updated>
+ <updated>2017-02-03T11:25:31-07:00</updated>
  <id>psychstatistics.github.io</id>
  <author>
    <name>Scott Baldwin</name>
@@ -19,7 +19,7 @@
    <id>psychstatistics.github.io/2014/12/27/d-lkj-priors</id>
    <content type="html">&lt;h2 id=&quot;visualizing-the-lkj-correlation-distribution&quot;&gt;Visualizing the LKJ Correlation Distribution&lt;/h2&gt;
 
-&lt;p&gt;I use multilevel models a lot. I’ve transitioned from using software like &lt;a href=&quot;http://cran.r-project.org/web/packages/lme4/index.html&quot;&gt;&lt;code&gt;lme4&lt;/code&gt;&lt;/a&gt; in R or &lt;a href=&quot;http://www.stata.com/manuals13/me.pdf&quot;&gt;&lt;code&gt;mixed&lt;/code&gt;&lt;/a&gt; in Stata, which use maximum likelihood methods, to using Bayesian software like &lt;a href=&quot;http://mc-stan.org&quot;&gt;Stan&lt;/a&gt; or &lt;a href=&quot;http://mcmc-jags.sourceforge.net&quot;&gt;JAGS&lt;/a&gt; to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.&lt;/p&gt;
+&lt;p&gt;I use multilevel models a lot. I’ve transitioned from using software like &lt;a href=&quot;http://cran.r-project.org/web/packages/lme4/index.html&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lme4&lt;/code&gt;&lt;/a&gt; in R or &lt;a href=&quot;http://www.stata.com/manuals13/me.pdf&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mixed&lt;/code&gt;&lt;/a&gt; in Stata, which use maximum likelihood methods, to using Bayesian software like &lt;a href=&quot;http://mc-stan.org&quot;&gt;Stan&lt;/a&gt; or &lt;a href=&quot;http://mcmc-jags.sourceforge.net&quot;&gt;JAGS&lt;/a&gt; to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.&lt;/p&gt;
 
 &lt;p&gt;Consider a simple growth-curve model for longitudinal data.&lt;/p&gt;
 
@@ -88,94 +88,94 @@ beta distribution.&lt;/p&gt;
 
 &lt;p&gt;To see what this looks like we are going to simulate correlation matrices for &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; = .5, 1, 2, 5, 10, and 50. We’ll then plot the density of one correlation from each of the simulated matrices to see how they look. Stan requires that you input some data, so I simulated some data out of poisson distribution to fit in Stan. We don’t care about those and they could be anything.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;rstan&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;reshape2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ggplot2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kp&quot;&gt;set.seed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;123&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-sim_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; rpois&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; N &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; R &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rstan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reshape2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set.seed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;123&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sim_data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rpois&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;First, I load the required libraries for this post. Then I set the seed and create the data needed to pass into Stan. &lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt; is 30 random draws from a poisson with a rate parameter = 5, &lt;script type=&quot;math/tex&quot;&gt;N&lt;/script&gt; is the sample size for the poisson data, and &lt;script type=&quot;math/tex&quot;&gt;R&lt;/script&gt; is the number of correlations we are dealing with (recall we have the correlations among the random intercept and 2 random slopes).&lt;/p&gt;
 
 &lt;h3 id=&quot;stan-model&quot;&gt;Stan Model&lt;/h3&gt;
 
-&lt;p&gt;Next I write the Stan model. The key part of this code is &lt;code&gt;generated quantities&lt;/code&gt; block. This block creates 6 correlation matrices named &lt;code&gt;Omega&lt;/code&gt;. The number after &lt;code&gt;Omega&lt;/code&gt; describes the size of &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.&lt;/p&gt;
+&lt;p&gt;Next I write the Stan model. The key part of this code is &lt;code class=&quot;highlighter-rouge&quot;&gt;generated quantities&lt;/code&gt; block. This block creates 6 correlation matrices named &lt;code class=&quot;highlighter-rouge&quot;&gt;Omega&lt;/code&gt;. The number after &lt;code class=&quot;highlighter-rouge&quot;&gt;Omega&lt;/code&gt; describes the size of &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_stan &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;data {&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  int&amp;lt;lower=0&amp;gt; N; // number of observations&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  int&amp;lt;lower=0&amp;gt; x[N]; // outcome variable&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  int R;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  }&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;parameters {&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  real lambda;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;model {&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  x ~ poisson_log(lambda);  &lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;generated quantities {&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega0;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega1;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega2;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega5;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega10;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  corr_matrix[R] Omega50;&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  Omega0 &amp;lt;- lkj_corr_rng(R,.9);&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  Omega1 &amp;lt;- lkj_corr_rng(R,1);&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  Omega2 &amp;lt;- lkj_corr_rng(R,2);&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  Omega5 &amp;lt;- lkj_corr_rng(R,5);&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  Omega10 &amp;lt;- lkj_corr_rng(R,10);&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  Omega50 &amp;lt;- lkj_corr_rng(R,50);&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;n&quot;&gt;sim_stan&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;
+data {
+  int&amp;lt;lower=0&amp;gt; N; // number of observations
+  int&amp;lt;lower=0&amp;gt; x[N]; // outcome variable
+  int R;
+  }
+parameters {
+  real lambda;
+}
+model {
+  x ~ poisson_log(lambda);  
+}
+generated quantities {
+  corr_matrix[R] Omega0;
+  corr_matrix[R] Omega1;
+  corr_matrix[R] Omega2;
+  corr_matrix[R] Omega5;
+  corr_matrix[R] Omega10;
+  corr_matrix[R] Omega50;
+  Omega0 &amp;lt;- lkj_corr_rng(R,.9);
+  Omega1 &amp;lt;- lkj_corr_rng(R,1);
+  Omega2 &amp;lt;- lkj_corr_rng(R,2);
+  Omega5 &amp;lt;- lkj_corr_rng(R,5);
+  Omega10 &amp;lt;- lkj_corr_rng(R,10);
+  Omega50 &amp;lt;- lkj_corr_rng(R,50);
+}
+&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;using-rstan-to-fit-the-model&quot;&gt;Using rstan to fit the model&lt;/h3&gt;
 
-&lt;p&gt;Next, I fit the model in R through the &lt;code&gt;rstan&lt;/code&gt; package.&lt;/p&gt;
+&lt;p&gt;Next, I fit the model in R through the &lt;code class=&quot;highlighter-rouge&quot;&gt;rstan&lt;/code&gt; package.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sim_parms &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Omega0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-			   &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega5&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Omega10&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Omega50&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-fit_sim &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; stan&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;model_code &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_stan&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; pars &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_parms&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sim_data&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; chains &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; iter &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;n&quot;&gt;sim_parms&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Omega0&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Omega1&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Omega2&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+			   &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Omega5&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Omega10&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Omega50&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_sim&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model_code&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sim_stan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pars&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sim_parms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sim_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chains&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;processing-the-mcmc-draws-and-getting-them-prepped-for-ggplot&quot;&gt;Processing the MCMC draws and getting them prepped for ggplot&lt;/h3&gt;
 
-&lt;p&gt;Finally, I process the data and transform it so that I can plot the density in &lt;code&gt;ggplot2&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Finally, I process the data and transform it so that I can plot the density in &lt;code class=&quot;highlighter-rouge&quot;&gt;ggplot2&lt;/code&gt;.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;res_sim &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fit_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\[&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;_&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\,&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;_&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;res_sim&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\\[&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;_&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\\,&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;_&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\\]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
-smalldata &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; res_sim&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Omega50_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega10_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega5_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                         &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega2_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega1_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Omega0_3_1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;smalldata&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res_sim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Omega50_3_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Omega10_3_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Omega5_3_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                         &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Omega2_3_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Omega1_3_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Omega0_3_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
-smalldata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;draw &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;smalldata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;Omega50_3_1&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;smalldata&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;smalldata&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Omega50_3_1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
-plotdata &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; melt&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;smalldata&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; id &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;draw&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plotdata&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;melt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;smalldata&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;draw&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
-plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;variable&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-		levels &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;variable&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; 
-		label &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 50&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 10&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-			  &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-			  &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = 1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;eta = .9&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-my.labs &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-		&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-		&lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;eta &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plotdata&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plotdata&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;variable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+		&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plotdata&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;variable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+		&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eta = 50&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eta = 10&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+			  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eta = 5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eta = 2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+			  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eta = 1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eta = .9&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my.labs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+		&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bquote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;.9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;creating-the-plot&quot;&gt;Creating the Plot&lt;/h3&gt;
 
 &lt;p&gt;Here’s the code for the plot.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;p &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; ggplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; value&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; colour &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; eta&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-p &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; geom_density&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-  scale_colour_manual&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;values&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; breaks &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;plotdata&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;eta&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-                      labels &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; my.labs&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; name &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Shape&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-  xlab&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Correlation Value&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-  ylab&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Density&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-  ggtitle&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Visualization of a correlation from the &lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;  		   lkj_corr density in Stan \n for various &lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;		   values of the shape parameter&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
-  theme_bw&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plotdata&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;colour&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom_density&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scale_colour_manual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;breaks&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plotdata&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                      &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my.labs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Shape&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Correlation Value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Density&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggtitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Visualization of a correlation from the 
+  		   lkj_corr density in Stan \n for various 
+		   values of the shape parameter&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theme_bw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;visualizing-the-density&quot;&gt;Visualizing the Density&lt;/h3&gt;
 
@@ -234,11 +234,11 @@ The slides for the presentation can be downloaded here:  &lt;a href=&quot;http:/
    <id>psychstatistics.github.io/2013/10/01/predicted-scores-and-residuals-in-stata</id>
    <content type="html">&lt;h2 id=&quot;predicted-scores-in-stata&quot;&gt;Predicted Scores in Stata&lt;/h2&gt;
 
-&lt;p&gt;As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the &lt;code&gt;auto&lt;/code&gt; dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation&lt;/p&gt;
+&lt;p&gt;As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;auto&lt;/code&gt; dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;mpg^\prime = b_0 + b_1weight&lt;/script&gt;
 
-&lt;pre&gt;&lt;code&gt;sysuse auto
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sysuse auto
 regress mpg weight
       Source |       SS       df       MS              Number of obs =      74
 -------------+------------------------------           F(  1,    72) =  134.62
@@ -253,15 +253,17 @@ regress mpg weight
        _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
 ------------------------------------------------------------------------------
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;Thus, we see a negative relationship between &lt;code&gt;weight&lt;/code&gt; and &lt;code&gt;mpg&lt;/code&gt;. For every 1 unit increase in &lt;code&gt;weight&lt;/code&gt;, &lt;code&gt;mpg&lt;/code&gt; goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:&lt;/p&gt;
+&lt;p&gt;Thus, we see a negative relationship between &lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg&lt;/code&gt;. For every 1 unit increase in &lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg&lt;/code&gt; goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;predict mpg_pred		
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;predict mpg_pred		
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;This creates a new variable called &lt;code&gt;mpg_pred&lt;/code&gt; with the predicted &lt;code&gt;mpg&lt;/code&gt; for all the &lt;code&gt;weight&lt;/code&gt; values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.&lt;/p&gt;
+&lt;p&gt;This creates a new variable called &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg_pred&lt;/code&gt; with the predicted &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg&lt;/code&gt; for all the &lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt; values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;list mpg mpg_pred in 1/20
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;list mpg mpg_pred in 1/20
      +----------------+
      | mpg   mpg_pred |
      |----------------|
@@ -290,6 +292,7 @@ regress mpg weight
  20. |  30   26.70187 |
      +----------------+
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;residuals-in-stata&quot;&gt;Residuals in Stata&lt;/h2&gt;
 
@@ -297,14 +300,15 @@ regress mpg weight
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;Y - Y^\prime&lt;/script&gt;
 
-&lt;p&gt;Thus, to compute residuals we can just subtract &lt;code&gt;mpg_pred&lt;/code&gt; from &lt;code&gt;mpg&lt;/code&gt;. Stata will do this for us using the predict command:&lt;/p&gt;
+&lt;p&gt;Thus, to compute residuals we can just subtract &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg_pred&lt;/code&gt; from &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg&lt;/code&gt;. Stata will do this for us using the predict command:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;predict mpg_res, residuals
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;predict mpg_res, residuals
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Here’s 20 of the actual mpg values, 20 of the predicted values, and 20 of the residuals.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt; list mpg mpg_pred mpg_res in 1/20
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; list mpg mpg_pred mpg_res in 1/20
      +----------------------------+
      | mpg   mpg_pred     mpg_res |
      |----------------------------|
@@ -333,17 +337,19 @@ regress mpg weight
  20. |  30   26.70187    3.298132 |
      +----------------------------+
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;We can see that the residuals are intact the difference between the first two columns. 
-Given that the residuals are the part of the &lt;code&gt;mpg&lt;/code&gt; that is unrelated to &lt;code&gt;weight&lt;/code&gt;, &lt;code&gt;mpg_res&lt;/code&gt; should be uncorrelated with &lt;code&gt;weight&lt;/code&gt;. Let’s check:&lt;/p&gt;
+Given that the residuals are the part of the &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg&lt;/code&gt; that is unrelated to &lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;mpg_res&lt;/code&gt; should be uncorrelated with &lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt;. Let’s check:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;. corr weight mpg_res
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;. corr weight mpg_res
 (obs=74)
              |   weight  mpg_res
 -------------+------------------
       weight |   1.0000
      mpg_res |   0.0000   1.0000
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/residual_predictor_correlation.png&quot; alt=&quot;residual_predictor_correlation.png&quot; /&gt;&lt;/p&gt;
 
@@ -385,7 +391,7 @@ Satorra, A. &amp;amp; Saris, W. E. (1985). Power of the likelihood ratio test in
 
 &lt;p&gt;Dummy coding is used when you have nominal categories, meaning the groups are assigned a value for coding purposes, but the values don’t represent more or less of anything. For example, I might code three different categories of race and coded them as follows: Caucasian = 1, African American = 2, Hispanic = 3. The numbers are for coding purposes only, 3 is not actually any bigger or more than 1. But if we use these in a regression (or any other) analysis, the numbers will be treated as continuous - not categorical. So we need to create dummy variables. Generally, we create k-1 new groups, where k is the total number of groups, and one group is used as the reference sample, or the group we want to compare other groups to.&lt;/p&gt;
 
-&lt;p&gt;Method 1: Using &lt;code&gt;generate&lt;/code&gt; and &lt;code&gt;replace&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Method 1: Using &lt;code class=&quot;highlighter-rouge&quot;&gt;generate&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;replace&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;We’ll use the built in system data systolic.&lt;/p&gt;
 
@@ -397,37 +403,41 @@ Satorra, A. &amp;amp; Saris, W. E. (1985). Power of the likelihood ratio test in
 
 &lt;p&gt;Consequently, we’ll need to make 3 dummy coded indicator variables to represent drug. We’ll use level 4 as the reference category. We’ll use a series of generate and replace commands to create the variables. This is definitely the brute-force way to make the variables, but it makes the logic behind creating dummy variables clear.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate drug1=1 if drug==1
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate drug1=1 if drug==1
 replace drug1=0 if drug!=1
 generate drug2=1 if drug==2
 replace drug2=0 if drug!=2
 generate drug3=1 if drug==3
 replace drug3=0 if drug!=3
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Tabulating each of the dummy variables – drug1 - drug3 – we see they match our original tabulation.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12_0-systolic_dta-3.jpg&quot; alt=&quot;Stata_SE-12.0-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Method 2: Use &lt;code&gt;generate&lt;/code&gt; only&lt;/p&gt;
+&lt;p&gt;Method 2: Use &lt;code class=&quot;highlighter-rouge&quot;&gt;generate&lt;/code&gt; only&lt;/p&gt;
 
 &lt;p&gt;We can also use a feature of the generate command to create a new variable that takes on the values 1 and 0. So, for example, if we want to create drug1, where drug1 is equal to 1 when the drug condition equals 1, we say:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate drug1=drug==1
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate drug1=drug==1
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;This creates a variable that is 1 when drug equals 1 (recall that &lt;code&gt;==&lt;/code&gt; is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.&lt;/p&gt;
+&lt;p&gt;This creates a variable that is 1 when drug equals 1 (recall that &lt;code class=&quot;highlighter-rouge&quot;&gt;==&lt;/code&gt; is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate drug2=drug==2
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate drug2=drug==2
 generate drug3=drug==3
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;Method 3: Use the &lt;code&gt;generate&lt;/code&gt; option of &lt;code&gt;tabulate&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Method 3: Use the &lt;code class=&quot;highlighter-rouge&quot;&gt;generate&lt;/code&gt; option of &lt;code class=&quot;highlighter-rouge&quot;&gt;tabulate&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;The function tabulate has an option called generate. The generate option takes one argument called stubname, where stubname is the stub of the new variable names created by the option. In our examples so far, the stub has been drug. Unlike the examples we have done so far, this method will create as many dummy variables as there are levels of the categorical variable (4 in our case). In our example, we type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;tabulate drug, generate(drug)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tabulate drug, generate(drug)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;We now have four new variables in our dataset – drug1-drug4.&lt;/p&gt;
 
@@ -449,16 +459,18 @@ generate drug3=drug==3
 
 &lt;p&gt;&lt;img src=&quot;/assets/pic2.png&quot; alt=&quot;pic2.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;To create labels using commands, you would use the &lt;code&gt;label&lt;/code&gt; command. The syntax is:&lt;/p&gt;
+&lt;p&gt;To create labels using commands, you would use the &lt;code class=&quot;highlighter-rouge&quot;&gt;label&lt;/code&gt; command. The syntax is:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;label define labelname value &quot;name&quot;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;label define labelname value &quot;name&quot;
 label define cond 1 &quot;No tx&quot; 2 &quot;Tx A&quot; 3 &quot;Tx B&quot; 4 &quot;Tx C&quot;
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;To apply your labels, use the &lt;code&gt;label&lt;/code&gt; command again. The syntax is &lt;code&gt;label value variable labelname&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;To apply your labels, use the &lt;code class=&quot;highlighter-rouge&quot;&gt;label&lt;/code&gt; command again. The syntax is &lt;code class=&quot;highlighter-rouge&quot;&gt;label value variable labelname&lt;/code&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;label value condition cond
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;label value condition cond
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h1 id=&quot;recoding-data&quot;&gt;Recoding Data&lt;/h1&gt;
 
@@ -470,17 +482,19 @@ label define cond 1 &quot;No tx&quot; 2 &quot;Tx A&quot; 3 &quot;Tx B&quot; 4 &q
 
 &lt;p&gt;&lt;img src=&quot;/assets/pic4.png&quot; alt=&quot;pic4.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;It is also quick and easy to recode variables using the &lt;code&gt;recode&lt;/code&gt; command:\&lt;/p&gt;
+&lt;p&gt;It is also quick and easy to recode variables using the &lt;code class=&quot;highlighter-rouge&quot;&gt;recode&lt;/code&gt; command:\&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;If you wanted to create a new variable with the recoded values, just use the &lt;code&gt;clonevar&lt;/code&gt; command &lt;em&gt;first&lt;/em&gt;, which will create a new variable with identical values to the first one. Then run the &lt;code&gt;recode&lt;/code&gt; command on your new variable. The syntax is &lt;code&gt;clonevar newvariable = variabletoclone&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;If you wanted to create a new variable with the recoded values, just use the &lt;code class=&quot;highlighter-rouge&quot;&gt;clonevar&lt;/code&gt; command &lt;em&gt;first&lt;/em&gt;, which will create a new variable with identical values to the first one. Then run the &lt;code class=&quot;highlighter-rouge&quot;&gt;recode&lt;/code&gt; command on your new variable. The syntax is &lt;code class=&quot;highlighter-rouge&quot;&gt;clonevar newvariable = variabletoclone&lt;/code&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;clonevar item2_reverse = item2	
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;clonevar item2_reverse = item2	
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;If you wanted to rename your new variable later, you would simply use the &lt;code&gt;rename&lt;/code&gt; command. The syntax is &lt;code&gt;rename oldname newname&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;If you wanted to rename your new variable later, you would simply use the &lt;code class=&quot;highlighter-rouge&quot;&gt;rename&lt;/code&gt; command. The syntax is &lt;code class=&quot;highlighter-rouge&quot;&gt;rename oldname newname&lt;/code&gt;.&lt;/p&gt;
 </content>
  </entry>
  
@@ -505,12 +519,13 @@ label define cond 1 &quot;No tx&quot; 2 &quot;Tx A&quot; 3 &quot;Tx B&quot; 4 &q
 
 &lt;p&gt;&lt;img src=&quot;/assets/Picture-14.png&quot; alt=&quot;Picture-14.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;The first command you will need is the &lt;code&gt;use&lt;/code&gt; command to specify the file you want Stata to use. If the file is not in the working directory that you are currently in, just specify which directory you want to pull the file from. Here are three examples of the &lt;code&gt;use&lt;/code&gt; command, one from a data set in the current working directly, one from the internet and one from a jump drive in a different working directory. Notice that on the end of each command, I add the option &lt;code&gt;clear&lt;/code&gt;. This is to clear any data that Stata is currently working with.&lt;/p&gt;
+&lt;p&gt;The first command you will need is the &lt;code class=&quot;highlighter-rouge&quot;&gt;use&lt;/code&gt; command to specify the file you want Stata to use. If the file is not in the working directory that you are currently in, just specify which directory you want to pull the file from. Here are three examples of the &lt;code class=&quot;highlighter-rouge&quot;&gt;use&lt;/code&gt; command, one from a data set in the current working directly, one from the internet and one from a jump drive in a different working directory. Notice that on the end of each command, I add the option &lt;code class=&quot;highlighter-rouge&quot;&gt;clear&lt;/code&gt;. This is to clear any data that Stata is currently working with.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;use relate.dta, clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use relate.dta, clear
 use http://www.stata-press.com/data/agis3/relate, clear
 use &quot;E:\relate.dta&quot;, clear
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;After I specify the data file, I enter the rest of the commands I want to run. Within this file, Stata will assume that each line is a new command unless you tell it otherwise. If you have a long command that you need on separate lines, add /// at the end of each line. That tells Stata that the next line is part of the same command. When I am ready to run the analyses, I select the commands I would like to run (you don’t have to select any text if you want to run them all) and click on the last icon on the toolbar in the do-file window:&lt;/p&gt;
 
@@ -528,12 +543,13 @@ use &quot;E:\relate.dta&quot;, clear
 
 &lt;p&gt;You can also start, suspend, resume and close logs using the log command. I will use this command to begin a log file, specify the name and location of the file as well as the extension. If I were going to create a log file called “creatinglogfiles” in a file on my desktop called “501” (filepath: /Desktop/501), I would type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;log using &quot;/Desktop/501/creatinglogfiles&quot;, text
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;log using &quot;/Desktop/501/creatinglogfiles&quot;, text
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;I included &lt;code&gt;text&lt;/code&gt; because I want the file to be a .log file, not an .smcl file. If I wanted to overwrite a file that already existed, I would add &lt;code&gt;replace&lt;/code&gt; after &lt;code&gt;text&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;I included &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; because I want the file to be a .log file, not an .smcl file. If I wanted to overwrite a file that already existed, I would add &lt;code class=&quot;highlighter-rouge&quot;&gt;replace&lt;/code&gt; after &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;After the log file is open, typing &lt;code&gt;log off&lt;/code&gt; will suspend the log file, &lt;code&gt;log on&lt;/code&gt; will resume the log file and &lt;code&gt;log close&lt;/code&gt; will close your log file.&lt;/p&gt;
+&lt;p&gt;After the log file is open, typing &lt;code class=&quot;highlighter-rouge&quot;&gt;log off&lt;/code&gt; will suspend the log file, &lt;code class=&quot;highlighter-rouge&quot;&gt;log on&lt;/code&gt; will resume the log file and &lt;code class=&quot;highlighter-rouge&quot;&gt;log close&lt;/code&gt; will close your log file.&lt;/p&gt;
 </content>
  </entry>
  
@@ -552,19 +568,21 @@ use &quot;E:\relate.dta&quot;, clear
 
 &lt;p&gt;&lt;img src=&quot;/assets/Reshaping_wideformat.png&quot; alt=&quot;Reshaping.wideformat.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the &lt;code&gt;reshape&lt;/code&gt; command, specifying that you’re reshaping to the long format. The syntax is &lt;code&gt;reshape long/wide stubname, i(i) j(j)&lt;/code&gt; where the stubname is the stub of your variables (in this case, it is “cond”), &lt;em&gt;i&lt;/em&gt; is the id variable and &lt;em&gt;j&lt;/em&gt; is the new variable you’ll create (or the existing variable if reshaping the data into wide format).&lt;/p&gt;
+&lt;p&gt;However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the &lt;code class=&quot;highlighter-rouge&quot;&gt;reshape&lt;/code&gt; command, specifying that you’re reshaping to the long format. The syntax is &lt;code class=&quot;highlighter-rouge&quot;&gt;reshape long/wide stubname, i(i) j(j)&lt;/code&gt; where the stubname is the stub of your variables (in this case, it is “cond”), &lt;em&gt;i&lt;/em&gt; is the id variable and &lt;em&gt;j&lt;/em&gt; is the new variable you’ll create (or the existing variable if reshaping the data into wide format).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;reshape long cond, i(id) j(condition)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;reshape long cond, i(id) j(condition)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Now my data looks like this:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Reshaping_longformat-176x300.png&quot; alt=&quot;Reshaping.longformat-176x300.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the &lt;code&gt;rename&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;rename&lt;/code&gt; command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;rename cond mood
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rename cond mood
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/rename_condition.png&quot; alt=&quot;rename.condition.png&quot; /&gt;&lt;/p&gt;
 
@@ -577,26 +595,29 @@ use &quot;E:\relate.dta&quot;, clear
    <updated>2011-07-06T00:00:00-06:00</updated>
    <id>psychstatistics.github.io/2011/07/06/stata-using-generate-to-create-new-variables</id>
    <content type="html">&lt;h1 id=&quot;generating-new-variables&quot;&gt;Generating New Variables&lt;/h1&gt;
-&lt;p&gt;The primary method for creating new variables in Stata is the &lt;code&gt;generate&lt;/code&gt; command. Load the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
+&lt;p&gt;The primary method for creating new variables in Stata is the &lt;code class=&quot;highlighter-rouge&quot;&gt;generate&lt;/code&gt; command. Load the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;clear
 sysuse auto
 describe
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta_1.jpg&quot; alt=&quot;Results-auto.dta_1.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;new-variable-from-existing-variables&quot;&gt;New Variable from Existing Variables&lt;/h2&gt;
 
-&lt;p&gt;Let’s create a new variable that is the sum of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; (ignore for the moment that summing weights and lengths doesn’t make a ton of sense). Simple with &lt;code&gt;generate&lt;/code&gt;. The syntax of &lt;code&gt;generate&lt;/code&gt; is:&lt;/p&gt;
+&lt;p&gt;Let’s create a new variable that is the sum of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; (ignore for the moment that summing weights and lengths doesn’t make a ton of sense). Simple with &lt;code class=&quot;highlighter-rouge&quot;&gt;generate&lt;/code&gt;. The syntax of &lt;code class=&quot;highlighter-rouge&quot;&gt;generate&lt;/code&gt; is:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;So to create a new variable called &lt;em&gt;weightlength&lt;/em&gt; that is the sum of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; we type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate weightlength = weight+length
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate weightlength = weight+length
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Now we have new variable called &lt;em&gt;weightlength&lt;/em&gt;.&lt;/p&gt;
 
@@ -604,70 +625,80 @@ describe
 
 &lt;p&gt;Suppose now that we want to create a new variable that is the square of weight.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate weight2 = weight^2
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate weight2 = weight^2
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;new-variable-that-is-a-constant&quot;&gt;New Variable that is a Constant&lt;/h2&gt;
 
 &lt;p&gt;Suppose we want to create a new variable that is a constant value (this isn’t necessarily a good idea and you can use macros to store constants but using a variable can be pretty convenient too). Let’s make a new variable &lt;em&gt;x&lt;/em&gt; that is equal to 100.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate x = 100
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate x = 100
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Let’s create a new variable that is equal to the mean of weight – we’ll call it &lt;em&gt;meanweight&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize weight
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize weight
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-3.jpg&quot; alt=&quot;Results-auto.dta-3.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate meanweight = 3019.459
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate meanweight = 3019.459
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;You can also use the results of the &lt;code&gt;summarize&lt;/code&gt; command to create a mean.&lt;/p&gt;
+&lt;p&gt;You can also use the results of the &lt;code class=&quot;highlighter-rouge&quot;&gt;summarize&lt;/code&gt; command to create a mean.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Viewer-1-help-summarize-1.jpg&quot; alt=&quot;Viewer-1-help-summarize-1.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize weight
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize weight
 generate meanweight = r(mean)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;You can use the &lt;code&gt;_N&lt;/code&gt; operator to create a new variable that is equal to the number of observations in a dataset.&lt;/p&gt;
+&lt;p&gt;You can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;_N&lt;/code&gt; operator to create a new variable that is equal to the number of observations in a dataset.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate obs = _N
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate obs = _N
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;If you combine this with &lt;code&gt;by&lt;/code&gt; you can create a new variable that will be equal to the number of observations within the levels of the &lt;code&gt;by&lt;/code&gt; variable. For example, we can type:&lt;/p&gt;
+&lt;p&gt;If you combine this with &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; you can create a new variable that will be equal to the number of observations within the levels of the &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; variable. For example, we can type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;by foreign: generate obs = _N
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;by foreign: generate obs = _N
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This will create a variable that is a constant within the levels of &lt;em&gt;foreign&lt;/em&gt;. That is, we are going to get the number of foreign cars and the number of domestic cars. If a line in the data is associated with foreign cars the new &lt;em&gt;obs&lt;/em&gt; variable will have a value of 22 and domestic cars will have a value of 52. Give it a try and see how it works.&lt;/p&gt;
 
 &lt;h2 id=&quot;new-variable-that-is-a-random-draw-from-a-distribution&quot;&gt;New Variable that is a Random Draw from a Distribution&lt;/h2&gt;
 
-&lt;p&gt;We can create a new variable that is a random draw from a distribution. Let’s create a new variable whose values will be random draws from a normal distribution with a mean of 0 and a standard deviation of 1. The random normal generator command is &lt;code&gt;rnormal()&lt;/code&gt; (it defaults to a mean of 0 and standard deviation of 1 and it will draw as many values as there are observations in the dataset).&lt;/p&gt;
+&lt;p&gt;We can create a new variable that is a random draw from a distribution. Let’s create a new variable whose values will be random draws from a normal distribution with a mean of 0 and a standard deviation of 1. The random normal generator command is &lt;code class=&quot;highlighter-rouge&quot;&gt;rnormal()&lt;/code&gt; (it defaults to a mean of 0 and standard deviation of 1 and it will draw as many values as there are observations in the dataset).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate random = rnormal()
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate random = rnormal()
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;create-a-new-variable-that-indexes-the-observations&quot;&gt;Create a New Variable that Indexes the Observations&lt;/h2&gt;
 
-&lt;p&gt;You can use the &lt;code&gt;_n&lt;/code&gt; operator to create a variable that indexes the observation number.&lt;/p&gt;
+&lt;p&gt;You can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;_n&lt;/code&gt; operator to create a variable that indexes the observation number.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;generate index = _n
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;generate index = _n
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;This will create a new variable that runs from 1 to 74. You can combine this with &lt;code&gt;by&lt;/code&gt; to create an index within another variable.&lt;/p&gt;
+&lt;p&gt;This will create a new variable that runs from 1 to 74. You can combine this with &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; to create an index within another variable.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;by foreign: index = _n
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;by foreign: index = _n
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This will create a new variable that runs from 1 to 52 for domestic cars and 1 to 22 for foreign cars.&lt;/p&gt;
 
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
-&lt;p&gt;I’ve just touched on the ways you can create new variables. You can also use the &lt;code&gt;egen&lt;/code&gt; command to create new variables. Try new ways to create variables and be sure to read the help files.&lt;/p&gt;
+&lt;p&gt;I’ve just touched on the ways you can create new variables. You can also use the &lt;code class=&quot;highlighter-rouge&quot;&gt;egen&lt;/code&gt; command to create new variables. Try new ways to create variables and be sure to read the help files.&lt;/p&gt;
 </content>
  </entry>
  
@@ -687,27 +718,31 @@ generate meanweight = r(mean)
 
 &lt;p&gt;We will use the built-in dataset &lt;strong&gt;systolic&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;webuse systolic
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;webuse systolic
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;examining-the-data&quot;&gt;Examining the data&lt;/h2&gt;
 
 &lt;p&gt;We will treat the &lt;em&gt;systolic&lt;/em&gt; variable as the outcome and &lt;em&gt;drug&lt;/em&gt; as the independent variable. Let’s look at descriptive statistics for &lt;em&gt;systolic&lt;/em&gt; and frequencies for &lt;em&gt;drug&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize systolic, detail
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize systolic, detail
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-1.jpg&quot; alt=&quot;Results-systolic.dta-1.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;table drug
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;table drug
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta.jpg&quot; alt=&quot;Results-systolic.dta_.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s also look at a boxplot of systolic by drug.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;graph box systolic, by(drug)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph box systolic, by(drug)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/NewImage.png&quot; alt=&quot;NewImage.png&quot; /&gt;&lt;/p&gt;
 
@@ -717,45 +752,49 @@ generate meanweight = r(mean)
 
 &lt;p&gt;Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;anova systolic drug
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;anova systolic drug
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;We reject the null hypothesis.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-2.jpg&quot; alt=&quot;Results-systolic.dta-2.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;using-the-test-command-to-perform-planned-comparisons&quot;&gt;Using the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons&lt;/h2&gt;
+&lt;h2 id=&quot;using-the-test-command-to-perform-planned-comparisons&quot;&gt;Using the &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; command to perform planned comparisons&lt;/h2&gt;
 
-&lt;p&gt;In Stata, once we have completed the ANOVA, we can use the &lt;code&gt;test&lt;/code&gt; command to perform planned comparisons. Note two important things about the &lt;code&gt;test&lt;/code&gt; command:&lt;/p&gt;
+&lt;p&gt;In Stata, once we have completed the ANOVA, we can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; command to perform planned comparisons. Note two important things about the &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; command:&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;You can only use it &lt;strong&gt;after&lt;/strong&gt; you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.&lt;/li&gt;
-  &lt;li&gt;The &lt;code&gt;test&lt;/code&gt; command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the &lt;code&gt;test&lt;/code&gt; command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that &lt;code&gt;test&lt;/code&gt; needs will not be available if you run another model.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; needs will not be available if you run another model.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-3.jpg&quot; alt=&quot;Results-systolic.dta-3.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;We reject the null hypothesis that they are not different. Note that to reference levels of the variable &lt;em&gt;drug&lt;/em&gt; we type &lt;code&gt;1.drug&lt;/code&gt; or &lt;code&gt;2.drug&lt;/code&gt;, etc. We put the level number, then a period, then the variabl ename.
+&lt;p&gt;We reject the null hypothesis that they are not different. Note that to reference levels of the variable &lt;em&gt;drug&lt;/em&gt; we type &lt;code class=&quot;highlighter-rouge&quot;&gt;1.drug&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;2.drug&lt;/code&gt;, etc. We put the level number, then a period, then the variabl ename.
 See if you can figure out why the following statement is equivalent&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Suppose we want to know if level 1 of drug is different from level 2.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;test 1.drug = 2.drug
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;test 1.drug = 2.drug
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-systolic_dta-5.jpg&quot; alt=&quot;Results-systolic.dta-5.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We cannot reject reject the null.&lt;/p&gt;
 
-&lt;p&gt;The &lt;code&gt;test&lt;/code&gt; command is really quite flexible. Fiddle around with it to better learn the syntax.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; command is really quite flexible. Fiddle around with it to better learn the syntax.&lt;/p&gt;
 </content>
  </entry>
  
@@ -766,7 +805,7 @@ See if you can figure out why the following statement is equivalent&lt;/p&gt;
    <id>psychstatistics.github.io/2011/07/01/stata-oneway-anova</id>
    <content type="html">&lt;h1 id=&quot;oneway-anova&quot;&gt;Oneway ANOVA&lt;/h1&gt;
 
-&lt;p&gt;This post will show how to use the &lt;code&gt;anova&lt;/code&gt; and &lt;code&gt;loneway&lt;/code&gt; commands in Stata to compute a oneway ANOVA.
+&lt;p&gt;This post will show how to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;anova&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;loneway&lt;/code&gt; commands in Stata to compute a oneway ANOVA.
 We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration. We will use &lt;em&gt;price&lt;/em&gt; as the outcome variable and &lt;em&gt;foreign&lt;/em&gt; as the factor.&lt;/p&gt;
 
 &lt;p&gt;Let’s initially look at descriptive statistics for &lt;em&gt;price&lt;/em&gt; stratified by &lt;em&gt;foreign&lt;/em&gt;.&lt;/p&gt;
@@ -775,25 +814,27 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
 
 &lt;p&gt;So it looks like there is a difference between in price between foreign and domestic cars, with foreign cars costing more money. We can test whether this difference is statistically significant with a oneway ANOVA (you could also just a use a t-test since there are just two levels of &lt;em&gt;foreign&lt;/em&gt;).&lt;/p&gt;
 
-&lt;h2 id=&quot;anova-command&quot;&gt;&lt;code&gt;anova&lt;/code&gt; Command&lt;/h2&gt;
+&lt;h2 id=&quot;anova-command&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;anova&lt;/code&gt; Command&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;anova&lt;/code&gt; command is simple and follows the standard Stata syntax – Command DV IV&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;anova&lt;/code&gt; command is simple and follows the standard Stata syntax – Command DV IV&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;anova price foreign
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;anova price foreign
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Viola – you’ve got an ANOVA source table.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/anova_oneway_auto.png&quot; alt=&quot;anova_oneway_auto.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Looks like the difference in price is not statistically significant. The advantage of using &lt;code&gt;anova&lt;/code&gt; is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the &lt;code&gt;loneway&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;Looks like the difference in price is not statistically significant. The advantage of using &lt;code class=&quot;highlighter-rouge&quot;&gt;anova&lt;/code&gt; is that you can fit lots of different ANOVA models using this command (e.g., factorial ANOVA, repeated measures ANOVA, nested ANOVA). However, if you just want to fit a oneway ANOVA, then you can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;loneway&lt;/code&gt; command.&lt;/p&gt;
 
-&lt;h2 id=&quot;loneway-command&quot;&gt;&lt;code&gt;loneway&lt;/code&gt; Command&lt;/h2&gt;
+&lt;h2 id=&quot;loneway-command&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;loneway&lt;/code&gt; Command&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;loneway&lt;/code&gt; command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, &lt;code&gt;loneway&lt;/code&gt; can be really useful.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;loneway&lt;/code&gt; command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, &lt;code class=&quot;highlighter-rouge&quot;&gt;loneway&lt;/code&gt; can be really useful.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;loneway price foreign
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;loneway price foreign
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-2.jpg&quot; alt=&quot;Results-auto_dta-2.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -806,87 +847,99 @@ We will use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this illustration.
    <updated>2011-05-30T16:02:33-06:00</updated>
    <id>psychstatistics.github.io/2011/05/30/stata-descriptive-statistics-mean-median-variability</id>
    <content type="html">&lt;p&gt;##Descriptive Statistics##
-For this tutorial we are going to use the &lt;code&gt;auto&lt;/code&gt; dataset that comes with Stata. To load this data type&lt;/p&gt;
+For this tutorial we are going to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;auto&lt;/code&gt; dataset that comes with Stata. To load this data type&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sysuse auto, clear
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;The auto dataset has the following variables.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;describe
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;describe
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/describe_stata.jpg&quot; alt=&quot;describe_stata.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Suppose we want to get some summarize statistics for price such as the mean, standard deviation, and range. We’ll use the &lt;code&gt;summarize&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;Suppose we want to get some summarize statistics for price such as the mean, standard deviation, and range. We’ll use the &lt;code class=&quot;highlighter-rouge&quot;&gt;summarize&lt;/code&gt; command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize price
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize price
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/summarize_price.jpg&quot; alt=&quot;summarize_price.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Now let’s add the option &lt;code&gt;detail&lt;/code&gt; to &lt;code&gt;summarize&lt;/code&gt;. This will give us lots more information, including the median and other percentiles.&lt;/p&gt;
+&lt;p&gt;Now let’s add the option &lt;code class=&quot;highlighter-rouge&quot;&gt;detail&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;summarize&lt;/code&gt;. This will give us lots more information, including the median and other percentiles.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize price, detail
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize price, detail
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/summ_detail.jpg&quot; alt=&quot;summ_detail.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;##Multiple Variables at Once##&lt;/p&gt;
 
-&lt;p&gt;To get descriptives for multiple variables at once just add the variable names after &lt;code&gt;summarize&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To get descriptives for multiple variables at once just add the variable names after &lt;code class=&quot;highlighter-rouge&quot;&gt;summarize&lt;/code&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize price mpg
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize price mpg
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/summ_mult.jpg&quot; alt=&quot;summ_mult.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Adding the &lt;code&gt;detail&lt;/code&gt; option.&lt;/p&gt;
+&lt;p&gt;Adding the &lt;code class=&quot;highlighter-rouge&quot;&gt;detail&lt;/code&gt; option.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize price mpg, detail
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize price mpg, detail
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/summ_mult_detail.jpg&quot; alt=&quot;summ_mult_detail.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;##Using &lt;code&gt;by&lt;/code&gt; processing##&lt;/p&gt;
+&lt;p&gt;##Using &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; processing##&lt;/p&gt;
 
-&lt;p&gt;Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called &lt;code&gt;by&lt;/code&gt; processing.&lt;/p&gt;
+&lt;p&gt;Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; processing.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;by foreign: summarize price
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;by foreign: summarize price
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/summ_by.jpg&quot; alt=&quot;summ_by.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;When using the by command, the variable of interest needs to be sorted in the data set. For example, in the previous example the variable “foreign” is already sorted within our data set. If we wanted to examine the price by mpg, we would need to sort miles per gallon. One way to sort data is using a simple sort command followed by the variable name. Stata will sort the data in ascending order by default.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sort mpg
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sort mpg
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;After we sort the data, we can then use the standard by mpg: command. In &lt;code&gt;by&lt;/code&gt; processing, we can also sort the data and execute the &lt;code&gt;by&lt;/code&gt; command at the same time using the &lt;code&gt;bysort&lt;/code&gt; command:&lt;/p&gt;
+&lt;p&gt;After we sort the data, we can then use the standard by mpg: command. In &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; processing, we can also sort the data and execute the &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; command at the same time using the &lt;code class=&quot;highlighter-rouge&quot;&gt;bysort&lt;/code&gt; command:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;bysort mpg: summarize price
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bysort mpg: summarize price
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;The &lt;code&gt;by&lt;/code&gt; command can also be used in other commands, such as creating graphics. For example, if we wanted to examine histograms of mpg by the make of the car, we would use the &lt;code&gt;by&lt;/code&gt; command as an option. The make of car does not have to be sorted for this command.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; command can also be used in other commands, such as creating graphics. For example, if we wanted to examine histograms of mpg by the make of the car, we would use the &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; command as an option. The make of car does not have to be sorted for this command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;histogram(mpg), by(foreign)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;histogram(mpg), by(foreign)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/histogram_by_foreign.png&quot; alt=&quot;histogram_by_foreign.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;##Using &lt;code&gt;if&lt;/code&gt;##&lt;/p&gt;
+&lt;p&gt;##Using &lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt;##&lt;/p&gt;
 
-&lt;p&gt;The &lt;code&gt;by&lt;/code&gt; statement will give us descriptives for all levels of the &lt;code&gt;by&lt;/code&gt; variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the &lt;code&gt;by&lt;/code&gt; variable. We can use the &lt;code&gt;if&lt;/code&gt; statement for that. For foreign cars (i.e., &lt;code&gt;foreign == 1&lt;/code&gt;):&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; statement will give us descriptives for all levels of the &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; variable. We can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt; statement for that. For foreign cars (i.e., &lt;code class=&quot;highlighter-rouge&quot;&gt;foreign == 1&lt;/code&gt;):&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize price if foreign == 1
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize price if foreign == 1
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/sum_if_1.jpg&quot; alt=&quot;sum_if_1.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;For domestic cars (i.e., &lt;code&gt;foreign == 0&lt;/code&gt;)&lt;/p&gt;
+&lt;p&gt;For domestic cars (i.e., &lt;code class=&quot;highlighter-rouge&quot;&gt;foreign == 0&lt;/code&gt;)&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize price if foreign == 0
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize price if foreign == 0
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/sum_if_11.jpg&quot; alt=&quot;sum_if_11.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -932,20 +985,22 @@ For this tutorial we are going to use the &lt;code&gt;auto&lt;/code&gt; dataset 
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;h2 id=&quot;using-in&quot;&gt;Using &lt;code&gt;in&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;using-in&quot;&gt;Using &lt;code class=&quot;highlighter-rouge&quot;&gt;in&lt;/code&gt;&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;in&lt;/code&gt; qualifier specifies a particular subset of cases based on their order in the dataset. For example, if we want to examine the mpg in the 10 least expensive cars, we would use the &lt;code&gt;in&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;in&lt;/code&gt; qualifier specifies a particular subset of cases based on their order in the dataset. For example, if we want to examine the mpg in the 10 least expensive cars, we would use the &lt;code class=&quot;highlighter-rouge&quot;&gt;in&lt;/code&gt; command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sort price
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sort price
 summarize mpg in 1/10
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/summarize_mpg_in.png&quot; alt=&quot;summarize_mpg_in.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;As a helpful hint for any of these processes, if your variables are labeled (showing the label instead of the numeric value) and you need to find the numeric values to examine levels of the variable, you can use the &lt;code&gt;nolabel&lt;/code&gt; option.&lt;/p&gt;
+&lt;p&gt;As a helpful hint for any of these processes, if your variables are labeled (showing the label instead of the numeric value) and you need to find the numeric values to examine levels of the variable, you can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;nolabel&lt;/code&gt; option.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;browse, nolabel
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;browse, nolabel
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This will show you the number values for variables. You can also find those values by double-clicking on them in the data browser.&lt;/p&gt;
 </content>
@@ -958,23 +1013,25 @@ summarize mpg in 1/10
    <id>psychstatistics.github.io/2011/05/30/things-i-love-about-stata-egen-mean</id>
    <content type="html">&lt;h1 id=&quot;egen-mean&quot;&gt;egen mean&lt;/h1&gt;
 
-&lt;p&gt;I work a lot with clustered data, including group psychotherapy data (people clustered in groups), individual psychotherapy data (people clustered within therapists), and longitudinal data (observations clustered within people). Consequently, I often need to create cluster-level means and grand means for graphing and modeling. The &lt;code&gt;egen mean&lt;/code&gt; function makes creating means easy. Combining &lt;code&gt;egen mean&lt;/code&gt; with &lt;code&gt;by&lt;/code&gt; processing in Stata makes this a breeze, even when cluster sizes differ.&lt;/p&gt;
+&lt;p&gt;I work a lot with clustered data, including group psychotherapy data (people clustered in groups), individual psychotherapy data (people clustered within therapists), and longitudinal data (observations clustered within people). Consequently, I often need to create cluster-level means and grand means for graphing and modeling. The &lt;code class=&quot;highlighter-rouge&quot;&gt;egen mean&lt;/code&gt; function makes creating means easy. Combining &lt;code class=&quot;highlighter-rouge&quot;&gt;egen mean&lt;/code&gt; with &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; processing in Stata makes this a breeze, even when cluster sizes differ.&lt;/p&gt;
 
-&lt;h2 id=&quot;egen-mean-for-grand-means&quot;&gt;&lt;code&gt;egen mean&lt;/code&gt; for grand means&lt;/h2&gt;
+&lt;h2 id=&quot;egen-mean-for-grand-means&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;egen mean&lt;/code&gt; for grand means&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;egen&lt;/code&gt; function is used to create new variables. To create a mean with &lt;code&gt;egen&lt;/code&gt; we use the following syntax:&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;egen&lt;/code&gt; function is used to create new variables. To create a mean with &lt;code class=&quot;highlighter-rouge&quot;&gt;egen&lt;/code&gt; we use the following syntax:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;egen nameofnewvariable=mean(nameofoldvariable)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;egen nameofnewvariable=mean(nameofoldvariable)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;We can download the the pig data from the &lt;code&gt;xtmixed&lt;/code&gt; help.&lt;/p&gt;
+&lt;p&gt;We can download the the pig data from the &lt;code class=&quot;highlighter-rouge&quot;&gt;xtmixed&lt;/code&gt; help.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;webuse pig, clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;webuse pig, clear
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;The variables are &lt;strong&gt;id&lt;/strong&gt;, &lt;strong&gt;week&lt;/strong&gt;, and &lt;strong&gt;weight&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;list in 1/15, clean
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;list in 1/15, clean
 id week weight
 1. 1 1 24
 2. 1 2 32
@@ -992,15 +1049,17 @@ id week weight
 14. 2 5 51
 15. 2 6 58.5
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;We can create a grand mean (say, for creating centered variables) of &lt;strong&gt;weight&lt;/strong&gt; using &lt;code&gt;egen&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;We can create a grand mean (say, for creating centered variables) of &lt;strong&gt;weight&lt;/strong&gt; using &lt;code class=&quot;highlighter-rouge&quot;&gt;egen&lt;/code&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;egen grandweight=mean(weight)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;egen grandweight=mean(weight)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This creates a new variable that is equal to the grand mean for weight (it is a constant across all variables)&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;list in 1/15, clean
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;list in 1/15, clean
 id week weight grandw~t
 1. 1 1 24 50.40509
 2. 1 2 32 50.40509
@@ -1018,22 +1077,25 @@ id week weight grandw~t
 14. 2 5 51 50.40509
 15. 2 6 58.5 50.40509
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;##&lt;code&gt;egen mean&lt;/code&gt; for cluster means##&lt;/p&gt;
+&lt;p&gt;##&lt;code class=&quot;highlighter-rouge&quot;&gt;egen mean&lt;/code&gt; for cluster means##&lt;/p&gt;
 
-&lt;p&gt;We can combine &lt;code&gt;egen mean&lt;/code&gt; with &lt;code&gt;by&lt;/code&gt; to compute cluster means. (Remember that &lt;strong&gt;id&lt;/strong&gt; is the cluster id variable.)&lt;/p&gt;
+&lt;p&gt;We can combine &lt;code class=&quot;highlighter-rouge&quot;&gt;egen mean&lt;/code&gt; with &lt;code class=&quot;highlighter-rouge&quot;&gt;by&lt;/code&gt; to compute cluster means. (Remember that &lt;strong&gt;id&lt;/strong&gt; is the cluster id variable.)&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;by id: egen groupweight=mean(weight)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;by id: egen groupweight=mean(weight)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;If the &lt;strong&gt;id&lt;/strong&gt; variable isn’t sorted, then you can change the code to:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;by id, sort: egen groupweight=mean(weight)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;by id, sort: egen groupweight=mean(weight)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This creates a variable that is equal to the cluster mean for each cluster. That is, its value is constant within clusters but varies across clusters.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;list in 1/15, clean
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;list in 1/15, clean
 id week weight grandw~t groupw~t
 1. 1 1 24 50.40509 48.66667
 2. 1 2 32 50.40509 48.66667
@@ -1051,22 +1113,25 @@ id week weight grandw~t groupw~t
 14. 2 5 51 50.40509 51.33333
 15. 2 6 58.5 50.40509 51.33333
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;##Looking at missing data##&lt;/p&gt;
 
-&lt;p&gt;You can also use &lt;code&gt;egen&lt;/code&gt; to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use &lt;code&gt;egen&lt;/code&gt; combined with &lt;code&gt;rowmiss&lt;/code&gt; to create a missing variable to examine this:&lt;/p&gt;
+&lt;p&gt;You can also use &lt;code class=&quot;highlighter-rouge&quot;&gt;egen&lt;/code&gt; to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use &lt;code class=&quot;highlighter-rouge&quot;&gt;egen&lt;/code&gt; combined with &lt;code class=&quot;highlighter-rouge&quot;&gt;rowmiss&lt;/code&gt; to create a missing variable to examine this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;egen missing = rowmiss(weight weight2)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;egen missing = rowmiss(weight weight2)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Then you can use the tabulate command to identify if any values are missing:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;tabulate missing
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tabulate missing
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/tabulate_missing1.png&quot; alt=&quot;tabulate.missing1.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Take a look at the other functions of &lt;code&gt;egen&lt;/code&gt;–they’re remarkably useful.&lt;/p&gt;
+&lt;p&gt;Take a look at the other functions of &lt;code class=&quot;highlighter-rouge&quot;&gt;egen&lt;/code&gt;–they’re remarkably useful.&lt;/p&gt;
 </content>
  </entry>
  
@@ -1080,12 +1145,13 @@ id week weight grandw~t groupw~t
 &lt;p&gt;This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.&lt;/p&gt;
 
 &lt;p&gt;##Syntax##
-You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;/p&gt;
+You can import csv files using the &lt;code class=&quot;highlighter-rouge&quot;&gt;insheet&lt;/code&gt; command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;insheet using &quot;auto.csv&quot;, comma clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;insheet using &quot;auto.csv&quot;, comma clear
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;The &lt;code&gt;using auto.csv&lt;/code&gt; statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or &lt;code&gt;cd&lt;/code&gt; to the directory with the csv file. I typically include the option &lt;code&gt;comma&lt;/code&gt;. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the &lt;code&gt;insheet&lt;/code&gt; command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the &lt;code&gt;clear&lt;/code&gt; option to clear out any data that are currently in memory.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;using auto.csv&lt;/code&gt; statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or &lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt; to the directory with the csv file. I typically include the option &lt;code class=&quot;highlighter-rouge&quot;&gt;comma&lt;/code&gt;. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the &lt;code class=&quot;highlighter-rouge&quot;&gt;insheet&lt;/code&gt; command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the &lt;code class=&quot;highlighter-rouge&quot;&gt;clear&lt;/code&gt; option to clear out any data that are currently in memory.&lt;/p&gt;
 
 &lt;p&gt;##Point-and-Click##&lt;/p&gt;
 
@@ -1116,7 +1182,7 @@ You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;
 
 &lt;p&gt;I started trying to solve this problem by writing a function for identifying prime numbers. I found an entry on Wikipedia for the “&lt;a href=&quot;http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes&quot;&gt;Sieve of Eratosthenes&lt;/a&gt;.” The entry also included Python code for implementing the sieve. I’ve reproduced an adapted version of the Wikipedia code. I had to change it because my computer ran out of memory when creating the candidate list. I had to change it so the candidate list had an upper limit of the square root of 600851475143. In any case, here is the solution with the sieve function first and then a function for actually solving the problem.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;def sieve(n): 
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def sieve(n): 
     fin = int(n**0.5) ##candidates below sqrt of n -- this is the upper limit
     candidates = list(range(fin+1)) ##This is an change of the wiki code
 
@@ -1129,6 +1195,7 @@ You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;
     # Filter out non-primes and return the list.
     return [i for i in candidates[2:] if i]
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;##A function for returning prime factors of n
 	def largeprime(n):
@@ -1138,9 +1205,10 @@ You can import csv files using the &lt;code&gt;insheet&lt;/code&gt; command.&lt;
 
 &lt;p&gt;##Return the prime factors as a list and print the last number&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;div = list(largeprime(n))
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;div = list(largeprime(n))
 print div[-1]
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This solution takes .38 seconds.&lt;/p&gt;
 </content>
@@ -1161,11 +1229,11 @@ print div[-1]
 
 &lt;h2 id=&quot;python-solution-1&quot;&gt;Python Solution 1&lt;/h2&gt;
 
-&lt;p&gt;This solution creates a function &lt;code&gt;fibon&lt;/code&gt; that takes a single argument – &lt;code&gt;maximum&lt;/code&gt;. The value of &lt;code&gt;maximum&lt;/code&gt; will be 4,000,000 in this example. The function first initializes an iterator (&lt;code&gt;i&lt;/code&gt;), a list with two entries (&lt;code&gt;fib&lt;/code&gt;), and a variable (&lt;code&gt;n&lt;/code&gt;) that will be used to tell Python when to stop the &lt;code&gt;while&lt;/code&gt; loop. The &lt;code&gt;while&lt;/code&gt; loop creates the next entry in the sequence (&lt;code&gt;fibtemp&lt;/code&gt;), makes it a list, and adds it to the &lt;code&gt;fib&lt;/code&gt; list. Then it alters the value of &lt;code&gt;n&lt;/code&gt; and adds 1 to the iterator.&lt;/p&gt;
+&lt;p&gt;This solution creates a function &lt;code class=&quot;highlighter-rouge&quot;&gt;fibon&lt;/code&gt; that takes a single argument – &lt;code class=&quot;highlighter-rouge&quot;&gt;maximum&lt;/code&gt;. The value of &lt;code class=&quot;highlighter-rouge&quot;&gt;maximum&lt;/code&gt; will be 4,000,000 in this example. The function first initializes an iterator (&lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt;), a list with two entries (&lt;code class=&quot;highlighter-rouge&quot;&gt;fib&lt;/code&gt;), and a variable (&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;) that will be used to tell Python when to stop the &lt;code class=&quot;highlighter-rouge&quot;&gt;while&lt;/code&gt; loop. The &lt;code class=&quot;highlighter-rouge&quot;&gt;while&lt;/code&gt; loop creates the next entry in the sequence (&lt;code class=&quot;highlighter-rouge&quot;&gt;fibtemp&lt;/code&gt;), makes it a list, and adds it to the &lt;code class=&quot;highlighter-rouge&quot;&gt;fib&lt;/code&gt; list. Then it alters the value of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; and adds 1 to the iterator.&lt;/p&gt;
 
-&lt;p&gt;Next it creates another empty list to hold the even numbers of the sequence (&lt;code&gt;fibeven&lt;/code&gt;). The it uses a &lt;code&gt;for&lt;/code&gt; loop over the elements of &lt;code&gt;fib&lt;/code&gt; to identify whether a particular element is even. If it is even, it adds that element to &lt;code&gt;fibeven&lt;/code&gt;. The function then returns the sum of &lt;code&gt;fibeven&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Next it creates another empty list to hold the even numbers of the sequence (&lt;code class=&quot;highlighter-rouge&quot;&gt;fibeven&lt;/code&gt;). The it uses a &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop over the elements of &lt;code class=&quot;highlighter-rouge&quot;&gt;fib&lt;/code&gt; to identify whether a particular element is even. If it is even, it adds that element to &lt;code class=&quot;highlighter-rouge&quot;&gt;fibeven&lt;/code&gt;. The function then returns the sum of &lt;code class=&quot;highlighter-rouge&quot;&gt;fibeven&lt;/code&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;def fibon(maximum):
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def fibon(maximum):
     i = 2
     fib = [1,2,]
     n=0
@@ -1184,12 +1252,13 @@ print div[-1]
 
 print fibon(4000000)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;python-solution-2&quot;&gt;Python Solution 2&lt;/h2&gt;
 
-&lt;p&gt;This solution uses a generator function to create the sequence. You can tell it is a generator function because of the &lt;code&gt;yield&lt;/code&gt; keyword in it. Then I used NumPy arrays to process the sequence and identify the even numbers. I’ve been using NumPy quite a bit lately, so I wanted to come up with a solution that involved NumPy.&lt;/p&gt;
+&lt;p&gt;This solution uses a generator function to create the sequence. You can tell it is a generator function because of the &lt;code class=&quot;highlighter-rouge&quot;&gt;yield&lt;/code&gt; keyword in it. Then I used NumPy arrays to process the sequence and identify the even numbers. I’ve been using NumPy quite a bit lately, so I wanted to come up with a solution that involved NumPy.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;import numpy as np
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import numpy as np
 
 def fibfun(maxnum):
     x = 0
@@ -1203,6 +1272,7 @@ npall = np.array(allnum)
 npeven = npall[np.where(npall % 2 == 0)]
 print np.sum(npeven)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 </content>
  </entry>
@@ -1218,9 +1288,9 @@ print np.sum(npeven)
 
 &lt;h2 id=&quot;python-solution-1&quot;&gt;Python Solution #1&lt;/h2&gt;
 
-&lt;p&gt;This uses the built in &lt;code&gt;range()&lt;/code&gt; function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using &lt;code&gt;extend()&lt;/code&gt;) and identify the unique values with the &lt;code&gt;set()&lt;/code&gt; function. I also sorted them because I like it better that way.&lt;/p&gt;
+&lt;p&gt;This uses the built in &lt;code class=&quot;highlighter-rouge&quot;&gt;range()&lt;/code&gt; function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using &lt;code class=&quot;highlighter-rouge&quot;&gt;extend()&lt;/code&gt;) and identify the unique values with the &lt;code class=&quot;highlighter-rouge&quot;&gt;set()&lt;/code&gt; function. I also sorted them because I like it better that way.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;answer =[] # empty list
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;answer =[] # empty list
 three = range(0,1000,3) #list of multiples of 3
 five = range(0,1000,5) #list of multiples of 5
 answer.extend(three) # add three to the answer list
@@ -1228,17 +1298,19 @@ answer.extend(five) #add five to the answer list
 answer.sort() #sort the list
 print sum(set(answer)) #print the sum of the unique values
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;python-solution-2&quot;&gt;Python Solution #2&lt;/h2&gt;
 
-&lt;p&gt;This solution uses a &lt;code&gt;for&lt;/code&gt; loop and take advantage of the mod operator in python – &lt;code&gt;%&lt;/code&gt; – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).&lt;/p&gt;
+&lt;p&gt;This solution uses a &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop and take advantage of the mod operator in python – &lt;code class=&quot;highlighter-rouge&quot;&gt;%&lt;/code&gt; – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;answer2 = [] #empty list
-for i in range(1000): #iterate from 0 to 999 -- 1000 isn't included
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;answer2 = [] #empty list
+for i in range(1000): #iterate from 0 to 999 -- 1000 isn&#39;t included
 	if i % 3 == 0 or i % 5 == 0: #identify whether i is divisible by 3 or 5
     	answer2.append(i) #if divisible, then append it to the answer2 list
 print sum(answer2) #print the sum of answer 2
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This will produce the correct answer. It is a bit slower than Solution #1 but both are very fast.&lt;/p&gt;
 </content>
@@ -1280,28 +1352,31 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;p&gt;In this post we’ll use the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sysuse auto, clear
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/autoscatter.jpg&quot; alt=&quot;autoscatter.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;creating-a-scatterplot&quot;&gt;Creating a Scatterplot&lt;/h2&gt;
 
-&lt;p&gt;Creating scatterplots is easy in Stata. We’ll use the &lt;code&gt;graph twoway scatter&lt;/code&gt; command (we can just type &lt;code&gt;scatter&lt;/code&gt; but I like to use the &lt;code&gt;graph twoway&lt;/code&gt; syntax to make things more consistent across graph types. We’ll visualize the relationship between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt;. When using &lt;code&gt;graph twoway scatter&lt;/code&gt; we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.&lt;/p&gt;
+&lt;p&gt;Creating scatterplots is easy in Stata. We’ll use the &lt;code class=&quot;highlighter-rouge&quot;&gt;graph twoway scatter&lt;/code&gt; command (we can just type &lt;code class=&quot;highlighter-rouge&quot;&gt;scatter&lt;/code&gt; but I like to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;graph twoway&lt;/code&gt; syntax to make things more consistent across graph types. We’ll visualize the relationship between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt;. When using &lt;code class=&quot;highlighter-rouge&quot;&gt;graph twoway scatter&lt;/code&gt; we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;graph twoway scatter price length, title(&quot;Scatterplot of price and length&quot;)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph twoway scatter price length, title(&quot;Scatterplot of price and length&quot;)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/scatter1.jpg&quot; alt=&quot;scatter1.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;adding-a-lowess-smoother&quot;&gt;Adding a Lowess Smoother&lt;/h2&gt;
 
-&lt;p&gt;Adding the lowess smoother is easy as well. To do this we are going to append two &lt;code&gt;graph twoway&lt;/code&gt; plots. Specifically, we are going to append &lt;code&gt;scatter&lt;/code&gt; and &lt;code&gt;lowess&lt;/code&gt;. We append two plots by using double-pipes – &lt;code&gt;||&lt;/code&gt;. The pipe is found on the key directly above return or enter on most keyboards (you need to hold shift).&lt;/p&gt;
+&lt;p&gt;Adding the lowess smoother is easy as well. To do this we are going to append two &lt;code class=&quot;highlighter-rouge&quot;&gt;graph twoway&lt;/code&gt; plots. Specifically, we are going to append &lt;code class=&quot;highlighter-rouge&quot;&gt;scatter&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;lowess&lt;/code&gt;. We append two plots by using double-pipes – &lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt;. The pipe is found on the key directly above return or enter on most keyboards (you need to hold shift).&lt;/p&gt;
 
 &lt;p&gt;So to get the scatterplot of &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt; with a lowess smoother, we type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;graph twoway scatter price length || lowess price length, title(&quot;Scatterplot of price and length&quot;)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph twoway scatter price length || lowess price length, title(&quot;Scatterplot of price and length&quot;)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/lowess1.jpg&quot; alt=&quot;lowess1.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -1313,15 +1388,17 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;p&gt;To create a histogram using commands, just type “histogram (your variable).” For example, to look at miles per gallon, you would type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;histogram mpg
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;histogram mpg
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Picture-7.png&quot; alt=&quot;Picture-7.png&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the &lt;code&gt;histogram&lt;/code&gt; command, including &lt;code&gt;width&lt;/code&gt; with allows you to specify bin width, &lt;code&gt;frequency&lt;/code&gt; which changes the y-axis to reflect frequency instead of density and &lt;code&gt;normal&lt;/code&gt; which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.&lt;/p&gt;
+&lt;p&gt;Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the &lt;code class=&quot;highlighter-rouge&quot;&gt;histogram&lt;/code&gt; command, including &lt;code class=&quot;highlighter-rouge&quot;&gt;width&lt;/code&gt; with allows you to specify bin width, &lt;code class=&quot;highlighter-rouge&quot;&gt;frequency&lt;/code&gt; which changes the y-axis to reflect frequency instead of density and &lt;code class=&quot;highlighter-rouge&quot;&gt;normal&lt;/code&gt; which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;histogram mpg, width(2) frequency normal title(mpg histogram)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;histogram mpg, width(2) frequency normal title(mpg histogram)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Picture-11.png&quot; alt=&quot;Picture-11.png&quot; /&gt;&lt;/p&gt;
 </content>
@@ -1336,44 +1413,48 @@ print sum(answer2) #print the sum of answer 2
 &lt;p&gt;This post will illustrate how to:&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Create a correlation matrix of variables using the &lt;a href=&quot;http://www.stata.com/help.cgi?correlate&quot;&gt;&lt;code&gt;correlate&lt;/code&gt;&lt;/a&gt; command.&lt;/li&gt;
+  &lt;li&gt;Create a correlation matrix of variables using the &lt;a href=&quot;http://www.stata.com/help.cgi?correlate&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;correlate&lt;/code&gt;&lt;/a&gt; command.&lt;/li&gt;
   &lt;li&gt;Display a correlation matrix as a covariance matrix.&lt;/li&gt;
-  &lt;li&gt;Obtain the statistical significance of a correlation using the &lt;a href=&quot;http://www.stata.com/help.cgi?pwcorr&quot;&gt;&lt;code&gt;pwcorr&lt;/code&gt;&lt;/a&gt; command.&lt;/li&gt;
+  &lt;li&gt;Obtain the statistical significance of a correlation using the &lt;a href=&quot;http://www.stata.com/help.cgi?pwcorr&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pwcorr&lt;/code&gt;&lt;/a&gt; command.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;correlation-matrix&quot;&gt;Correlation Matrix&lt;/h2&gt;
 
 &lt;p&gt;We’ll use the &lt;strong&gt;auto&lt;/strong&gt; dataset for this tutorial.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sysuse auto, clear 
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sysuse auto, clear 
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/auto.jpg&quot; alt=&quot;auto.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We’ll create a correlation matrix of four variables – &lt;em&gt;price&lt;/em&gt;, &lt;em&gt;mpg&lt;/em&gt;, &lt;em&gt;weight&lt;/em&gt;, and &lt;em&gt;length&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;correlation price mpg weight length
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;correlation price mpg weight length
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/corr.jpg&quot; alt=&quot;corr.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Note: We can shorten the &lt;code&gt;correlation&lt;/code&gt; command to &lt;code&gt;corr&lt;/code&gt; for convenience.&lt;/p&gt;
+&lt;p&gt;Note: We can shorten the &lt;code class=&quot;highlighter-rouge&quot;&gt;correlation&lt;/code&gt; command to &lt;code class=&quot;highlighter-rouge&quot;&gt;corr&lt;/code&gt; for convenience.&lt;/p&gt;
 
 &lt;h2 id=&quot;covariance-matrix&quot;&gt;Covariance Matrix&lt;/h2&gt;
 
-&lt;p&gt;If we want to create of covariance matrix, we simply add the &lt;code&gt;covariance&lt;/code&gt; option to the &lt;code&gt;correlation&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;If we want to create of covariance matrix, we simply add the &lt;code class=&quot;highlighter-rouge&quot;&gt;covariance&lt;/code&gt; option to the &lt;code class=&quot;highlighter-rouge&quot;&gt;correlation&lt;/code&gt; command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;correlation price mpg weigh length, covariance
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;correlation price mpg weigh length, covariance
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/covariance.jpg&quot; alt=&quot;covariance.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;statistical-significance-of-a-correlation&quot;&gt;Statistical Significance of a Correlation&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;correlation&lt;/code&gt; command produces a clean correlation matrix (or covariance matrix with the &lt;code&gt;covariance&lt;/code&gt; option). If we want to see the statistical significance of a correlation, we need to use the &lt;code&gt;pwcorr&lt;/code&gt; command with the &lt;code&gt;sig&lt;/code&gt; option.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;correlation&lt;/code&gt; command produces a clean correlation matrix (or covariance matrix with the &lt;code class=&quot;highlighter-rouge&quot;&gt;covariance&lt;/code&gt; option). If we want to see the statistical significance of a correlation, we need to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;pwcorr&lt;/code&gt; command with the &lt;code class=&quot;highlighter-rouge&quot;&gt;sig&lt;/code&gt; option.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;pwcorr price mpg weight length, sig
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pwcorr price mpg weight length, sig
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/pwcorr.jpg&quot; alt=&quot;pwcorr.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -1391,22 +1472,24 @@ print sum(answer2) #print the sum of answer 2
 &lt;ol&gt;
   &lt;li&gt;Show how to extend &lt;a href=&quot;http://www.psychstatistics.com/2011/04/19/stata-bivariate-regression/&quot;&gt;bivariate regression&lt;/a&gt; to include multiple predictor variables.&lt;/li&gt;
   &lt;li&gt;Show how to manually create partial and semipartial correlations using residuals from a regression model.&lt;/li&gt;
-  &lt;li&gt;Show how to use the &lt;code&gt;pcorr&lt;/code&gt; command to obtain partial and semipartial correlations.&lt;/li&gt;
+  &lt;li&gt;Show how to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;pcorr&lt;/code&gt; command to obtain partial and semipartial correlations.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;multiple-predictors&quot;&gt;Multiple Predictors&lt;/h2&gt;
 
 &lt;p&gt;We will again use the &lt;strong&gt;auto&lt;/strong&gt; dataset.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sysuse auto, clear
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/autodata.jpg&quot; alt=&quot;autodata.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Suppose we want to regress &lt;em&gt;price&lt;/em&gt; on three variables – &lt;em&gt;mpg&lt;/em&gt;, &lt;em&gt;weight&lt;/em&gt;, and &lt;em&gt;foreign&lt;/em&gt;. To add three predictors, we simply add the variables we want after the dependent variable.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;regress price mpg weight foreign
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;regress price mpg weight foreign
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;This produces the following output.&lt;/p&gt;
 
@@ -1422,18 +1505,21 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;p&gt;To obtain the part of &lt;em&gt;price&lt;/em&gt; independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt; we regress &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;regress price weight foreign
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;regress price weight foreign
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;We then save the residuals for &lt;em&gt;price&lt;/em&gt;. We’ll call this &lt;em&gt;priceres&lt;/em&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;predict priceres, residuals
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;predict priceres, residuals
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;We now have a new variable in our dataset called &lt;em&gt;priceres&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize priceres, detail
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize priceres, detail
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/priceres.jpg&quot; alt=&quot;priceres.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -1441,18 +1527,21 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;p&gt;At this point, we need to repeat what we did about except substitute &lt;em&gt;mpg&lt;/em&gt; for price. We regress &lt;em&gt;mpg&lt;/em&gt; on &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;regress mpg weight foreign
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;regress mpg weight foreign
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;We save the residuals for &lt;em&gt;mpg&lt;/em&gt;. We’ll call this &lt;em&gt;mpgres&lt;/em&gt; (not very original, I know).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;predict mpgres, residuals
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;predict mpgres, residuals
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;We now have a new variable in our dataset called &lt;em&gt;mpgres&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;summarize mpgres, detail
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;summarize mpgres, detail
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/mpgres.jpg&quot; alt=&quot;mpgres.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -1460,8 +1549,9 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;p&gt;We know have everything we need for the partial correlation between &lt;em&gt;price&lt;/em&gt; and &lt;em&gt;mpg&lt;/em&gt; controlling for &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Specifically, we have &lt;em&gt;priceres&lt;/em&gt; – which is the part of &lt;em&gt;price&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. We also have &lt;em&gt;mpgres&lt;/em&gt; – which is the part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;. Therefore, to obtain the partial correlation we simply need to correlate &lt;em&gt;priceres&lt;/em&gt; and &lt;em&gt;mpgres&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;corr priceres mpgres
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;corr priceres mpgres
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/partialcorrelation.jpg&quot; alt=&quot;partialcorrelation.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -1469,17 +1559,19 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;p&gt;We also already have everything we need for the semipartial correlation. Recall that for the semipartial correlation we only remove the shared relationship between &lt;em&gt;x&lt;/em&gt; and the &lt;em&gt;x2&lt;/em&gt; (or set of covariates). We don’t do anything with &lt;em&gt;y&lt;/em&gt;. In our example &lt;em&gt;price&lt;/em&gt; is our &lt;em&gt;y&lt;/em&gt; variable. So to compute the semipartial correlation we correlate &lt;em&gt;price&lt;/em&gt; (i.e., the “untouched” &lt;em&gt;y&lt;/em&gt; variable) and &lt;em&gt;mpgres&lt;/em&gt; (i.e., the part of &lt;em&gt;mpg&lt;/em&gt; that is independent of &lt;em&gt;weight&lt;/em&gt; and &lt;em&gt;foreign&lt;/em&gt;).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;corr price mpgres
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;corr price mpgres
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/semipartialcorrelation.jpg&quot; alt=&quot;semipartialcorrelation.jpg&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;partial-and-semipartial-correlations---pcorr&quot;&gt;Partial and Semipartial Correlations - &lt;code&gt;pcorr&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;partial-and-semipartial-correlations---pcorr&quot;&gt;Partial and Semipartial Correlations - &lt;code class=&quot;highlighter-rouge&quot;&gt;pcorr&lt;/code&gt;&lt;/h2&gt;
 
 &lt;p&gt;Thankfully Stata has a built in command for computing partial and semipartial correlations – &lt;a href=&quot;http://www.stata.com/help.cgi?pcorr&quot;&gt;pcorr&lt;/a&gt;. To obtain the partial and semipartial correlations, we type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;pcorr price mpg weight foreign
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pcorr price mpg weight foreign
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Note that the first variable listed is considered the &lt;em&gt;y&lt;/em&gt; variable. All other variables are variables are considered &lt;em&gt;x&lt;/em&gt; variables. Stata reports as many partial and semipartial correlations as there are &lt;em&gt;x&lt;/em&gt; variables. Additionally, Stata reports the squared partial and squared semipartial correlations. These are interpreted as the proportion of shared variance between &lt;em&gt;y&lt;/em&gt; and &lt;em&gt;x&lt;/em&gt; controlling for the other &lt;em&gt;x&lt;/em&gt; variables. The partial and semipartial correlations listed for &lt;em&gt;mpg&lt;/em&gt; are the same as what we found above.&lt;/p&gt;
 
@@ -1495,15 +1587,17 @@ print sum(answer2) #print the sum of answer 2
    <content type="html">&lt;h1 id=&quot;bivariate-regression&quot;&gt;Bivariate Regression&lt;/h1&gt;
 &lt;p&gt;In this post we’ll use the system dataset &lt;strong&gt;auto&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sysuse auto, clear
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sysuse auto, clear
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-1.jpg&quot; alt=&quot;Results - auto.dta-1&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;To estimate the model we use the &lt;code&gt;regress&lt;/code&gt; command in the command window. The &lt;code&gt;regress&lt;/code&gt; command follows the general format of &lt;code&gt;regress dv iv, options&lt;/code&gt;. Type &lt;code&gt;help regress&lt;/code&gt; or visit the online help for &lt;a href=&quot;http://www.stata.com/help.cgi?regress&quot;&gt;&lt;code&gt;regress&lt;/code&gt;&lt;/a&gt; for a description of the options available for regress. For example the regression of &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;mpg&lt;/em&gt; is estimated as follows:&lt;/p&gt;
+&lt;p&gt;To estimate the model we use the &lt;code class=&quot;highlighter-rouge&quot;&gt;regress&lt;/code&gt; command in the command window. The &lt;code class=&quot;highlighter-rouge&quot;&gt;regress&lt;/code&gt; command follows the general format of &lt;code class=&quot;highlighter-rouge&quot;&gt;regress dv iv, options&lt;/code&gt;. Type &lt;code class=&quot;highlighter-rouge&quot;&gt;help regress&lt;/code&gt; or visit the online help for &lt;a href=&quot;http://www.stata.com/help.cgi?regress&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;regress&lt;/code&gt;&lt;/a&gt; for a description of the options available for regress. For example the regression of &lt;em&gt;price&lt;/em&gt; on &lt;em&gt;mpg&lt;/em&gt; is estimated as follows:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;regress price mpg
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;regress price mpg
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-3.jpg&quot; alt=&quot;Results-auto.dta-3&quot; /&gt;&lt;/p&gt;
 
@@ -1517,28 +1611,31 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;h2 id=&quot;standardized-coefficients&quot;&gt;Standardized Coefficients&lt;/h2&gt;
 
-&lt;p&gt;Suppose we would like Stata to report standardized coefficients. To get standardized coefficients we add the &lt;code&gt;beta&lt;/code&gt; option to our command.&lt;/p&gt;
+&lt;p&gt;Suppose we would like Stata to report standardized coefficients. To get standardized coefficients we add the &lt;code class=&quot;highlighter-rouge&quot;&gt;beta&lt;/code&gt; option to our command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;regress price mpg, beta
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;regress price mpg, beta
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Results-auto_dta-4.jpg&quot; alt=&quot;Results-auto.dta-4&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;visualizing-regression-lines&quot;&gt;Visualizing Regression Lines&lt;/h2&gt;
 
-&lt;p&gt;We can visualize the relationship between two variables with a scatterplot. Stata’s graphics provide several useful commands for including regression lines on a scatterplot. We’ll discuss the &lt;code&gt;lfit&lt;/code&gt; and &lt;code&gt;lfitci&lt;/code&gt; commands.&lt;/p&gt;
+&lt;p&gt;We can visualize the relationship between two variables with a scatterplot. Stata’s graphics provide several useful commands for including regression lines on a scatterplot. We’ll discuss the &lt;code class=&quot;highlighter-rouge&quot;&gt;lfit&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;lfitci&lt;/code&gt; commands.&lt;/p&gt;
 
-&lt;p&gt;To produce a scatterplot between &lt;em&gt;price&lt;/em&gt; (y-axis) and &lt;em&gt;mpg&lt;/em&gt; (x-axis), we use the &lt;code&gt;graph twoway scatter&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;To produce a scatterplot between &lt;em&gt;price&lt;/em&gt; (y-axis) and &lt;em&gt;mpg&lt;/em&gt; (x-axis), we use the &lt;code class=&quot;highlighter-rouge&quot;&gt;graph twoway scatter&lt;/code&gt; command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;graph twoway scatter price mpg
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph twoway scatter price mpg
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Graph-Graph-1.jpg&quot; alt=&quot;Graph-Graph-1&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Now let’s add the regression line to the plot. The &lt;code&gt;lfit&lt;/code&gt; graph command allows us to do this (&lt;code&gt;lfit&lt;/code&gt; stands for &lt;em&gt;linear&lt;/em&gt; fit). However, we don’t want the regression line in isolation. We want it on top of the scatterplot. Stata lets you combine twoway graphs in one of two ways: (1) using parentheses or (2) using pipes. To add the regression line with parentheses, we type:&amp;lt;/p&amp;gt;&lt;/p&gt;
+&lt;p&gt;Now let’s add the regression line to the plot. The &lt;code class=&quot;highlighter-rouge&quot;&gt;lfit&lt;/code&gt; graph command allows us to do this (&lt;code class=&quot;highlighter-rouge&quot;&gt;lfit&lt;/code&gt; stands for &lt;em&gt;linear&lt;/em&gt; fit). However, we don’t want the regression line in isolation. We want it on top of the scatterplot. Stata lets you combine twoway graphs in one of two ways: (1) using parentheses or (2) using pipes. To add the regression line with parentheses, we type:&amp;lt;/p&amp;gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;graph twoway (lfit price mpg) (scatter price mpg)	
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph twoway (lfit price mpg) (scatter price mpg)	
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;The first set of parentheses is the regression line and the second is the scatterplot. This produces the following plot:&lt;/p&gt;
 
@@ -1546,13 +1643,15 @@ print sum(answer2) #print the sum of answer 2
 
 &lt;p&gt;To add the regression line with pipes (this produces an identical plot as above), we type:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;graph twoway lfit price mpg || scatter price mpg
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph twoway lfit price mpg || scatter price mpg
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;It can be nice to include confidence intervals on the plot. To do this we simply change the &lt;code&gt;lfit&lt;/code&gt; command to &lt;code&gt;lfitci&lt;/code&gt;, where the &lt;code&gt;ci&lt;/code&gt; refers to confidence interval.&lt;/p&gt;
+&lt;p&gt;It can be nice to include confidence intervals on the plot. To do this we simply change the &lt;code class=&quot;highlighter-rouge&quot;&gt;lfit&lt;/code&gt; command to &lt;code class=&quot;highlighter-rouge&quot;&gt;lfitci&lt;/code&gt;, where the &lt;code class=&quot;highlighter-rouge&quot;&gt;ci&lt;/code&gt; refers to confidence interval.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;graph twoway lfitci price mpg || scatter price mpg
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph twoway lfitci price mpg || scatter price mpg
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/scatter3.jpg&quot; alt=&quot;scatter3&quot; /&gt;&lt;/p&gt;
 </content>
@@ -1571,13 +1670,14 @@ print sum(answer2) #print the sum of answer 2
   &lt;li&gt;Add colored shading to a graph to visualize portions of a distribution&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&quot;the-twoway-function-command&quot;&gt;The &lt;code&gt;twoway function&lt;/code&gt; command&lt;/h2&gt;
+&lt;h2 id=&quot;the-twoway-function-command&quot;&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;twoway function&lt;/code&gt; command&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;twoway function&lt;/code&gt; plotting command is used to plot functions, such as &lt;code&gt;y = mx + b&lt;/code&gt;. If we want to plot the density of a normal distribution across a range of x values, we type &lt;code&gt;y=normalden(x)&lt;/code&gt;. You can also include graphing options available to twoway plots (e.g., &lt;code&gt;xtitle&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;twoway function&lt;/code&gt; plotting command is used to plot functions, such as &lt;code class=&quot;highlighter-rouge&quot;&gt;y = mx + b&lt;/code&gt;. If we want to plot the density of a normal distribution across a range of x values, we type &lt;code class=&quot;highlighter-rouge&quot;&gt;y=normalden(x)&lt;/code&gt;. You can also include graphing options available to twoway plots (e.g., &lt;code class=&quot;highlighter-rouge&quot;&gt;xtitle&lt;/code&gt;).&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-4 4) xtitle(&quot;{it: x}&quot;) ///
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;twoway function y=normalden(x), range(-4 4) xtitle(&quot;{it: x}&quot;) ///
 ytitle(&quot;Density&quot;) title(&quot;Standard Normal Distribution&quot;)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Stand_Normal.jpg&quot; alt=&quot;Stand_Normal.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -1591,9 +1691,9 @@ ytitle(&quot;Density&quot;) title(&quot;Standard Normal Distribution&quot;)
   &lt;li&gt;A normal curve from 1.96 to 4&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, &lt;code&gt;||&lt;/code&gt;, between calls to the &lt;code&gt;twoway function&lt;/code&gt; command. We will shade the area under the curve for #1 and #3 using the &lt;code&gt;recast(area)&lt;/code&gt; option of &lt;code&gt;twoway function&lt;/code&gt;. We will assign the color of the shading to dark navy blue using the &lt;code&gt;color(dknavy)&lt;/code&gt; option. We will leave the area under the curve for #2 unshaded.&lt;/p&gt;
+&lt;p&gt;The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, &lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt;, between calls to the &lt;code class=&quot;highlighter-rouge&quot;&gt;twoway function&lt;/code&gt; command. We will shade the area under the curve for #1 and #3 using the &lt;code class=&quot;highlighter-rouge&quot;&gt;recast(area)&lt;/code&gt; option of &lt;code class=&quot;highlighter-rouge&quot;&gt;twoway function&lt;/code&gt;. We will assign the color of the shading to dark navy blue using the &lt;code class=&quot;highlighter-rouge&quot;&gt;color(dknavy)&lt;/code&gt; option. We will leave the area under the curve for #2 unshaded.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
 function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///
 function y=normalden(x), range(1.96 4) recast(area) color(dknavy) ///
 xtitle(&quot;{it: x}&quot;) ///
@@ -1601,24 +1701,26 @@ ytitle(&quot;Density&quot;) title(&quot;Critial Values for Standard Normal&quot;
 subtitle(&quot;Two-tailed test and {&amp;amp;alpha}=.05&quot;) ///
 legend(off) xlabel(-1.96 0 1.96)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/twotail_normal.jpg&quot; alt=&quot;twotail_normal.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can repeat for a one-tailed test.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;twoway function y=normalden(x), range(-4 1.64) color(dknavy) || ///
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;twoway function y=normalden(x), range(-4 1.64) color(dknavy) || ///
 function y=normalden(x), range(1.64 4) recast(area) color(dknavy) ///
 xtitle(&quot;{it: x}&quot;) ///
 ytitle(&quot;Density&quot;) title(&quot;Critial Values for Standard Normal&quot;) ///
 subtitle(&quot;One-tailed test and {&amp;amp;alpha}=.05&quot;) ///
 legend(off) xlabel(0 1.64)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/onetailed_normal.jpg&quot; alt=&quot;onetailed_normal.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can also visualize other distributions available in Stata. Below, I provide an example of a &lt;em&gt;t&lt;/em&gt;-distribution with 20 degrees of freedom&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;twoway function y=tden(20,x), range(-2.09 2.09) color(dknavy) || ///
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;twoway function y=tden(20,x), range(-2.09 2.09) color(dknavy) || ///
 function y=tden(20,x), range(-4 -2.09) recast(area) color(dknavy) || ///
 function y=tden(20,x), range(2.09 4) recast(area) color(dknavy) ///
 xtitle(&quot;{it: x}&quot;) ///
@@ -1626,6 +1728,7 @@ ytitle(&quot;Density&quot;) title(&quot;Critial Values for {it: t}-distribution 
 subtitle(&quot;Two-tailed test and {&amp;amp;alpha}=.05&quot;) ///
 legend(off) xlabel(-2.09 0 2.09)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/tdist20df.jpg&quot; alt=&quot;tdist20df.jpg&quot; /&gt;&lt;/p&gt;
 </content>
@@ -1699,16 +1802,17 @@ legend(off) xlabel(-2.09 0 2.09)
 &lt;p&gt;We will consider 2 ways to analyze this data.&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Using the built-in command &lt;code&gt;anova&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Using the user-written command &lt;code&gt;wsanova&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Using the built-in command &lt;code class=&quot;highlighter-rouge&quot;&gt;anova&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Using the user-written command &lt;code class=&quot;highlighter-rouge&quot;&gt;wsanova&lt;/code&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;But first let’s look at the structure of the data. The data are in “long” format (i.e., there are multiple lines of data for every person). The &lt;code&gt;anova&lt;/code&gt; and &lt;code&gt;wsanova&lt;/code&gt; commands expect the data to be in long format.&lt;/p&gt;
+&lt;p&gt;But first let’s look at the structure of the data. The data are in “long” format (i.e., there are multiple lines of data for every person). The &lt;code class=&quot;highlighter-rouge&quot;&gt;anova&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;wsanova&lt;/code&gt; commands expect the data to be in long format.&lt;/p&gt;
 
 &lt;p&gt;We can also create a table of the data using the tabdisp command.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;tabdisp person stress, cellvar(hr) center cellwidth(9)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tabdisp person stress, cellvar(hr) center cellwidth(9)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0.jpg&quot; alt=&quot;Stata_SE-12.0.jpg&quot; /&gt;&lt;/p&gt;
 
@@ -1716,30 +1820,33 @@ legend(off) xlabel(-2.09 0 2.09)
 
 &lt;p&gt;You can also use the table command to specify any other data you want to look at.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;table stress, contents(n hr mean hr sd hr)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;table stress, contents(n hr mean hr sd hr)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0-1.jpg&quot; alt=&quot;Stata_SE 12.0-1.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This shows us the observations, mean and standard deviation for each condition.&lt;/p&gt;
 
-&lt;h2 id=&quot;method-1-anova&quot;&gt;Method 1: &lt;code&gt;anova&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;method-1-anova&quot;&gt;Method 1: &lt;code class=&quot;highlighter-rouge&quot;&gt;anova&lt;/code&gt;&lt;/h2&gt;
 
 &lt;p&gt;To specify a repeated measures anova using the anova command, we’ll use the repeated option. I’ve found the repeated option to be a bit confusing sometimes, because I initially thought the repeated option meant the variable for which there are multiple measures – namely, person in our example. Instead, the repeated option expects the factor on which persons were repeatedly observed. In our case, this is stress. Thus, the syntax is:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;anova hr person stress, repeated(stress)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;anova hr person stress, repeated(stress)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0-2.jpg&quot; alt=&quot;Stata_SE-12.0-2.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The output at the bottom provides the corrected p-values for each of the three epsilons.&lt;/p&gt;
 
-&lt;h2 id=&quot;method-2-wsanova&quot;&gt;Method 2: &lt;code&gt;wsanova&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;method-2-wsanova&quot;&gt;Method 2: &lt;code class=&quot;highlighter-rouge&quot;&gt;wsanova&lt;/code&gt;&lt;/h2&gt;
 
-&lt;p&gt;A second method for estimating a repeated measures anova is to use the user-written command &lt;code&gt;wsanova&lt;/code&gt; (type &lt;code&gt;findit wsanova&lt;/code&gt; and install after clicking “sg103”). The syntax is different and I believe it is a bit more intuitive because we specify the variable that identifies the subjects we repeatedly observe using the id option. To get the corrected p-values, we also need to specify the epsilon option.&lt;/p&gt;
+&lt;p&gt;A second method for estimating a repeated measures anova is to use the user-written command &lt;code class=&quot;highlighter-rouge&quot;&gt;wsanova&lt;/code&gt; (type &lt;code class=&quot;highlighter-rouge&quot;&gt;findit wsanova&lt;/code&gt; and install after clicking “sg103”). The syntax is different and I believe it is a bit more intuitive because we specify the variable that identifies the subjects we repeatedly observe using the id option. To get the corrected p-values, we also need to specify the epsilon option.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;wsanova hr stress, id(person) epsilon
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wsanova hr stress, id(person) epsilon
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/Stata_SE-12.0-3.jpg&quot; alt=&quot;Stata_SE-12.0-3.jpg&quot; /&gt;&lt;/p&gt;
 

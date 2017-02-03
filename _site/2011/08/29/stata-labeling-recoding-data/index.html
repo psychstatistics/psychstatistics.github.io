@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -135,16 +135,18 @@
 
 <p><img src="/assets/pic2.png" alt="pic2.png" /></p>
 
-<p>To create labels using commands, you would use the <code>label</code> command. The syntax is:</p>
+<p>To create labels using commands, you would use the <code class="highlighter-rouge">label</code> command. The syntax is:</p>
 
-<pre><code>label define labelname value "name"
+<div class="highlighter-rouge"><pre class="highlight"><code>label define labelname value "name"
 label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
 </code></pre>
+</div>
 
-<p>To apply your labels, use the <code>label</code> command again. The syntax is <code>label value variable labelname</code></p>
+<p>To apply your labels, use the <code class="highlighter-rouge">label</code> command again. The syntax is <code class="highlighter-rouge">label value variable labelname</code></p>
 
-<pre><code>label value condition cond
+<div class="highlighter-rouge"><pre class="highlight"><code>label value condition cond
 </code></pre>
+</div>
 
 <h1 id="recoding-data">Recoding Data</h1>
 
@@ -156,17 +158,19 @@ label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
 
 <p><img src="/assets/pic4.png" alt="pic4.png" /></p>
 
-<p>It is also quick and easy to recode variables using the <code>recode</code> command:\</p>
+<p>It is also quick and easy to recode variables using the <code class="highlighter-rouge">recode</code> command:\</p>
 
-<pre><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+<div class="highlighter-rouge"><pre class="highlight"><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
 </code></pre>
+</div>
 
-<p>If you wanted to create a new variable with the recoded values, just use the <code>clonevar</code> command <em>first</em>, which will create a new variable with identical values to the first one. Then run the <code>recode</code> command on your new variable. The syntax is <code>clonevar newvariable = variabletoclone</code></p>
+<p>If you wanted to create a new variable with the recoded values, just use the <code class="highlighter-rouge">clonevar</code> command <em>first</em>, which will create a new variable with identical values to the first one. Then run the <code class="highlighter-rouge">recode</code> command on your new variable. The syntax is <code class="highlighter-rouge">clonevar newvariable = variabletoclone</code></p>
 
-<pre><code>clonevar item2_reverse = item2	
+<div class="highlighter-rouge"><pre class="highlight"><code>clonevar item2_reverse = item2	
 </code></pre>
+</div>
 
-<p>If you wanted to rename your new variable later, you would simply use the <code>rename</code> command. The syntax is <code>rename oldname newname</code>.</p>
+<p>If you wanted to rename your new variable later, you would simply use the <code class="highlighter-rouge">rename</code> command. The syntax is <code class="highlighter-rouge">rename oldname newname</code>.</p>
 
 </div>
 

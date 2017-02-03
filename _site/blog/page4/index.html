@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -142,11 +142,11 @@
 
 <h2 id="python-solution-1">Python Solution 1</h2>
 
-<p>This solution creates a function <code>fibon</code> that takes a single argument – <code>maximum</code>. The value of <code>maximum</code> will be 4,000,000 in this example. The function first initializes an iterator (<code>i</code>), a list with two entries (<code>fib</code>), and a variable (<code>n</code>) that will be used to tell Python when to stop the <code>while</code> loop. The <code>while</code> loop creates the next entry in the sequence (<code>fibtemp</code>), makes it a list, and adds it to the <code>fib</code> list. Then it alters the value of <code>n</code> and adds 1 to the iterator.</p>
+<p>This solution creates a function <code class="highlighter-rouge">fibon</code> that takes a single argument – <code class="highlighter-rouge">maximum</code>. The value of <code class="highlighter-rouge">maximum</code> will be 4,000,000 in this example. The function first initializes an iterator (<code class="highlighter-rouge">i</code>), a list with two entries (<code class="highlighter-rouge">fib</code>), and a variable (<code class="highlighter-rouge">n</code>) that will be used to tell Python when to stop the <code class="highlighter-rouge">while</code> loop. The <code class="highlighter-rouge">while</code> loop creates the next entry in the sequence (<code class="highlighter-rouge">fibtemp</code>), makes it a list, and adds it to the <code class="highlighter-rouge">fib</code> list. Then it alters the value of <code class="highlighter-rouge">n</code> and adds 1 to the iterator.</p>
 
-<p>Next it creates another empty list to hold the even numbers of the sequence (<code>fibeven</code>). The it uses a <code>for</code> loop over the elements of <code>fib</code> to identify whether a particular element is even. If it is even, it adds that element to <code>fibeven</code>. The function then returns the sum of <code>fibeven</code>.</p>
+<p>Next it creates another empty list to hold the even numbers of the sequence (<code class="highlighter-rouge">fibeven</code>). The it uses a <code class="highlighter-rouge">for</code> loop over the elements of <code class="highlighter-rouge">fib</code> to identify whether a particular element is even. If it is even, it adds that element to <code class="highlighter-rouge">fibeven</code>. The function then returns the sum of <code class="highlighter-rouge">fibeven</code>.</p>
 
-<pre><code>def fibon(maximum):
+<div class="highlighter-rouge"><pre class="highlight"><code>def fibon(maximum):
     i = 2
     fib = [1,2,]
     n=0
@@ -165,12 +165,13 @@
 
 print fibon(4000000)
 </code></pre>
+</div>
 
 <h2 id="python-solution-2">Python Solution 2</h2>
 
-<p>This solution uses a generator function to create the sequence. You can tell it is a generator function because of the <code>yield</code> keyword in it. Then I used NumPy arrays to process the sequence and identify the even numbers. I’ve been using NumPy quite a bit lately, so I wanted to come up with a solution that involved NumPy.</p>
+<p>This solution uses a generator function to create the sequence. You can tell it is a generator function because of the <code class="highlighter-rouge">yield</code> keyword in it. Then I used NumPy arrays to process the sequence and identify the even numbers. I’ve been using NumPy quite a bit lately, so I wanted to come up with a solution that involved NumPy.</p>
 
-<pre><code>import numpy as np
+<div class="highlighter-rouge"><pre class="highlight"><code>import numpy as np
 
 def fibfun(maxnum):
     x = 0
@@ -184,6 +185,7 @@ npall = np.array(allnum)
 npeven = npall[np.where(npall % 2 == 0)]
 print np.sum(npeven)
 </code></pre>
+</div>
 
 
   </div>
@@ -202,9 +204,9 @@ print np.sum(npeven)
 
 <h2 id="python-solution-1">Python Solution #1</h2>
 
-<p>This uses the built in <code>range()</code> function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using <code>extend()</code>) and identify the unique values with the <code>set()</code> function. I also sorted them because I like it better that way.</p>
+<p>This uses the built in <code class="highlighter-rouge">range()</code> function to get all multiples of three and five. The problem with this solution is that there is going to be overlap between the values in three and five lists. Consequently, we have to put them in a common list (using <code class="highlighter-rouge">extend()</code>) and identify the unique values with the <code class="highlighter-rouge">set()</code> function. I also sorted them because I like it better that way.</p>
 
-<pre><code>answer =[] # empty list
+<div class="highlighter-rouge"><pre class="highlight"><code>answer =[] # empty list
 three = range(0,1000,3) #list of multiples of 3
 five = range(0,1000,5) #list of multiples of 5
 answer.extend(three) # add three to the answer list
@@ -212,17 +214,19 @@ answer.extend(five) #add five to the answer list
 answer.sort() #sort the list
 print sum(set(answer)) #print the sum of the unique values
 </code></pre>
+</div>
 
 <h2 id="python-solution-2">Python Solution #2</h2>
 
-<p>This solution uses a <code>for</code> loop and take advantage of the mod operator in python – <code>%</code> – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).</p>
+<p>This solution uses a <code class="highlighter-rouge">for</code> loop and take advantage of the mod operator in python – <code class="highlighter-rouge">%</code> – to identify values between 0 and 1000 that are divisible by 3 or 5 (i.e., have a mod equal to 0).</p>
 
-<pre><code>answer2 = [] #empty list
+<div class="highlighter-rouge"><pre class="highlight"><code>answer2 = [] #empty list
 for i in range(1000): #iterate from 0 to 999 -- 1000 isn't included
 	if i % 3 == 0 or i % 5 == 0: #identify whether i is divisible by 3 or 5
     	answer2.append(i) #if divisible, then append it to the answer2 list
 print sum(answer2) #print the sum of answer 2
 </code></pre>
+</div>
 
 <p>This will produce the correct answer. It is a bit slower than Solution #1 but both are very fast.</p>
 
@@ -270,28 +274,31 @@ print sum(answer2) #print the sum of answer 2
 
 <p>In this post we’ll use the <strong>auto</strong> dataset.</p>
 
-<pre><code>sysuse auto, clear
+<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear
 </code></pre>
+</div>
 
 <p><img src="/assets/autoscatter.jpg" alt="autoscatter.jpg" /></p>
 
 <h2 id="creating-a-scatterplot">Creating a Scatterplot</h2>
 
-<p>Creating scatterplots is easy in Stata. We’ll use the <code>graph twoway scatter</code> command (we can just type <code>scatter</code> but I like to use the <code>graph twoway</code> syntax to make things more consistent across graph types. We’ll visualize the relationship between <em>price</em> and <em>length</em>. When using <code>graph twoway scatter</code> we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.</p>
+<p>Creating scatterplots is easy in Stata. We’ll use the <code class="highlighter-rouge">graph twoway scatter</code> command (we can just type <code class="highlighter-rouge">scatter</code> but I like to use the <code class="highlighter-rouge">graph twoway</code> syntax to make things more consistent across graph types. We’ll visualize the relationship between <em>price</em> and <em>length</em>. When using <code class="highlighter-rouge">graph twoway scatter</code> we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.</p>
 
-<pre><code>graph twoway scatter price length, title("Scatterplot of price and length")
+<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway scatter price length, title("Scatterplot of price and length")
 </code></pre>
+</div>
 
 <p><img src="/assets/scatter1.jpg" alt="scatter1.jpg" /></p>
 
 <h2 id="adding-a-lowess-smoother">Adding a Lowess Smoother</h2>
 
-<p>Adding the lowess smoother is easy as well. To do this we are going to append two <code>graph twoway</code> plots. Specifically, we are going to append <code>scatter</code> and <code>lowess</code>. We append two plots by using double-pipes – <code>||</code>. The pipe is found on the key directly above return or enter on most keyboards (you need to hold shift).</p>
+<p>Adding the lowess smoother is easy as well. To do this we are going to append two <code class="highlighter-rouge">graph twoway</code> plots. Specifically, we are going to append <code class="highlighter-rouge">scatter</code> and <code class="highlighter-rouge">lowess</code>. We append two plots by using double-pipes – <code class="highlighter-rouge">||</code>. The pipe is found on the key directly above return or enter on most keyboards (you need to hold shift).</p>
 
 <p>So to get the scatterplot of <em>price</em> and <em>length</em> with a lowess smoother, we type:</p>
 
-<pre><code>graph twoway scatter price length || lowess price length, title("Scatterplot of price and length")
+<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway scatter price length || lowess price length, title("Scatterplot of price and length")
 </code></pre>
+</div>
 
 <p><img src="/assets/lowess1.jpg" alt="lowess1.jpg" /></p>
 
@@ -303,15 +310,17 @@ print sum(answer2) #print the sum of answer 2
 
 <p>To create a histogram using commands, just type “histogram (your variable).” For example, to look at miles per gallon, you would type:</p>
 
-<pre><code>histogram mpg
+<div class="highlighter-rouge"><pre class="highlight"><code>histogram mpg
 </code></pre>
+</div>
 
 <p><img src="/assets/Picture-7.png" alt="Picture-7.png" /></p>
 
-<p>Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the <code>histogram</code> command, including <code>width</code> with allows you to specify bin width, <code>frequency</code> which changes the y-axis to reflect frequency instead of density and <code>normal</code> which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.</p>
+<p>Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the <code class="highlighter-rouge">histogram</code> command, including <code class="highlighter-rouge">width</code> with allows you to specify bin width, <code class="highlighter-rouge">frequency</code> which changes the y-axis to reflect frequency instead of density and <code class="highlighter-rouge">normal</code> which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.</p>
 
-<pre><code>histogram mpg, width(2) frequency normal title(mpg histogram)
+<div class="highlighter-rouge"><pre class="highlight"><code>histogram mpg, width(2) frequency normal title(mpg histogram)
 </code></pre>
+</div>
 
 <p><img src="/assets/Picture-11.png" alt="Picture-11.png" /></p>
 
@@ -329,44 +338,48 @@ print sum(answer2) #print the sum of answer 2
 <p>This post will illustrate how to:</p>
 
 <ol>
-  <li>Create a correlation matrix of variables using the <a href="http://www.stata.com/help.cgi?correlate"><code>correlate</code></a> command.</li>
+  <li>Create a correlation matrix of variables using the <a href="http://www.stata.com/help.cgi?correlate"><code class="highlighter-rouge">correlate</code></a> command.</li>
   <li>Display a correlation matrix as a covariance matrix.</li>
-  <li>Obtain the statistical significance of a correlation using the <a href="http://www.stata.com/help.cgi?pwcorr"><code>pwcorr</code></a> command.</li>
+  <li>Obtain the statistical significance of a correlation using the <a href="http://www.stata.com/help.cgi?pwcorr"><code class="highlighter-rouge">pwcorr</code></a> command.</li>
 </ol>
 
 <h2 id="correlation-matrix">Correlation Matrix</h2>
 
 <p>We’ll use the <strong>auto</strong> dataset for this tutorial.</p>
 
-<pre><code>sysuse auto, clear 
+<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear 
 </code></pre>
+</div>
 
 <p><img src="/assets/auto.jpg" alt="auto.jpg" /></p>
 
 <p>We’ll create a correlation matrix of four variables – <em>price</em>, <em>mpg</em>, <em>weight</em>, and <em>length</em>.</p>
 
-<pre><code>correlation price mpg weight length
+<div class="highlighter-rouge"><pre class="highlight"><code>correlation price mpg weight length
 </code></pre>
+</div>
 
 <p><img src="/assets/corr.jpg" alt="corr.jpg" /></p>
 
-<p>Note: We can shorten the <code>correlation</code> command to <code>corr</code> for convenience.</p>
+<p>Note: We can shorten the <code class="highlighter-rouge">correlation</code> command to <code class="highlighter-rouge">corr</code> for convenience.</p>
 
 <h2 id="covariance-matrix">Covariance Matrix</h2>
 
-<p>If we want to create of covariance matrix, we simply add the <code>covariance</code> option to the <code>correlation</code> command.</p>
+<p>If we want to create of covariance matrix, we simply add the <code class="highlighter-rouge">covariance</code> option to the <code class="highlighter-rouge">correlation</code> command.</p>
 
-<pre><code>correlation price mpg weigh length, covariance
+<div class="highlighter-rouge"><pre class="highlight"><code>correlation price mpg weigh length, covariance
 </code></pre>
+</div>
 
 <p><img src="/assets/covariance.jpg" alt="covariance.jpg" /></p>
 
 <h2 id="statistical-significance-of-a-correlation">Statistical Significance of a Correlation</h2>
 
-<p>The <code>correlation</code> command produces a clean correlation matrix (or covariance matrix with the <code>covariance</code> option). If we want to see the statistical significance of a correlation, we need to use the <code>pwcorr</code> command with the <code>sig</code> option.</p>
+<p>The <code class="highlighter-rouge">correlation</code> command produces a clean correlation matrix (or covariance matrix with the <code class="highlighter-rouge">covariance</code> option). If we want to see the statistical significance of a correlation, we need to use the <code class="highlighter-rouge">pwcorr</code> command with the <code class="highlighter-rouge">sig</code> option.</p>
 
-<pre><code>pwcorr price mpg weight length, sig
+<div class="highlighter-rouge"><pre class="highlight"><code>pwcorr price mpg weight length, sig
 </code></pre>
+</div>
 
 <p><img src="/assets/pwcorr.jpg" alt="pwcorr.jpg" /></p>
 

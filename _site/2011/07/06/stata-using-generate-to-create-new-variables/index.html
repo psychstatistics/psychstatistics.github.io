@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -127,26 +127,29 @@
   <span class="post-date">06 Jul 2011</span>
   <span class="post-tags">Tags: Stata and Tutorial</span>
   <h1 id="generating-new-variables">Generating New Variables</h1>
-<p>The primary method for creating new variables in Stata is the <code>generate</code> command. Load the <strong>auto</strong> dataset.</p>
+<p>The primary method for creating new variables in Stata is the <code class="highlighter-rouge">generate</code> command. Load the <strong>auto</strong> dataset.</p>
 
-<pre><code>clear
+<div class="highlighter-rouge"><pre class="highlight"><code>clear
 sysuse auto
 describe
 </code></pre>
+</div>
 
 <p><img src="/assets/Results-auto_dta_1.jpg" alt="Results-auto.dta_1.jpg" /></p>
 
 <h2 id="new-variable-from-existing-variables">New Variable from Existing Variables</h2>
 
-<p>Let’s create a new variable that is the sum of <em>weight</em> and <em>length</em> (ignore for the moment that summing weights and lengths doesn’t make a ton of sense). Simple with <code>generate</code>. The syntax of <code>generate</code> is:</p>
+<p>Let’s create a new variable that is the sum of <em>weight</em> and <em>length</em> (ignore for the moment that summing weights and lengths doesn’t make a ton of sense). Simple with <code class="highlighter-rouge">generate</code>. The syntax of <code class="highlighter-rouge">generate</code> is:</p>
 
-<pre><code>generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
+<div class="highlighter-rouge"><pre class="highlight"><code>generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
 </code></pre>
+</div>
 
 <p>So to create a new variable called <em>weightlength</em> that is the sum of <em>weight</em> and <em>length</em> we type:</p>
 
-<pre><code>generate weightlength = weight+length
+<div class="highlighter-rouge"><pre class="highlight"><code>generate weightlength = weight+length
 </code></pre>
+</div>
 
 <p>Now we have new variable called <em>weightlength</em>.</p>
 
@@ -154,70 +157,80 @@ describe
 
 <p>Suppose now that we want to create a new variable that is the square of weight.</p>
 
-<pre><code>generate weight2 = weight^2
+<div class="highlighter-rouge"><pre class="highlight"><code>generate weight2 = weight^2
 </code></pre>
+</div>
 
 <h2 id="new-variable-that-is-a-constant">New Variable that is a Constant</h2>
 
 <p>Suppose we want to create a new variable that is a constant value (this isn’t necessarily a good idea and you can use macros to store constants but using a variable can be pretty convenient too). Let’s make a new variable <em>x</em> that is equal to 100.</p>
 
-<pre><code>generate x = 100
+<div class="highlighter-rouge"><pre class="highlight"><code>generate x = 100
 </code></pre>
+</div>
 
 <p>Let’s create a new variable that is equal to the mean of weight – we’ll call it <em>meanweight</em>.</p>
 
-<pre><code>summarize weight
+<div class="highlighter-rouge"><pre class="highlight"><code>summarize weight
 </code></pre>
+</div>
 
 <p><img src="/assets/Results-auto_dta-3.jpg" alt="Results-auto.dta-3.jpg" /></p>
 
-<pre><code>generate meanweight = 3019.459
+<div class="highlighter-rouge"><pre class="highlight"><code>generate meanweight = 3019.459
 </code></pre>
+</div>
 
-<p>You can also use the results of the <code>summarize</code> command to create a mean.</p>
+<p>You can also use the results of the <code class="highlighter-rouge">summarize</code> command to create a mean.</p>
 
 <p><img src="/assets/Viewer-1-help-summarize-1.jpg" alt="Viewer-1-help-summarize-1.jpg" /></p>
 
-<pre><code>summarize weight
+<div class="highlighter-rouge"><pre class="highlight"><code>summarize weight
 generate meanweight = r(mean)
 </code></pre>
+</div>
 
-<p>You can use the <code>_N</code> operator to create a new variable that is equal to the number of observations in a dataset.</p>
+<p>You can use the <code class="highlighter-rouge">_N</code> operator to create a new variable that is equal to the number of observations in a dataset.</p>
 
-<pre><code>generate obs = _N
+<div class="highlighter-rouge"><pre class="highlight"><code>generate obs = _N
 </code></pre>
+</div>
 
-<p>If you combine this with <code>by</code> you can create a new variable that will be equal to the number of observations within the levels of the <code>by</code> variable. For example, we can type:</p>
+<p>If you combine this with <code class="highlighter-rouge">by</code> you can create a new variable that will be equal to the number of observations within the levels of the <code class="highlighter-rouge">by</code> variable. For example, we can type:</p>
 
-<pre><code>by foreign: generate obs = _N
+<div class="highlighter-rouge"><pre class="highlight"><code>by foreign: generate obs = _N
 </code></pre>
+</div>
 
 <p>This will create a variable that is a constant within the levels of <em>foreign</em>. That is, we are going to get the number of foreign cars and the number of domestic cars. If a line in the data is associated with foreign cars the new <em>obs</em> variable will have a value of 22 and domestic cars will have a value of 52. Give it a try and see how it works.</p>
 
 <h2 id="new-variable-that-is-a-random-draw-from-a-distribution">New Variable that is a Random Draw from a Distribution</h2>
 
-<p>We can create a new variable that is a random draw from a distribution. Let’s create a new variable whose values will be random draws from a normal distribution with a mean of 0 and a standard deviation of 1. The random normal generator command is <code>rnormal()</code> (it defaults to a mean of 0 and standard deviation of 1 and it will draw as many values as there are observations in the dataset).</p>
+<p>We can create a new variable that is a random draw from a distribution. Let’s create a new variable whose values will be random draws from a normal distribution with a mean of 0 and a standard deviation of 1. The random normal generator command is <code class="highlighter-rouge">rnormal()</code> (it defaults to a mean of 0 and standard deviation of 1 and it will draw as many values as there are observations in the dataset).</p>
 
-<pre><code>generate random = rnormal()
+<div class="highlighter-rouge"><pre class="highlight"><code>generate random = rnormal()
 </code></pre>
+</div>
 
 <h2 id="create-a-new-variable-that-indexes-the-observations">Create a New Variable that Indexes the Observations</h2>
 
-<p>You can use the <code>_n</code> operator to create a variable that indexes the observation number.</p>
+<p>You can use the <code class="highlighter-rouge">_n</code> operator to create a variable that indexes the observation number.</p>
 
-<pre><code>generate index = _n
+<div class="highlighter-rouge"><pre class="highlight"><code>generate index = _n
 </code></pre>
+</div>
 
-<p>This will create a new variable that runs from 1 to 74. You can combine this with <code>by</code> to create an index within another variable.</p>
+<p>This will create a new variable that runs from 1 to 74. You can combine this with <code class="highlighter-rouge">by</code> to create an index within another variable.</p>
 
-<pre><code>by foreign: index = _n
+<div class="highlighter-rouge"><pre class="highlight"><code>by foreign: index = _n
 </code></pre>
+</div>
 
 <p>This will create a new variable that runs from 1 to 52 for domestic cars and 1 to 22 for foreign cars.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>I’ve just touched on the ways you can create new variables. You can also use the <code>egen</code> command to create new variables. Try new ways to create variables and be sure to read the help files.</p>
+<p>I’ve just touched on the ways you can create new variables. You can also use the <code class="highlighter-rouge">egen</code> command to create new variables. Try new ways to create variables and be sure to read the help files.</p>
 
 </div>
 

@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -128,11 +128,11 @@
   <span class="post-tags">Tags: Stata and Tutorial</span>
   <h2 id="predicted-scores-in-stata">Predicted Scores in Stata</h2>
 
-<p>As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the <code>auto</code> dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation</p>
+<p>As we discussed in class, the predicted value of the outcome variable can be created using the regression model. For example, we can use the <code class="highlighter-rouge">auto</code> dataset from Stata to look at the relationship between miles per gallon and weight across various cars. We estimate the follow equation</p>
 
 <script type="math/tex; mode=display">mpg^\prime = b_0 + b_1weight</script>
 
-<pre><code>sysuse auto
+<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto
 regress mpg weight
       Source |       SS       df       MS              Number of obs =      74
 -------------+------------------------------           F(  1,    72) =  134.62
@@ -147,15 +147,17 @@ regress mpg weight
        _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
 ------------------------------------------------------------------------------
 </code></pre>
+</div>
 
-<p>Thus, we see a negative relationship between <code>weight</code> and <code>mpg</code>. For every 1 unit increase in <code>weight</code>, <code>mpg</code> goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:</p>
+<p>Thus, we see a negative relationship between <code class="highlighter-rouge">weight</code> and <code class="highlighter-rouge">mpg</code>. For every 1 unit increase in <code class="highlighter-rouge">weight</code>, <code class="highlighter-rouge">mpg</code> goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:</p>
 
-<pre><code>predict mpg_pred		
+<div class="highlighter-rouge"><pre class="highlight"><code>predict mpg_pred		
 </code></pre>
+</div>
 
-<p>This creates a new variable called <code>mpg_pred</code> with the predicted <code>mpg</code> for all the <code>weight</code> values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.</p>
+<p>This creates a new variable called <code class="highlighter-rouge">mpg_pred</code> with the predicted <code class="highlighter-rouge">mpg</code> for all the <code class="highlighter-rouge">weight</code> values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.</p>
 
-<pre><code>list mpg mpg_pred in 1/20
+<div class="highlighter-rouge"><pre class="highlight"><code>list mpg mpg_pred in 1/20
      +----------------+
      | mpg   mpg_pred |
      |----------------|
@@ -184,6 +186,7 @@ regress mpg weight
  20. |  30   26.70187 |
      +----------------+
 </code></pre>
+</div>
 
 <h2 id="residuals-in-stata">Residuals in Stata</h2>
 
@@ -191,14 +194,15 @@ regress mpg weight
 
 <script type="math/tex; mode=display">Y - Y^\prime</script>
 
-<p>Thus, to compute residuals we can just subtract <code>mpg_pred</code> from <code>mpg</code>. Stata will do this for us using the predict command:</p>
+<p>Thus, to compute residuals we can just subtract <code class="highlighter-rouge">mpg_pred</code> from <code class="highlighter-rouge">mpg</code>. Stata will do this for us using the predict command:</p>
 
-<pre><code>predict mpg_res, residuals
+<div class="highlighter-rouge"><pre class="highlight"><code>predict mpg_res, residuals
 </code></pre>
+</div>
 
 <p>Here’s 20 of the actual mpg values, 20 of the predicted values, and 20 of the residuals.</p>
 
-<pre><code> list mpg mpg_pred mpg_res in 1/20
+<div class="highlighter-rouge"><pre class="highlight"><code> list mpg mpg_pred mpg_res in 1/20
      +----------------------------+
      | mpg   mpg_pred     mpg_res |
      |----------------------------|
@@ -227,17 +231,19 @@ regress mpg weight
  20. |  30   26.70187    3.298132 |
      +----------------------------+
 </code></pre>
+</div>
 
 <p>We can see that the residuals are intact the difference between the first two columns. 
-Given that the residuals are the part of the <code>mpg</code> that is unrelated to <code>weight</code>, <code>mpg_res</code> should be uncorrelated with <code>weight</code>. Let’s check:</p>
+Given that the residuals are the part of the <code class="highlighter-rouge">mpg</code> that is unrelated to <code class="highlighter-rouge">weight</code>, <code class="highlighter-rouge">mpg_res</code> should be uncorrelated with <code class="highlighter-rouge">weight</code>. Let’s check:</p>
 
-<pre><code>. corr weight mpg_res
+<div class="highlighter-rouge"><pre class="highlight"><code>. corr weight mpg_res
 (obs=74)
              |   weight  mpg_res
 -------------+------------------
       weight |   1.0000
      mpg_res |   0.0000   1.0000
 </code></pre>
+</div>
 
 <p><img src="/assets/residual_predictor_correlation.png" alt="residual_predictor_correlation.png" /></p>
 

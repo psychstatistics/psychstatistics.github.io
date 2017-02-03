@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -137,27 +137,31 @@
 
 <p>We will use the built-in dataset <strong>systolic</strong>.</p>
 
-<pre><code>webuse systolic
+<div class="highlighter-rouge"><pre class="highlight"><code>webuse systolic
 </code></pre>
+</div>
 
 <h2 id="examining-the-data">Examining the data</h2>
 
 <p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
 
-<pre><code>summarize systolic, detail
+<div class="highlighter-rouge"><pre class="highlight"><code>summarize systolic, detail
 </code></pre>
+</div>
 
 <p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
 
-<pre><code>table drug
+<div class="highlighter-rouge"><pre class="highlight"><code>table drug
 </code></pre>
+</div>
 
 <p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
 
 <p>Let’s also look at a boxplot of systolic by drug.</p>
 
-<pre><code>graph box systolic, by(drug)
+<div class="highlighter-rouge"><pre class="highlight"><code>graph box systolic, by(drug)
 </code></pre>
+</div>
 
 <p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
 
@@ -167,45 +171,49 @@
 
 <p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
 
-<pre><code>anova systolic drug
+<div class="highlighter-rouge"><pre class="highlight"><code>anova systolic drug
 </code></pre>
+</div>
 
 <p>We reject the null hypothesis.</p>
 
 <p><img src="/assets/Results-systolic_dta-2.jpg" alt="Results-systolic.dta-2.jpg" /></p>
 
-<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code>test</code> command to perform planned comparisons</h2>
+<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code class="highlighter-rouge">test</code> command to perform planned comparisons</h2>
 
-<p>In Stata, once we have completed the ANOVA, we can use the <code>test</code> command to perform planned comparisons. Note two important things about the <code>test</code> command:</p>
+<p>In Stata, once we have completed the ANOVA, we can use the <code class="highlighter-rouge">test</code> command to perform planned comparisons. Note two important things about the <code class="highlighter-rouge">test</code> command:</p>
 
 <ol>
   <li>You can only use it <strong>after</strong> you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.</li>
-  <li>The <code>test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code>test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code>test</code> needs will not be available if you run another model.</li>
+  <li>The <code class="highlighter-rouge">test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code class="highlighter-rouge">test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code class="highlighter-rouge">test</code> needs will not be available if you run another model.</li>
 </ol>
 
 <p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
 
-<pre><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+<div class="highlighter-rouge"><pre class="highlight"><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
 </code></pre>
+</div>
 
 <p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
 
-<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code>1.drug</code> or <code>2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
+<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code class="highlighter-rouge">1.drug</code> or <code class="highlighter-rouge">2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
 See if you can figure out why the following statement is equivalent</p>
 
-<pre><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+<div class="highlighter-rouge"><pre class="highlight"><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
 </code></pre>
+</div>
 
 <p>Suppose we want to know if level 1 of drug is different from level 2.</p>
 
-<pre><code>test 1.drug = 2.drug
+<div class="highlighter-rouge"><pre class="highlight"><code>test 1.drug = 2.drug
 </code></pre>
+</div>
 
 <p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
 
 <p>We cannot reject reject the null.</p>
 
-<p>The <code>test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
+<p>The <code class="highlighter-rouge">test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
 
 </div>
 

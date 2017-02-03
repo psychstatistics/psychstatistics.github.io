@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -128,7 +128,7 @@
   <span class="post-tags">Tags: R, Stan, and multilevel</span>
   <h2 id="visualizing-the-lkj-correlation-distribution">Visualizing the LKJ Correlation Distribution</h2>
 
-<p>I use multilevel models a lot. I’ve transitioned from using software like <a href="http://cran.r-project.org/web/packages/lme4/index.html"><code>lme4</code></a> in R or <a href="http://www.stata.com/manuals13/me.pdf"><code>mixed</code></a> in Stata, which use maximum likelihood methods, to using Bayesian software like <a href="http://mc-stan.org">Stan</a> or <a href="http://mcmc-jags.sourceforge.net">JAGS</a> to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.</p>
+<p>I use multilevel models a lot. I’ve transitioned from using software like <a href="http://cran.r-project.org/web/packages/lme4/index.html"><code class="highlighter-rouge">lme4</code></a> in R or <a href="http://www.stata.com/manuals13/me.pdf"><code class="highlighter-rouge">mixed</code></a> in Stata, which use maximum likelihood methods, to using Bayesian software like <a href="http://mc-stan.org">Stan</a> or <a href="http://mcmc-jags.sourceforge.net">JAGS</a> to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.</p>
 
 <p>Consider a simple growth-curve model for longitudinal data.</p>
 
@@ -197,94 +197,94 @@ beta distribution.</p>
 
 <p>To see what this looks like we are going to simulate correlation matrices for <script type="math/tex">\eta</script> = .5, 1, 2, 5, 10, and 50. We’ll then plot the density of one correlation from each of the simulated matrices to see how they look. Stan requires that you input some data, so I simulated some data out of poisson distribution to fit in Stan. We don’t care about those and they could be anything.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>rstan<span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>reshape2<span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>ggplot2<span class="p">)</span>
-<span class="kp">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
-sim_data <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span>x <span class="o">=</span> rpois<span class="p">(</span><span class="m">30</span><span class="p">,</span> <span class="m">5</span><span class="p">),</span> N <span class="o">=</span> <span class="m">30</span><span class="p">,</span> R <span class="o">=</span> <span class="m">3</span><span class="p">)</span> </code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">rstan</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span><span class="w">
+</span><span class="n">sim_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpois</span><span class="p">(</span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"> </span></code></pre></figure>
 
 <p>First, I load the required libraries for this post. Then I set the seed and create the data needed to pass into Stan. <script type="math/tex">x</script> is 30 random draws from a poisson with a rate parameter = 5, <script type="math/tex">N</script> is the sample size for the poisson data, and <script type="math/tex">R</script> is the number of correlations we are dealing with (recall we have the correlations among the random intercept and 2 random slopes).</p>
 
 <h3 id="stan-model">Stan Model</h3>
 
-<p>Next I write the Stan model. The key part of this code is <code>generated quantities</code> block. This block creates 6 correlation matrices named <code>Omega</code>. The number after <code>Omega</code> describes the size of <script type="math/tex">\eta</script> in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with <script type="math/tex">\eta</script> values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.</p>
+<p>Next I write the Stan model. The key part of this code is <code class="highlighter-rouge">generated quantities</code> block. This block creates 6 correlation matrices named <code class="highlighter-rouge">Omega</code>. The number after <code class="highlighter-rouge">Omega</code> describes the size of <script type="math/tex">\eta</script> in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with <script type="math/tex">\eta</script> values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">sim_stan <span class="o">&lt;-</span> <span class="s">&quot;</span>
-<span class="s">data {</span>
-<span class="s">  int&lt;lower=0&gt; N; // number of observations</span>
-<span class="s">  int&lt;lower=0&gt; x[N]; // outcome variable</span>
-<span class="s">  int R;</span>
-<span class="s">  }</span>
-<span class="s">parameters {</span>
-<span class="s">  real lambda;</span>
-<span class="s">}</span>
-<span class="s">model {</span>
-<span class="s">  x ~ poisson_log(lambda);  </span>
-<span class="s">}</span>
-<span class="s">generated quantities {</span>
-<span class="s">  corr_matrix[R] Omega0;</span>
-<span class="s">  corr_matrix[R] Omega1;</span>
-<span class="s">  corr_matrix[R] Omega2;</span>
-<span class="s">  corr_matrix[R] Omega5;</span>
-<span class="s">  corr_matrix[R] Omega10;</span>
-<span class="s">  corr_matrix[R] Omega50;</span>
-<span class="s">  Omega0 &lt;- lkj_corr_rng(R,.9);</span>
-<span class="s">  Omega1 &lt;- lkj_corr_rng(R,1);</span>
-<span class="s">  Omega2 &lt;- lkj_corr_rng(R,2);</span>
-<span class="s">  Omega5 &lt;- lkj_corr_rng(R,5);</span>
-<span class="s">  Omega10 &lt;- lkj_corr_rng(R,10);</span>
-<span class="s">  Omega50 &lt;- lkj_corr_rng(R,50);</span>
-<span class="s">}</span>
-<span class="s">&quot;</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sim_stan</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"
+data {
+  int&lt;lower=0&gt; N; // number of observations
+  int&lt;lower=0&gt; x[N]; // outcome variable
+  int R;
+  }
+parameters {
+  real lambda;
+}
+model {
+  x ~ poisson_log(lambda);  
+}
+generated quantities {
+  corr_matrix[R] Omega0;
+  corr_matrix[R] Omega1;
+  corr_matrix[R] Omega2;
+  corr_matrix[R] Omega5;
+  corr_matrix[R] Omega10;
+  corr_matrix[R] Omega50;
+  Omega0 &lt;- lkj_corr_rng(R,.9);
+  Omega1 &lt;- lkj_corr_rng(R,1);
+  Omega2 &lt;- lkj_corr_rng(R,2);
+  Omega5 &lt;- lkj_corr_rng(R,5);
+  Omega10 &lt;- lkj_corr_rng(R,10);
+  Omega50 &lt;- lkj_corr_rng(R,50);
+}
+"</span></code></pre></figure>
 
 <h3 id="using-rstan-to-fit-the-model">Using rstan to fit the model</h3>
 
-<p>Next, I fit the model in R through the <code>rstan</code> package.</p>
+<p>Next, I fit the model in R through the <code class="highlighter-rouge">rstan</code> package.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">sim_parms <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;Omega0&#39;</span><span class="p">,</span> <span class="s">&#39;Omega1&#39;</span><span class="p">,</span> <span class="s">&#39;Omega2&#39;</span><span class="p">,</span>
-			   <span class="s">&#39;Omega5&#39;</span><span class="p">,</span><span class="s">&#39;Omega10&#39;</span><span class="p">,</span> <span class="s">&#39;Omega50&#39;</span><span class="p">)</span>
-fit_sim <span class="o">&lt;-</span> stan<span class="p">(</span>model_code <span class="o">=</span> sim_stan<span class="p">,</span> pars <span class="o">=</span> sim_parms<span class="p">,</span>
-                data <span class="o">=</span> sim_data<span class="p">,</span> chains <span class="o">=</span> <span class="m">1</span><span class="p">,</span> iter <span class="o">=</span> <span class="m">10000</span><span class="p">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sim_parms</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'Omega0'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega2'</span><span class="p">,</span><span class="w">
+			   </span><span class="s1">'Omega5'</span><span class="p">,</span><span class="s1">'Omega10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega50'</span><span class="p">)</span><span class="w">
+</span><span class="n">fit_sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stan</span><span class="p">(</span><span class="n">model_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_stan</span><span class="p">,</span><span class="w"> </span><span class="n">pars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_parms</span><span class="p">,</span><span class="w">
+                </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_data</span><span class="p">,</span><span class="w"> </span><span class="n">chains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000</span><span class="p">)</span></code></pre></figure>
 
 <h3 id="processing-the-mcmc-draws-and-getting-them-prepped-for-ggplot">Processing the MCMC draws and getting them prepped for ggplot</h3>
 
-<p>Finally, I process the data and transform it so that I can plot the density in <code>ggplot2</code>.</p>
+<p>Finally, I process the data and transform it so that I can plot the density in <code class="highlighter-rouge">ggplot2</code>.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">res_sim <span class="o">&lt;-</span> <span class="kp">as.data.frame</span><span class="p">(</span>fit_sim<span class="p">)</span>
-<span class="kp">names</span><span class="p">(</span>res_sim<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;\\[&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">,</span> <span class="kp">names</span><span class="p">(</span>res_sim<span class="p">))</span>
-<span class="kp">names</span><span class="p">(</span>res_sim<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;\\,&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">,</span> <span class="kp">names</span><span class="p">(</span>res_sim<span class="p">))</span>
-<span class="kp">names</span><span class="p">(</span>res_sim<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">sub</span><span class="p">(</span><span class="s">&quot;\\]&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="kp">names</span><span class="p">(</span>res_sim<span class="p">))</span>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">res_sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">fit_sim</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\["</span><span class="p">,</span><span class="w"> </span><span class="s2">"_"</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\,"</span><span class="p">,</span><span class="w"> </span><span class="s2">"_"</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\]"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
 
-smalldata <span class="o">&lt;-</span> res_sim<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Omega50_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega10_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega5_3_1&quot;</span><span class="p">,</span>
-                         <span class="s">&quot;Omega2_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega1_3_1&quot;</span><span class="p">,</span> <span class="s">&quot;Omega0_3_1&quot;</span><span class="p">)]</span>
+</span><span class="n">smalldata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">res_sim</span><span class="p">[,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Omega50_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega10_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega5_3_1"</span><span class="p">,</span><span class="w">
+                         </span><span class="s2">"Omega2_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega1_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega0_3_1"</span><span class="p">)]</span><span class="w">
 
-smalldata<span class="o">$</span>draw <span class="o">&lt;-</span> <span class="kp">seq</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="kp">length</span><span class="p">(</span>smalldata<span class="o">$</span>Omega50_3_1<span class="p">))</span>
+</span><span class="n">smalldata</span><span class="o">$</span><span class="n">draw</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">smalldata</span><span class="o">$</span><span class="n">Omega50_3_1</span><span class="p">))</span><span class="w">
 
-plotdata <span class="o">&lt;-</span> melt<span class="p">(</span>smalldata<span class="p">,</span> id <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;draw&quot;</span><span class="p">))</span>
+</span><span class="n">plotdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">smalldata</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"draw"</span><span class="p">))</span><span class="w">
 
-plotdata<span class="o">$</span>eta <span class="o">&lt;-</span> <span class="kp">factor</span><span class="p">(</span>plotdata<span class="o">$</span>variable<span class="p">,</span> 
-		levels <span class="o">=</span> <span class="kp">levels</span><span class="p">(</span>plotdata<span class="o">$</span>variable<span class="p">),</span> 
-		label <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;eta = 50&quot;</span><span class="p">,</span> <span class="s">&quot;eta = 10&quot;</span><span class="p">,</span> 
-			  <span class="s">&quot;eta = 5&quot;</span><span class="p">,</span> <span class="s">&quot;eta = 2&quot;</span><span class="p">,</span> 
-			  <span class="s">&quot;eta = 1&quot;</span><span class="p">,</span> <span class="s">&quot;eta = .9&quot;</span><span class="p">))</span>
-my.labs <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span><span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">50</span><span class="p">),</span> <span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">10</span><span class="p">),</span>
-		<span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">5</span><span class="p">),</span> <span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">2</span><span class="p">),</span>
-		<span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">1</span><span class="p">),</span> <span class="kp">bquote</span><span class="p">(</span>eta <span class="o">==</span> <span class="m">.9</span><span class="p">))</span></code></pre></figure>
+</span><span class="n">plotdata</span><span class="o">$</span><span class="n">eta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">variable</span><span class="p">,</span><span class="w"> 
+		</span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">levels</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">variable</span><span class="p">),</span><span class="w"> 
+		</span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"eta = 50"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = 10"</span><span class="p">,</span><span class="w"> 
+			  </span><span class="s2">"eta = 5"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = 2"</span><span class="p">,</span><span class="w"> 
+			  </span><span class="s2">"eta = 1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = .9"</span><span class="p">))</span><span class="w">
+</span><span class="n">my.labs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">50</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">10</span><span class="p">),</span><span class="w">
+		</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w">
+		</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">.9</span><span class="p">))</span></code></pre></figure>
 
 <h3 id="creating-the-plot">Creating the Plot</h3>
 
 <p>Here’s the code for the plot.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r">p <span class="o">&lt;-</span> ggplot<span class="p">(</span>plotdata<span class="p">,</span> aes<span class="p">(</span>x <span class="o">=</span> value<span class="p">,</span> colour <span class="o">=</span> eta<span class="p">))</span>
-p <span class="o">+</span> geom_density<span class="p">()</span> <span class="o">+</span>
-  scale_colour_manual<span class="p">(</span>values<span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">6</span><span class="p">,</span> breaks <span class="o">=</span> <span class="kp">levels</span><span class="p">(</span>plotdata<span class="o">$</span>eta<span class="p">),</span>
-                      labels <span class="o">=</span> my.labs<span class="p">,</span> name <span class="o">=</span> <span class="s">&quot;Shape&quot;</span><span class="p">)</span> <span class="o">+</span>
-  xlab<span class="p">(</span><span class="s">&quot;Correlation Value&quot;</span><span class="p">)</span> <span class="o">+</span>
-  ylab<span class="p">(</span><span class="s">&quot;Density&quot;</span><span class="p">)</span> <span class="o">+</span>
-  ggtitle<span class="p">(</span><span class="s">&quot;Visualization of a correlation from the </span>
-<span class="s">  		   lkj_corr density in Stan \n for various </span>
-<span class="s">		   values of the shape parameter&quot;</span><span class="p">)</span> <span class="o">+</span> 
-  theme_bw<span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">plotdata</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eta</span><span class="p">))</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_density</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_colour_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">levels</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">eta</span><span class="p">),</span><span class="w">
+                      </span><span class="n">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">my.labs</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Shape"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Correlation Value"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Density"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Visualization of a correlation from the 
+  		   lkj_corr density in Stan \n for various 
+		   values of the shape parameter"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">theme_bw</span><span class="p">()</span></code></pre></figure>
 
 <h3 id="visualizing-the-density">Visualizing the Density</h3>
 

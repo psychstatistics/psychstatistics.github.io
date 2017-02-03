@@ -116,7 +116,7 @@
 	  
 	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2017. All rights reserved.</p>
   </div>
 </div>
 
@@ -131,12 +131,13 @@
 <p>This post will show how to read in comma separated files (also known as .csv files) into Stata. I will show you how to use both syntax and point-and-click.</p>
 
 <p>##Syntax##
-You can import csv files using the <code>insheet</code> command.</p>
+You can import csv files using the <code class="highlighter-rouge">insheet</code> command.</p>
 
-<pre><code>insheet using "auto.csv", comma clear
+<div class="highlighter-rouge"><pre class="highlight"><code>insheet using "auto.csv", comma clear
 </code></pre>
+</div>
 
-<p>The <code>using auto.csv</code> statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or <code>cd</code> to the directory with the csv file. I typically include the option <code>comma</code>. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the <code>insheet</code> command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the <code>clear</code> option to clear out any data that are currently in memory.</p>
+<p>The <code class="highlighter-rouge">using auto.csv</code> statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or <code class="highlighter-rouge">cd</code> to the directory with the csv file. I typically include the option <code class="highlighter-rouge">comma</code>. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the <code class="highlighter-rouge">insheet</code> command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the <code class="highlighter-rouge">clear</code> option to clear out any data that are currently in memory.</p>
 
 <p>##Point-and-Click##</p>
 
