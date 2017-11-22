@@ -9,7 +9,6 @@ title: Current Research
 2. The performance of clustered standard errors versus multilevel models in the analysis of multilevel zero-inflated count data.
 3. Open access meta-analysis archive.
 4. Non-parametric Bayesian models for the analysis of longitudinal physical activity data.
-5. Meta-analysis of intraclass correlations.
 
 ## Books
 
