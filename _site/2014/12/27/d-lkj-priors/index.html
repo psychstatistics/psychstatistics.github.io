@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      LKJ Priors &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51580833-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2017. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">LKJ Priors</h1>
+  <span class="post-date">27 Dec 2014</span>
+  <span class="post-tags">Tags: R, Stan, and multilevel</span>
+  <h2 id="visualizing-the-lkj-correlation-distribution">Visualizing the LKJ Correlation Distribution</h2>
+
+<p>I use multilevel models a lot. I’ve transitioned from using software like <a href="http://cran.r-project.org/web/packages/lme4/index.html"><code class="highlighter-rouge">lme4</code></a> in R or <a href="http://www.stata.com/manuals13/me.pdf"><code class="highlighter-rouge">mixed</code></a> in Stata, which use maximum likelihood methods, to using Bayesian software like <a href="http://mc-stan.org">Stan</a> or <a href="http://mcmc-jags.sourceforge.net">JAGS</a> to estimate multilevel models as Bayesian hierarchical models. When mulitlevel models have 2 or more random effects, the prior for the random effects is usually a covariance matrix. Typically we want to estimate the parameters in the covariance matrix and thus we place a (hyper)prior on the covariance matrix.</p>
+
+<p>Consider a simple growth-curve model for longitudinal data.</p>
+
+<script type="math/tex; mode=display">y_{ij} = b_0 + b_1time_{ij} + u_{0j} + u_{1j}time_{ij} + e_{ij}</script>
+
+<p>Where <script type="math/tex">b_0</script> is the overall intercept, <script type="math/tex">b_1</script> is the effect of time, <script type="math/tex">u_{0j}</script> is a person-specific intercept, <script type="math/tex">u_{1j}</script> is a person-specific effect of time. The <script type="math/tex">u</script>’s are the random effects, which we typically assume follow a multivariate normal distribution:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\left [\
+        \begin{array}{c}
+            u_{0j} \\
+            u_{1j}
+        \end{array}
+    \right ]\
+    \sim
+    \textrm{MVN}
+    \left [\
+        \begin{array}{c}
+            0 \\
+            0
+        \end{array}
+    \right ]\ ,
+    \left [\
+        \begin{array}{ll}
+            \sigma^2_{u0} & \sigma_{u0u1} \\
+            \sigma_{u0u1} & \sigma^2_{u1}
+        \end{array}
+    \right ]\ %]]></script>
+
+<p>Unfortunately, choosing a prior for the covariance matrix can be difficult and, frankly, occassionally maddening. Usually I have to use an inverse-Wishart distribution, which seems easy enough. However, they can be tricky to specify once the covariance matrix gets pretty big. Further, in software like JAGS, the multivariate normal distribution is parameterized with a precision matrix, so you have to use the Wishart distribution. Finally, it is downright hard to choose a sensible prior for a covariance matrix.</p>
+
+<p>Wouldn’t it be great if you could choose a prior using a correlation matrix? I, and I suspsect most folks, are a little more comfortable thinking about correlations than covariances. Fortunately, the developers of the open-source Bayesian modeling program Stan have made choosing a prior for a correlation matrix reasonably straightforward by using the LKJ Correlation Density.</p>
+
+<p>It turns out it isn’t too difficult to choose a prior for this type of model because there is just a single covariance to deal with. However, suppose we extend the model above to include a random intercept and two random slopes and we estimate the covariances between all three. A possible way to set up this model in Stan is to choose whatever prior you’d like for the variances and then use the LKJ Correlation Distribution to to provide a prior for the correlations. You would then obtain the covariances by using the appropriate variances and correlation. I’ll do another post that provides the specifics.</p>
+
+<p>There is only a single parameter for the LKJ Distribution - <script type="math/tex">\eta</script>. When I first started using the LKJ Correlation Distribution, I didn’t know what to set <script type="math/tex">\eta</script> to and the Stan documentation didn’t initially make a lot of sense to me. Fortunately, Stan provides a random number generator for the LKJ Correlation Distribution, so it is easy to visualize the distribution using random draws for various values of <script type="math/tex">\eta</script>. The primary purpose of this post is to show how different values of <script type="math/tex">\eta</script> affect the probability of different correlations.</p>
+
+<h2 id="what-the-stan-manual-says">What the Stan Manual Says</h2>
+
+<p>The Stan Manual provides the following guidance regarding <script type="math/tex">\eta</script> (page 385, Stan Manual 2.5):</p>
+
+<blockquote>
+  <p>The shape parameter <script type="math/tex">\eta</script> can be interpreted like the shape parameter of a symmetric
+beta distribution.</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>if <script type="math/tex">\eta</script> = 1, then the density is uniform over all correlation matrices of a given order;</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>if <script type="math/tex">\eta</script> &gt; 1, the identity matrix is the modal correlation matrix, with sharper peaks in the density around the identity matrix for larger <script type="math/tex">\eta</script>; and</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>if 0 &lt; <script type="math/tex">\eta</script> &lt; 1, the density has a trough at the identity matrix.</li>
+  </ul>
+</blockquote>
+
+<h2 id="using-simulation-to-visualize-what-the-manual-means">Using Simulation to Visualize What the Manual Means</h2>
+
+<p>To see what this looks like we are going to simulate correlation matrices for <script type="math/tex">\eta</script> = .5, 1, 2, 5, 10, and 50. We’ll then plot the density of one correlation from each of the simulated matrices to see how they look. Stan requires that you input some data, so I simulated some data out of poisson distribution to fit in Stan. We don’t care about those and they could be anything.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">rstan</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span><span class="w">
+</span><span class="n">sim_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpois</span><span class="p">(</span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"> </span></code></pre></figure>
+
+<p>First, I load the required libraries for this post. Then I set the seed and create the data needed to pass into Stan. <script type="math/tex">x</script> is 30 random draws from a poisson with a rate parameter = 5, <script type="math/tex">N</script> is the sample size for the poisson data, and <script type="math/tex">R</script> is the number of correlations we are dealing with (recall we have the correlations among the random intercept and 2 random slopes).</p>
+
+<h3 id="stan-model">Stan Model</h3>
+
+<p>Next I write the Stan model. The key part of this code is <code class="highlighter-rouge">generated quantities</code> block. This block creates 6 correlation matrices named <code class="highlighter-rouge">Omega</code>. The number after <code class="highlighter-rouge">Omega</code> describes the size of <script type="math/tex">\eta</script> in the LKJ Distribution. This block also takes random draws from the LKJ Distribution with <script type="math/tex">\eta</script> values equal to .9, 1, 2, 5, 10, or 50. We can then use these random draws to visualize the shape of the priors for a given correlation.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sim_stan</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"
+data {
+  int&lt;lower=0&gt; N; // number of observations
+  int&lt;lower=0&gt; x[N]; // outcome variable
+  int R;
+  }
+parameters {
+  real lambda;
+}
+model {
+  x ~ poisson_log(lambda);  
+}
+generated quantities {
+  corr_matrix[R] Omega0;
+  corr_matrix[R] Omega1;
+  corr_matrix[R] Omega2;
+  corr_matrix[R] Omega5;
+  corr_matrix[R] Omega10;
+  corr_matrix[R] Omega50;
+  Omega0 &lt;- lkj_corr_rng(R,.9);
+  Omega1 &lt;- lkj_corr_rng(R,1);
+  Omega2 &lt;- lkj_corr_rng(R,2);
+  Omega5 &lt;- lkj_corr_rng(R,5);
+  Omega10 &lt;- lkj_corr_rng(R,10);
+  Omega50 &lt;- lkj_corr_rng(R,50);
+}
+"</span></code></pre></figure>
+
+<h3 id="using-rstan-to-fit-the-model">Using rstan to fit the model</h3>
+
+<p>Next, I fit the model in R through the <code class="highlighter-rouge">rstan</code> package.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sim_parms</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'Omega0'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega2'</span><span class="p">,</span><span class="w">
+			   </span><span class="s1">'Omega5'</span><span class="p">,</span><span class="s1">'Omega10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Omega50'</span><span class="p">)</span><span class="w">
+</span><span class="n">fit_sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stan</span><span class="p">(</span><span class="n">model_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_stan</span><span class="p">,</span><span class="w"> </span><span class="n">pars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_parms</span><span class="p">,</span><span class="w">
+                </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_data</span><span class="p">,</span><span class="w"> </span><span class="n">chains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="processing-the-mcmc-draws-and-getting-them-prepped-for-ggplot">Processing the MCMC draws and getting them prepped for ggplot</h3>
+
+<p>Finally, I process the data and transform it so that I can plot the density in <code class="highlighter-rouge">ggplot2</code>.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">res_sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">fit_sim</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\["</span><span class="p">,</span><span class="w"> </span><span class="s2">"_"</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\,"</span><span class="p">,</span><span class="w"> </span><span class="s2">"_"</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="s2">"\\]"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">res_sim</span><span class="p">))</span><span class="w">
+
+</span><span class="n">smalldata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">res_sim</span><span class="p">[,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Omega50_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega10_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega5_3_1"</span><span class="p">,</span><span class="w">
+                         </span><span class="s2">"Omega2_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega1_3_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Omega0_3_1"</span><span class="p">)]</span><span class="w">
+
+</span><span class="n">smalldata</span><span class="o">$</span><span class="n">draw</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">smalldata</span><span class="o">$</span><span class="n">Omega50_3_1</span><span class="p">))</span><span class="w">
+
+</span><span class="n">plotdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">smalldata</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"draw"</span><span class="p">))</span><span class="w">
+
+</span><span class="n">plotdata</span><span class="o">$</span><span class="n">eta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">variable</span><span class="p">,</span><span class="w"> 
+		</span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">levels</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">variable</span><span class="p">),</span><span class="w"> 
+		</span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"eta = 50"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = 10"</span><span class="p">,</span><span class="w"> 
+			  </span><span class="s2">"eta = 5"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = 2"</span><span class="p">,</span><span class="w"> 
+			  </span><span class="s2">"eta = 1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"eta = .9"</span><span class="p">))</span><span class="w">
+</span><span class="n">my.labs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">50</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">10</span><span class="p">),</span><span class="w">
+		</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w">
+		</span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">bquote</span><span class="p">(</span><span class="n">eta</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">.9</span><span class="p">))</span></code></pre></figure>
+
+<h3 id="creating-the-plot">Creating the Plot</h3>
+
+<p>Here’s the code for the plot.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">plotdata</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eta</span><span class="p">))</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_density</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_colour_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">levels</span><span class="p">(</span><span class="n">plotdata</span><span class="o">$</span><span class="n">eta</span><span class="p">),</span><span class="w">
+                      </span><span class="n">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">my.labs</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Shape"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Correlation Value"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Density"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Visualization of a correlation from the 
+  		   lkj_corr density in Stan \n for various 
+		   values of the shape parameter"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">theme_bw</span><span class="p">()</span></code></pre></figure>
+
+<h3 id="visualizing-the-density">Visualizing the Density</h3>
+
+<p>The moment you’ve been waiting for – a plot of the density.</p>
+
+<p><img src="/assets/lkj_prior.png" alt="LKJ Density" /></p>
+
+<p>These plots are consistent with what the Stan manual says:</p>
+
+<blockquote>
+  <p>The shape parameter <script type="math/tex">\eta</script> can be interpreted like the shape parameter of a symmetric
+beta distribution.</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>if <script type="math/tex">\eta</script> = 1, then the density is uniform over all correlation matrices of a given order;</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>if <script type="math/tex">\eta</script> &gt; 1, the identity matrix is the modal correlation matrix, with sharper peaks in the density around the identity matrix for larger <script type="math/tex">\eta</script>; and</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>if 0 &lt; <script type="math/tex">\eta</script> &lt; 1, the density has a trough at the identity matrix.</li>
+  </ul>
+</blockquote>
+
+<p>I find this helps me make better decisions about the value of <script type="math/tex">\eta</script>.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/08/30/resources-for-power-in-sem/">
+            Resources for Power in SEM
+            <small>30 Aug 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>

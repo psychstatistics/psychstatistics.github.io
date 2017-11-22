@@ -1,0 +1,31 @@
+# Dependencies
+markdown:         kramdown
+highlighter:      rouge
+
+# Permalinks
+permalink:        pretty
+
+
+# Setup
+title:            Psychstatistics
+name:             Psychstatistics
+tagline:          'Data Analysis in Psychology'
+description:      'Trying to be thoughtful'
+url:              psychstatistics.github.io
+baseurl:          "/"
+comments:         true
+
+
+author:
+  name:           'Scott Baldwin'
+
+plugins:          [jekyll-paginate]
+paginate:         5
+paginate_path:    "blog/page:num/"
+
+# Custom vars
+#version:          2.1.0
+  
+excerpt_separator: <!--more-->
+
+theme: jekyll-theme-cayman
