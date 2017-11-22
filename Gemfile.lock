@@ -216,6 +216,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll-theme-cayman
   json
 
 BUNDLED WITH
