@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Blog &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51580833-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2017. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/08/29/stata-labeling-recoding-data/">
+        Stata: Labeling & Recoding Data
+      </a>
+    </h1>
+
+    <span class="post-date">29 Aug 2011</span>
+    <h1 id="labeling-variables">Labeling Variables</h1>
+<p>In order to assign labels to values of your variable, you can use either the variables manager or command syntax. For example, if you wanted to assign labels to each condition, where 1 represents No treatment, 2 represents Treatment A, 3 represents Treatment B &amp; 4 represents Treatment C, you could double-click on the variable manager &amp; click on “condition” and then “Manage.”</p>
+
+<p><img src="/assets/pic1.png" alt="pic1.png" /></p>
+
+<p>When the Manage Value Label box appears, click “Create Labels” and it will open a new dialogue box where you can give a label name to the variable and then assign labels for particular values. After you assign all of your values, be sure to click “Apply” back in your Variables Manager window.</p>
+
+<p><img src="/assets/pic2.png" alt="pic2.png" /></p>
+
+<p>To create labels using commands, you would use the <code class="highlighter-rouge">label</code> command. The syntax is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>label define labelname value "name"
+label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
+</code></pre></div></div>
+
+<p>To apply your labels, use the <code class="highlighter-rouge">label</code> command again. The syntax is <code class="highlighter-rouge">label value variable labelname</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>label value condition cond
+</code></pre></div></div>
+
+<h1 id="recoding-data">Recoding Data</h1>
+
+<p>You will often need to recode values in your data for a number of reasons. For example, you may need to reverse-score items negatively-worded items on a measure. To do this via point and click, Go to Data -&gt; Create or Change Data -&gt; Other Variable Transformation Commands -&gt; Recode Categorical Variable. In the Main tab, you will enter the variable(s) you want recoded and in the “Required” window, you will enter how you want them recoded. This is an example of how you might reverse score a 5-pt Likert item.</p>
+
+<p><img src="/assets/pic3.png" alt="pic3.png" /></p>
+
+<p>If you’re done, click “Ok”. If you want to retain your original variable and create a new variable for the reverse-scored item, go to the “Options” tab and enter the name of the new variable(s).</p>
+
+<p><img src="/assets/pic4.png" alt="pic4.png" /></p>
+
+<p>It is also quick and easy to recode variables using the <code class="highlighter-rouge">recode</code> command:\</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+</code></pre></div></div>
+
+<p>If you wanted to create a new variable with the recoded values, just use the <code class="highlighter-rouge">clonevar</code> command <em>first</em>, which will create a new variable with identical values to the first one. Then run the <code class="highlighter-rouge">recode</code> command on your new variable. The syntax is <code class="highlighter-rouge">clonevar newvariable = variabletoclone</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clonevar item2_reverse = item2	
+</code></pre></div></div>
+
+<p>If you wanted to rename your new variable later, you would simply use the <code class="highlighter-rouge">rename</code> command. The syntax is <code class="highlighter-rouge">rename oldname newname</code>.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/08/18/stata-do-file-log-files/">
+        Stata: Do-files and Log-files
+      </a>
+    </h1>
+
+    <span class="post-date">18 Aug 2011</span>
+    <p>As you begin to work with datasets, there are two record and save your commands and actions in Stata.</p>
+
+<h2 id="creating-do-files">Creating do-files</h2>
+
+<p>Do-files allow you to record all of your commands. There are a number of benefits to using do-files. By using do-files to run your commands, you have a copy of what you did, which allows you and other researchers to replicate your analyses exactly. It also allows you to run analyses without changing your original data file until you are ready to save out a clean data set. Many researchers will keep a do-file recording data management (addressing missing data, reverse-scoring if necessary, etc) and may have separate do-files for analyses for the final clean data set or subsets of the data. To create a do-file, you can either go to “File”-&gt;“New Do File” or you can use this icon on the toolbar in the Stata window.</p>
+
+<p><img src="/assets/Picture-131.png" alt="Picture-131.png" /></p>
+
+<p>You’re new do file should open in a separate window that looks like this:</p>
+
+<p><img src="/assets/blank.dofile.png" alt="blank.dofile.png" /></p>
+
+<p>One optional step that can be helpful in creating do-files is placing a comment at the top of the file denoting which data you’re using and any other notes you want. To separate notes and comments from commands in do-files, begin the line with an asterisk. If it is a longer note, you can set it apart by typing /* before your comment and */ after the comment. For example, if I were using a data set called “relate”, I might begin my data file like this:</p>
+
+<p><img src="/assets/Picture-14.png" alt="Picture-14.png" /></p>
+
+<p>The first command you will need is the <code class="highlighter-rouge">use</code> command to specify the file you want Stata to use. If the file is not in the working directory that you are currently in, just specify which directory you want to pull the file from. Here are three examples of the <code class="highlighter-rouge">use</code> command, one from a data set in the current working directly, one from the internet and one from a jump drive in a different working directory. Notice that on the end of each command, I add the option <code class="highlighter-rouge">clear</code>. This is to clear any data that Stata is currently working with.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use relate.dta, clear
+use http://www.stata-press.com/data/agis3/relate, clear
+use "E:\relate.dta", clear
+</code></pre></div></div>
+
+<p>After I specify the data file, I enter the rest of the commands I want to run. Within this file, Stata will assume that each line is a new command unless you tell it otherwise. If you have a long command that you need on separate lines, add /// at the end of each line. That tells Stata that the next line is part of the same command. When I am ready to run the analyses, I select the commands I would like to run (you don’t have to select any text if you want to run them all) and click on the last icon on the toolbar in the do-file window:</p>
+
+<p><img src="/assets/do.file_.toolbar.run_.png" alt="do.file_.toolbar.run_.png" /></p>
+
+<p>To save your do-file, you can either use the icon on the toolbar or use the “File”-&gt;“Save As” menu while the do-file editor is active.</p>
+
+<h2 id="creating-log-files">Creating log files</h2>
+
+<p>In addition to recording all of your commands in a do-file, you can also have Stata create a copy of everything that is sent to the Results window, with the exception of graphs. This is called a log file and can be helpful for you to save all of your output. This will also retain your commands, although it will not save them in the same way a do-file does (they will be embedded in the output). To create a log file, go to “File” -&gt; “Log” -&gt; “Begin.” This will bring up a dialogue box where you will save your log file. The default in Stata is to save the file with the extension .smcl. This will allow you to open the log file in Stata, but other programs will not read this type of file. The other extension available is .log. This file format will allow you to open your log file in other programs and may be easier to manage than the .smcl files. To save it as a .log file, just select the Stata Log option under the “File Format” menu in the dialogue box.</p>
+
+<p><img src="/assets/log.dialogue.choose.png" alt="log.dialogue.choose.png" /></p>
+
+<p>Once you begin a log file, you can suspend it at any time and resume later. You can do this by going to the “File” -&gt; “Log” -&gt; “Suspend” (or “Resume”). You can also close your log using this menu.</p>
+
+<p>You can also start, suspend, resume and close logs using the log command. I will use this command to begin a log file, specify the name and location of the file as well as the extension. If I were going to create a log file called “creatinglogfiles” in a file on my desktop called “501” (filepath: /Desktop/501), I would type:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log using "/Desktop/501/creatinglogfiles", text
+</code></pre></div></div>
+
+<p>I included <code class="highlighter-rouge">text</code> because I want the file to be a .log file, not an .smcl file. If I wanted to overwrite a file that already existed, I would add <code class="highlighter-rouge">replace</code> after <code class="highlighter-rouge">text</code>.</p>
+
+<p>After the log file is open, typing <code class="highlighter-rouge">log off</code> will suspend the log file, <code class="highlighter-rouge">log on</code> will resume the log file and <code class="highlighter-rouge">log close</code> will close your log file.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/08/17/reshaping-labeling-recoding-data/">
+        Stata: Reshaping Data
+      </a>
+    </h1>
+
+    <span class="post-date">17 Aug 2011</span>
+    <h2 id="reshaping-data">Reshaping Data</h2>
+
+<h3 id="reshaping">Reshaping</h3>
+
+<p>You will often have to reshape your data or change the name or values of your data to analyze it more easily. First, we’ll show you how to transform your data between “long” format, where there are multiple lines of data for every person, and “wide” format, where each subject has only one row and all data is entered in columns.</p>
+
+<p>Right now, my data is in the “wide” format, where each participant reported their mood in four conditions.</p>
+
+<p><img src="/assets/Reshaping_wideformat.png" alt="Reshaping.wideformat.png" /></p>
+
+<p>However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the <code class="highlighter-rouge">reshape</code> command, specifying that you’re reshaping to the long format. The syntax is <code class="highlighter-rouge">reshape long/wide stubname, i(i) j(j)</code> where the stubname is the stub of your variables (in this case, it is “cond”), <em>i</em> is the id variable and <em>j</em> is the new variable you’ll create (or the existing variable if reshaping the data into wide format).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reshape long cond, i(id) j(condition)
+</code></pre></div></div>
+
+<p>Now my data looks like this:</p>
+
+<p><img src="/assets/Reshaping_longformat-176x300.png" alt="Reshaping.longformat-176x300.png" /></p>
+
+<p>Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the <code class="highlighter-rouge">rename</code> command.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rename cond mood
+</code></pre></div></div>
+
+<p><img src="/assets/rename_condition.png" alt="rename.condition.png" /></p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/07/06/stata-using-generate-to-create-new-variables/">
+        Stata: Using generate to create new variables
+      </a>
+    </h1>
+
+    <span class="post-date">06 Jul 2011</span>
+    <h1 id="generating-new-variables">Generating New Variables</h1>
+<p>The primary method for creating new variables in Stata is the <code class="highlighter-rouge">generate</code> command. Load the <strong>auto</strong> dataset.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clear
+sysuse auto
+describe
+</code></pre></div></div>
+
+<p><img src="/assets/Results-auto_dta_1.jpg" alt="Results-auto.dta_1.jpg" /></p>
+
+<h2 id="new-variable-from-existing-variables">New Variable from Existing Variables</h2>
+
+<p>Let’s create a new variable that is the sum of <em>weight</em> and <em>length</em> (ignore for the moment that summing weights and lengths doesn’t make a ton of sense). Simple with <code class="highlighter-rouge">generate</code>. The syntax of <code class="highlighter-rouge">generate</code> is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
+</code></pre></div></div>
+
+<p>So to create a new variable called <em>weightlength</em> that is the sum of <em>weight</em> and <em>length</em> we type:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate weightlength = weight+length
+</code></pre></div></div>
+
+<p>Now we have new variable called <em>weightlength</em>.</p>
+
+<p><img src="/assets/Results-auto_dta-21.jpg" alt="Results-auto.dta-21.jpg" /></p>
+
+<p>Suppose now that we want to create a new variable that is the square of weight.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate weight2 = weight^2
+</code></pre></div></div>
+
+<h2 id="new-variable-that-is-a-constant">New Variable that is a Constant</h2>
+
+<p>Suppose we want to create a new variable that is a constant value (this isn’t necessarily a good idea and you can use macros to store constants but using a variable can be pretty convenient too). Let’s make a new variable <em>x</em> that is equal to 100.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate x = 100
+</code></pre></div></div>
+
+<p>Let’s create a new variable that is equal to the mean of weight – we’ll call it <em>meanweight</em>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize weight
+</code></pre></div></div>
+
+<p><img src="/assets/Results-auto_dta-3.jpg" alt="Results-auto.dta-3.jpg" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate meanweight = 3019.459
+</code></pre></div></div>
+
+<p>You can also use the results of the <code class="highlighter-rouge">summarize</code> command to create a mean.</p>
+
+<p><img src="/assets/Viewer-1-help-summarize-1.jpg" alt="Viewer-1-help-summarize-1.jpg" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize weight
+generate meanweight = r(mean)
+</code></pre></div></div>
+
+<p>You can use the <code class="highlighter-rouge">_N</code> operator to create a new variable that is equal to the number of observations in a dataset.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate obs = _N
+</code></pre></div></div>
+
+<p>If you combine this with <code class="highlighter-rouge">by</code> you can create a new variable that will be equal to the number of observations within the levels of the <code class="highlighter-rouge">by</code> variable. For example, we can type:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by foreign: generate obs = _N
+</code></pre></div></div>
+
+<p>This will create a variable that is a constant within the levels of <em>foreign</em>. That is, we are going to get the number of foreign cars and the number of domestic cars. If a line in the data is associated with foreign cars the new <em>obs</em> variable will have a value of 22 and domestic cars will have a value of 52. Give it a try and see how it works.</p>
+
+<h2 id="new-variable-that-is-a-random-draw-from-a-distribution">New Variable that is a Random Draw from a Distribution</h2>
+
+<p>We can create a new variable that is a random draw from a distribution. Let’s create a new variable whose values will be random draws from a normal distribution with a mean of 0 and a standard deviation of 1. The random normal generator command is <code class="highlighter-rouge">rnormal()</code> (it defaults to a mean of 0 and standard deviation of 1 and it will draw as many values as there are observations in the dataset).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate random = rnormal()
+</code></pre></div></div>
+
+<h2 id="create-a-new-variable-that-indexes-the-observations">Create a New Variable that Indexes the Observations</h2>
+
+<p>You can use the <code class="highlighter-rouge">_n</code> operator to create a variable that indexes the observation number.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate index = _n
+</code></pre></div></div>
+
+<p>This will create a new variable that runs from 1 to 74. You can combine this with <code class="highlighter-rouge">by</code> to create an index within another variable.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by foreign: index = _n
+</code></pre></div></div>
+
+<p>This will create a new variable that runs from 1 to 52 for domestic cars and 1 to 22 for foreign cars.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I’ve just touched on the ways you can create new variables. You can also use the <code class="highlighter-rouge">egen</code> command to create new variables. Try new ways to create variables and be sure to read the help files.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2011/07/06/stata-planned-comparisons-with-the-test-command/">
+        Stata: Planned Comparisons with the test command
+      </a>
+    </h1>
+
+    <span class="post-date">06 Jul 2011</span>
+    <h1 id="planned-comparisons">Planned Comparisons</h1>
+
+<p>This post will show you how to:</p>
+
+<ol>
+  <li>Run a one-way ANOVA using an independent variable with four levels.</li>
+  <li>Use planned comparisons to contrast levels of the independent variable.</li>
+</ol>
+
+<p>We will use the built-in dataset <strong>systolic</strong>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>webuse systolic
+</code></pre></div></div>
+
+<h2 id="examining-the-data">Examining the data</h2>
+
+<p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize systolic, detail
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>table drug
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
+
+<p>Let’s also look at a boxplot of systolic by drug.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph box systolic, by(drug)
+</code></pre></div></div>
+
+<p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
+
+<p>Thus, it appears there are some differences between drug levels and systolic blood pressure.</p>
+
+<h2 id="oneway-anova">Oneway ANOVA</h2>
+
+<p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anova systolic drug
+</code></pre></div></div>
+
+<p>We reject the null hypothesis.</p>
+
+<p><img src="/assets/Results-systolic_dta-2.jpg" alt="Results-systolic.dta-2.jpg" /></p>
+
+<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code class="highlighter-rouge">test</code> command to perform planned comparisons</h2>
+
+<p>In Stata, once we have completed the ANOVA, we can use the <code class="highlighter-rouge">test</code> command to perform planned comparisons. Note two important things about the <code class="highlighter-rouge">test</code> command:</p>
+
+<ol>
+  <li>You can only use it <strong>after</strong> you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.</li>
+  <li>The <code class="highlighter-rouge">test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code class="highlighter-rouge">test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code class="highlighter-rouge">test</code> needs will not be available if you run another model.</li>
+</ol>
+
+<p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
+
+<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code class="highlighter-rouge">1.drug</code> or <code class="highlighter-rouge">2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
+See if you can figure out why the following statement is equivalent</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+</code></pre></div></div>
+
+<p>Suppose we want to know if level 1 of drug is different from level 2.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test 1.drug = 2.drug
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
+
+<p>We cannot reject reject the null.</p>
+
+<p>The <code class="highlighter-rouge">test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
+
+  </div>
+  
+</div>
+
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/blog/page3/">Older</a>
+  
+  
+    
+      <a class="pagination-item newer" href="/blog/">Newer</a>
+    
+  
+</div>
+	  	
+
+    </div>
+
+  </body>
+</html>

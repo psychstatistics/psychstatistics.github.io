@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Stata: Correlation and Covariance &middot; Psychstatistics
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <script type="text/javascript"
+          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+		  
+</head>
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51580833-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  <body  class="theme-base-0d">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="/">
+          Psychstatistics
+        </a>
+      </h2>
+      <p class="lead">Trying to be thoughtful</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">Current Research</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/tutorials/">Tutorials</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+	  
+	  <a class="sidebar-nav-item" href="/blog/index.html">Blog</a>    </nav>
+
+    <p>&copy; 2017. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Stata: Correlation and Covariance</h1>
+  <span class="post-date">21 Apr 2011</span>
+  <span class="post-tags">Tags: Stata and Tutorial</span>
+  <h1 id="correlation-and-covariance">Correlation and Covariance</h1>
+<p>This post will illustrate how to:</p>
+
+<ol>
+  <li>Create a correlation matrix of variables using the <a href="http://www.stata.com/help.cgi?correlate"><code class="highlighter-rouge">correlate</code></a> command.</li>
+  <li>Display a correlation matrix as a covariance matrix.</li>
+  <li>Obtain the statistical significance of a correlation using the <a href="http://www.stata.com/help.cgi?pwcorr"><code class="highlighter-rouge">pwcorr</code></a> command.</li>
+</ol>
+
+<h2 id="correlation-matrix">Correlation Matrix</h2>
+
+<p>We’ll use the <strong>auto</strong> dataset for this tutorial.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear 
+</code></pre></div></div>
+
+<p><img src="/assets/auto.jpg" alt="auto.jpg" /></p>
+
+<p>We’ll create a correlation matrix of four variables – <em>price</em>, <em>mpg</em>, <em>weight</em>, and <em>length</em>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>correlation price mpg weight length
+</code></pre></div></div>
+
+<p><img src="/assets/corr.jpg" alt="corr.jpg" /></p>
+
+<p>Note: We can shorten the <code class="highlighter-rouge">correlation</code> command to <code class="highlighter-rouge">corr</code> for convenience.</p>
+
+<h2 id="covariance-matrix">Covariance Matrix</h2>
+
+<p>If we want to create of covariance matrix, we simply add the <code class="highlighter-rouge">covariance</code> option to the <code class="highlighter-rouge">correlation</code> command.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>correlation price mpg weigh length, covariance
+</code></pre></div></div>
+
+<p><img src="/assets/covariance.jpg" alt="covariance.jpg" /></p>
+
+<h2 id="statistical-significance-of-a-correlation">Statistical Significance of a Correlation</h2>
+
+<p>The <code class="highlighter-rouge">correlation</code> command produces a clean correlation matrix (or covariance matrix with the <code class="highlighter-rouge">covariance</code> option). If we want to see the statistical significance of a correlation, we need to use the <code class="highlighter-rouge">pwcorr</code> command with the <code class="highlighter-rouge">sig</code> option.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pwcorr price mpg weight length, sig
+</code></pre></div></div>
+
+<p><img src="/assets/pwcorr.jpg" alt="pwcorr.jpg" /></p>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2014/12/27/d-lkj-priors/">
+            LKJ Priors
+            <small>27 Dec 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/11/13/beginning-and-advanced-sem/">
+            Beginning and Advanced SEM
+            <small>13 Nov 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2013/10/01/predicted-scores-and-residuals-in-stata/">
+            Predicted Scores and Residuals in Stata
+            <small>01 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+	  	
+	    <div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = 'psychstatistics'; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	
+
+    </div>
+
+  </body>
+</html>
