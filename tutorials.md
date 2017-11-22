@@ -5,7 +5,7 @@ title: Tutorials
 
 ## Stata
 
-* [Bivariate Regression](/2011/04/19/stata-bivariate-regression)
+* [Bivariate Regression](/2011111/04/19/stata-bivariate-regression)
 * [Correlation and Covariance]({{ site.baseurl }}2011/04/21/stata-correlation-and-covariance)
 * [Descriptive Statistics: Mean, Median, Variability]({{ site.baseurl }}2011/05/30/stata-descriptive-statistics-mean-median-variability)
 * [Do-files and Log-files]({{ site.baseurl }}2011/08/18/stata-do-file-log-files)
