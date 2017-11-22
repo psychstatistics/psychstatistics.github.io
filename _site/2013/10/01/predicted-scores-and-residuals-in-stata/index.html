@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -132,7 +134,7 @@
 
 <script type="math/tex; mode=display">mpg^\prime = b_0 + b_1weight</script>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto
 regress mpg weight
       Source |       SS       df       MS              Number of obs =      74
 -------------+------------------------------           F(  1,    72) =  134.62
@@ -146,18 +148,16 @@ regress mpg weight
       weight |  -.0060087   .0005179   -11.60   0.000    -.0070411   -.0049763
        _cons |   39.44028   1.614003    24.44   0.000     36.22283    42.65774
 ------------------------------------------------------------------------------
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Thus, we see a negative relationship between <code class="highlighter-rouge">weight</code> and <code class="highlighter-rouge">mpg</code>. For every 1 unit increase in <code class="highlighter-rouge">weight</code>, <code class="highlighter-rouge">mpg</code> goes down by -.006. We can obtain the predicted scores for the observations in our dataset with the following command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>predict mpg_pred		
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>predict mpg_pred		
+</code></pre></div></div>
 
 <p>This creates a new variable called <code class="highlighter-rouge">mpg_pred</code> with the predicted <code class="highlighter-rouge">mpg</code> for all the <code class="highlighter-rouge">weight</code> values in our dataset. Here’s 20 of the actual mpg values and 20 of the predicted values.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>list mpg mpg_pred in 1/20
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>list mpg mpg_pred in 1/20
      +----------------+
      | mpg   mpg_pred |
      |----------------|
@@ -185,8 +185,7 @@ regress mpg weight
  19. |  19   18.83049 |
  20. |  30   26.70187 |
      +----------------+
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="residuals-in-stata">Residuals in Stata</h2>
 
@@ -196,13 +195,12 @@ regress mpg weight
 
 <p>Thus, to compute residuals we can just subtract <code class="highlighter-rouge">mpg_pred</code> from <code class="highlighter-rouge">mpg</code>. Stata will do this for us using the predict command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>predict mpg_res, residuals
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>predict mpg_res, residuals
+</code></pre></div></div>
 
 <p>Here’s 20 of the actual mpg values, 20 of the predicted values, and 20 of the residuals.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> list mpg mpg_pred mpg_res in 1/20
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> list mpg mpg_pred mpg_res in 1/20
      +----------------------------+
      | mpg   mpg_pred     mpg_res |
      |----------------------------|
@@ -230,20 +228,18 @@ regress mpg weight
  19. |  19   18.83049    .1695122 |
  20. |  30   26.70187    3.298132 |
      +----------------------------+
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>We can see that the residuals are intact the difference between the first two columns. 
 Given that the residuals are the part of the <code class="highlighter-rouge">mpg</code> that is unrelated to <code class="highlighter-rouge">weight</code>, <code class="highlighter-rouge">mpg_res</code> should be uncorrelated with <code class="highlighter-rouge">weight</code>. Let’s check:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>. corr weight mpg_res
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>. corr weight mpg_res
 (obs=74)
              |   weight  mpg_res
 -------------+------------------
       weight |   1.0000
      mpg_res |   0.0000   1.0000
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/residual_predictor_correlation.png" alt="residual_predictor_correlation.png" /></p>
 

@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -129,31 +131,27 @@
   <p>##Descriptive Statistics##
 For this tutorial we are going to use the <code class="highlighter-rouge">auto</code> dataset that comes with Stata. To load this data type</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear
+</code></pre></div></div>
 
 <p>The auto dataset has the following variables.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>describe
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>describe
+</code></pre></div></div>
 
 <p><img src="/assets/describe_stata.jpg" alt="describe_stata.jpg" /></p>
 
 <p>Suppose we want to get some summarize statistics for price such as the mean, standard deviation, and range. We’ll use the <code class="highlighter-rouge">summarize</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price
+</code></pre></div></div>
 
 <p><img src="/assets/summarize_price.jpg" alt="summarize_price.jpg" /></p>
 
 <p>Now let’s add the option <code class="highlighter-rouge">detail</code> to <code class="highlighter-rouge">summarize</code>. This will give us lots more information, including the median and other percentiles.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price, detail
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price, detail
+</code></pre></div></div>
 
 <p><img src="/assets/summ_detail.jpg" alt="summ_detail.jpg" /></p>
 
@@ -161,17 +159,15 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>To get descriptives for multiple variables at once just add the variable names after <code class="highlighter-rouge">summarize</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/summ_mult.jpg" alt="summ_mult.jpg" /></p>
 
 <p>Adding the <code class="highlighter-rouge">detail</code> option.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price mpg, detail
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price mpg, detail
+</code></pre></div></div>
 
 <p><img src="/assets/summ_mult_detail.jpg" alt="summ_mult_detail.jpg" /></p>
 
@@ -179,29 +175,25 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called <code class="highlighter-rouge">by</code> processing.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by foreign: summarize price
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by foreign: summarize price
+</code></pre></div></div>
 
 <p><img src="/assets/summ_by.jpg" alt="summ_by.jpg" /></p>
 
 <p>When using the by command, the variable of interest needs to be sorted in the data set. For example, in the previous example the variable “foreign” is already sorted within our data set. If we wanted to examine the price by mpg, we would need to sort miles per gallon. One way to sort data is using a simple sort command followed by the variable name. Stata will sort the data in ascending order by default.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sort mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sort mpg
+</code></pre></div></div>
 
 <p>After we sort the data, we can then use the standard by mpg: command. In <code class="highlighter-rouge">by</code> processing, we can also sort the data and execute the <code class="highlighter-rouge">by</code> command at the same time using the <code class="highlighter-rouge">bysort</code> command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>bysort mpg: summarize price
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bysort mpg: summarize price
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">by</code> command can also be used in other commands, such as creating graphics. For example, if we wanted to examine histograms of mpg by the make of the car, we would use the <code class="highlighter-rouge">by</code> command as an option. The make of car does not have to be sorted for this command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>histogram(mpg), by(foreign)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>histogram(mpg), by(foreign)
+</code></pre></div></div>
 
 <p><img src="/assets/histogram_by_foreign.png" alt="histogram_by_foreign.png" /></p>
 
@@ -209,17 +201,15 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>The <code class="highlighter-rouge">by</code> statement will give us descriptives for all levels of the <code class="highlighter-rouge">by</code> variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the <code class="highlighter-rouge">by</code> variable. We can use the <code class="highlighter-rouge">if</code> statement for that. For foreign cars (i.e., <code class="highlighter-rouge">foreign == 1</code>):</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price if foreign == 1
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price if foreign == 1
+</code></pre></div></div>
 
 <p><img src="/assets/sum_if_1.jpg" alt="sum_if_1.jpg" /></p>
 
 <p>For domestic cars (i.e., <code class="highlighter-rouge">foreign == 0</code>)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price if foreign == 0
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price if foreign == 0
+</code></pre></div></div>
 
 <p><img src="/assets/sum_if_11.jpg" alt="sum_if_11.jpg" /></p>
 
@@ -269,18 +259,16 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>The <code class="highlighter-rouge">in</code> qualifier specifies a particular subset of cases based on their order in the dataset. For example, if we want to examine the mpg in the 10 least expensive cars, we would use the <code class="highlighter-rouge">in</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sort price
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sort price
 summarize mpg in 1/10
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/summarize_mpg_in.png" alt="summarize_mpg_in.png" /></p>
 
 <p>As a helpful hint for any of these processes, if your variables are labeled (showing the label instead of the numeric value) and you need to find the numeric values to examine levels of the variable, you can use the <code class="highlighter-rouge">nolabel</code> option.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>browse, nolabel
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>browse, nolabel
+</code></pre></div></div>
 
 <p>This will show you the number values for variables. You can also find those values by double-clicking on them in the data browser.</p>
 

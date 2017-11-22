@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -144,11 +146,10 @@
 
 <p>The first command you will need is the <code class="highlighter-rouge">use</code> command to specify the file you want Stata to use. If the file is not in the working directory that you are currently in, just specify which directory you want to pull the file from. Here are three examples of the <code class="highlighter-rouge">use</code> command, one from a data set in the current working directly, one from the internet and one from a jump drive in a different working directory. Notice that on the end of each command, I add the option <code class="highlighter-rouge">clear</code>. This is to clear any data that Stata is currently working with.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>use relate.dta, clear
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use relate.dta, clear
 use http://www.stata-press.com/data/agis3/relate, clear
 use "E:\relate.dta", clear
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After I specify the data file, I enter the rest of the commands I want to run. Within this file, Stata will assume that each line is a new command unless you tell it otherwise. If you have a long command that you need on separate lines, add /// at the end of each line. That tells Stata that the next line is part of the same command. When I am ready to run the analyses, I select the commands I would like to run (you don’t have to select any text if you want to run them all) and click on the last icon on the toolbar in the do-file window:</p>
 
@@ -166,9 +167,8 @@ use "E:\relate.dta", clear
 
 <p>You can also start, suspend, resume and close logs using the log command. I will use this command to begin a log file, specify the name and location of the file as well as the extension. If I were going to create a log file called “creatinglogfiles” in a file on my desktop called “501” (filepath: /Desktop/501), I would type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>log using "/Desktop/501/creatinglogfiles", text
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log using "/Desktop/501/creatinglogfiles", text
+</code></pre></div></div>
 
 <p>I included <code class="highlighter-rouge">text</code> because I want the file to be a .log file, not an .smcl file. If I wanted to overwrite a file that already existed, I would add <code class="highlighter-rouge">replace</code> after <code class="highlighter-rouge">text</code>.</p>
 

@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -139,17 +141,15 @@
 
 <p>We’ll use the <strong>auto</strong> dataset for this tutorial.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear 
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear 
+</code></pre></div></div>
 
 <p><img src="/assets/auto.jpg" alt="auto.jpg" /></p>
 
 <p>We’ll create a correlation matrix of four variables – <em>price</em>, <em>mpg</em>, <em>weight</em>, and <em>length</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>correlation price mpg weight length
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>correlation price mpg weight length
+</code></pre></div></div>
 
 <p><img src="/assets/corr.jpg" alt="corr.jpg" /></p>
 
@@ -159,9 +159,8 @@
 
 <p>If we want to create of covariance matrix, we simply add the <code class="highlighter-rouge">covariance</code> option to the <code class="highlighter-rouge">correlation</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>correlation price mpg weigh length, covariance
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>correlation price mpg weigh length, covariance
+</code></pre></div></div>
 
 <p><img src="/assets/covariance.jpg" alt="covariance.jpg" /></p>
 
@@ -169,9 +168,8 @@
 
 <p>The <code class="highlighter-rouge">correlation</code> command produces a clean correlation matrix (or covariance matrix with the <code class="highlighter-rouge">covariance</code> option). If we want to see the statistical significance of a correlation, we need to use the <code class="highlighter-rouge">pwcorr</code> command with the <code class="highlighter-rouge">sig</code> option.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>pwcorr price mpg weight length, sig
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pwcorr price mpg weight length, sig
+</code></pre></div></div>
 
 <p><img src="/assets/pwcorr.jpg" alt="pwcorr.jpg" /></p>
 

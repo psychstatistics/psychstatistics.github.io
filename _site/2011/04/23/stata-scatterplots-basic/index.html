@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -139,9 +141,8 @@
 
 <p>In this post we’ll use the <strong>auto</strong> dataset.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear
+</code></pre></div></div>
 
 <p><img src="/assets/autoscatter.jpg" alt="autoscatter.jpg" /></p>
 
@@ -149,9 +150,8 @@
 
 <p>Creating scatterplots is easy in Stata. We’ll use the <code class="highlighter-rouge">graph twoway scatter</code> command (we can just type <code class="highlighter-rouge">scatter</code> but I like to use the <code class="highlighter-rouge">graph twoway</code> syntax to make things more consistent across graph types. We’ll visualize the relationship between <em>price</em> and <em>length</em>. When using <code class="highlighter-rouge">graph twoway scatter</code> we first list the variable that we want on the y-axis and then the variable we want on the x-axis. We’ll also add a title to the graph.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway scatter price length, title("Scatterplot of price and length")
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway scatter price length, title("Scatterplot of price and length")
+</code></pre></div></div>
 
 <p><img src="/assets/scatter1.jpg" alt="scatter1.jpg" /></p>
 
@@ -161,9 +161,8 @@
 
 <p>So to get the scatterplot of <em>price</em> and <em>length</em> with a lowess smoother, we type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway scatter price length || lowess price length, title("Scatterplot of price and length")
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway scatter price length || lowess price length, title("Scatterplot of price and length")
+</code></pre></div></div>
 
 <p><img src="/assets/lowess1.jpg" alt="lowess1.jpg" /></p>
 
@@ -175,17 +174,15 @@
 
 <p>To create a histogram using commands, just type “histogram (your variable).” For example, to look at miles per gallon, you would type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>histogram mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>histogram mpg
+</code></pre></div></div>
 
 <p><img src="/assets/Picture-7.png" alt="Picture-7.png" /></p>
 
 <p>Often the default settings of the histogram may not be the best representation of your data. There are a number of useful options with the <code class="highlighter-rouge">histogram</code> command, including <code class="highlighter-rouge">width</code> with allows you to specify bin width, <code class="highlighter-rouge">frequency</code> which changes the y-axis to reflect frequency instead of density and <code class="highlighter-rouge">normal</code> which overlays a normal curve onto your graphic. You can also modify the title and axes of the graph using syntax options.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>histogram mpg, width(2) frequency normal title(mpg histogram)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>histogram mpg, width(2) frequency normal title(mpg histogram)
+</code></pre></div></div>
 
 <p><img src="/assets/Picture-11.png" alt="Picture-11.png" /></p>
 

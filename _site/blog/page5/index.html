@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -145,17 +147,15 @@
 
 <p>We will again use the <strong>auto</strong> dataset.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear
+</code></pre></div></div>
 
 <p><img src="/assets/autodata.jpg" alt="autodata.jpg" /></p>
 
 <p>Suppose we want to regress <em>price</em> on three variables – <em>mpg</em>, <em>weight</em>, and <em>foreign</em>. To add three predictors, we simply add the variables we want after the dependent variable.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>regress price mpg weight foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>regress price mpg weight foreign
+</code></pre></div></div>
 
 <p>This produces the following output.</p>
 
@@ -171,21 +171,18 @@
 
 <p>To obtain the part of <em>price</em> independent of <em>weight</em> and <em>foreign</em> we regress <em>price</em> on <em>weight</em> and <em>foreign</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>regress price weight foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>regress price weight foreign
+</code></pre></div></div>
 
 <p>We then save the residuals for <em>price</em>. We’ll call this <em>priceres</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>predict priceres, residuals
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>predict priceres, residuals
+</code></pre></div></div>
 
 <p>We now have a new variable in our dataset called <em>priceres</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize priceres, detail
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize priceres, detail
+</code></pre></div></div>
 
 <p><img src="/assets/priceres.jpg" alt="priceres.jpg" /></p>
 
@@ -193,21 +190,18 @@
 
 <p>At this point, we need to repeat what we did about except substitute <em>mpg</em> for price. We regress <em>mpg</em> on <em>weight</em> and <em>foreign</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>regress mpg weight foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>regress mpg weight foreign
+</code></pre></div></div>
 
 <p>We save the residuals for <em>mpg</em>. We’ll call this <em>mpgres</em> (not very original, I know).</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>predict mpgres, residuals
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>predict mpgres, residuals
+</code></pre></div></div>
 
 <p>We now have a new variable in our dataset called <em>mpgres</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize mpgres, detail
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize mpgres, detail
+</code></pre></div></div>
 
 <p><img src="/assets/mpgres.jpg" alt="mpgres.jpg" /></p>
 
@@ -215,9 +209,8 @@
 
 <p>We know have everything we need for the partial correlation between <em>price</em> and <em>mpg</em> controlling for <em>weight</em> and <em>foreign</em>. Specifically, we have <em>priceres</em> – which is the part of <em>price</em> that is independent of <em>weight</em> and <em>foreign</em>. We also have <em>mpgres</em> – which is the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>. Therefore, to obtain the partial correlation we simply need to correlate <em>priceres</em> and <em>mpgres</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>corr priceres mpgres
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>corr priceres mpgres
+</code></pre></div></div>
 
 <p><img src="/assets/partialcorrelation.jpg" alt="partialcorrelation.jpg" /></p>
 
@@ -225,9 +218,8 @@
 
 <p>We also already have everything we need for the semipartial correlation. Recall that for the semipartial correlation we only remove the shared relationship between <em>x</em> and the <em>x2</em> (or set of covariates). We don’t do anything with <em>y</em>. In our example <em>price</em> is our <em>y</em> variable. So to compute the semipartial correlation we correlate <em>price</em> (i.e., the “untouched” <em>y</em> variable) and <em>mpgres</em> (i.e., the part of <em>mpg</em> that is independent of <em>weight</em> and <em>foreign</em>).</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>corr price mpgres
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>corr price mpgres
+</code></pre></div></div>
 
 <p><img src="/assets/semipartialcorrelation.jpg" alt="semipartialcorrelation.jpg" /></p>
 
@@ -235,9 +227,8 @@
 
 <p>Thankfully Stata has a built in command for computing partial and semipartial correlations – <a href="http://www.stata.com/help.cgi?pcorr">pcorr</a>. To obtain the partial and semipartial correlations, we type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>pcorr price mpg weight foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pcorr price mpg weight foreign
+</code></pre></div></div>
 
 <p>Note that the first variable listed is considered the <em>y</em> variable. All other variables are variables are considered <em>x</em> variables. Stata reports as many partial and semipartial correlations as there are <em>x</em> variables. Additionally, Stata reports the squared partial and squared semipartial correlations. These are interpreted as the proportion of shared variance between <em>y</em> and <em>x</em> controlling for the other <em>x</em> variables. The partial and semipartial correlations listed for <em>mpg</em> are the same as what we found above.</p>
 
@@ -256,17 +247,15 @@
     <h1 id="bivariate-regression">Bivariate Regression</h1>
 <p>In this post we’ll use the system dataset <strong>auto</strong>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-1.jpg" alt="Results - auto.dta-1" /></p>
 
 <p>To estimate the model we use the <code class="highlighter-rouge">regress</code> command in the command window. The <code class="highlighter-rouge">regress</code> command follows the general format of <code class="highlighter-rouge">regress dv iv, options</code>. Type <code class="highlighter-rouge">help regress</code> or visit the online help for <a href="http://www.stata.com/help.cgi?regress"><code class="highlighter-rouge">regress</code></a> for a description of the options available for regress. For example the regression of <em>price</em> on <em>mpg</em> is estimated as follows:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>regress price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>regress price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-3.jpg" alt="Results-auto.dta-3" /></p>
 
@@ -282,9 +271,8 @@
 
 <p>Suppose we would like Stata to report standardized coefficients. To get standardized coefficients we add the <code class="highlighter-rouge">beta</code> option to our command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>regress price mpg, beta
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>regress price mpg, beta
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-4.jpg" alt="Results-auto.dta-4" /></p>
 
@@ -294,17 +282,15 @@
 
 <p>To produce a scatterplot between <em>price</em> (y-axis) and <em>mpg</em> (x-axis), we use the <code class="highlighter-rouge">graph twoway scatter</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway scatter price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway scatter price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/Graph-Graph-1.jpg" alt="Graph-Graph-1" /></p>
 
 <p>Now let’s add the regression line to the plot. The <code class="highlighter-rouge">lfit</code> graph command allows us to do this (<code class="highlighter-rouge">lfit</code> stands for <em>linear</em> fit). However, we don’t want the regression line in isolation. We want it on top of the scatterplot. Stata lets you combine twoway graphs in one of two ways: (1) using parentheses or (2) using pipes. To add the regression line with parentheses, we type:&lt;/p&gt;</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway (lfit price mpg) (scatter price mpg)	
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway (lfit price mpg) (scatter price mpg)	
+</code></pre></div></div>
 
 <p>The first set of parentheses is the regression line and the second is the scatterplot. This produces the following plot:</p>
 
@@ -312,15 +298,13 @@
 
 <p>To add the regression line with pipes (this produces an identical plot as above), we type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway lfit price mpg || scatter price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway lfit price mpg || scatter price mpg
+</code></pre></div></div>
 
 <p>It can be nice to include confidence intervals on the plot. To do this we simply change the <code class="highlighter-rouge">lfit</code> command to <code class="highlighter-rouge">lfitci</code>, where the <code class="highlighter-rouge">ci</code> refers to confidence interval.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway lfitci price mpg || scatter price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway lfitci price mpg || scatter price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/scatter3.jpg" alt="scatter3" /></p>
 
@@ -346,10 +330,9 @@
 
 <p>The <code class="highlighter-rouge">twoway function</code> plotting command is used to plot functions, such as <code class="highlighter-rouge">y = mx + b</code>. If we want to plot the density of a normal distribution across a range of x values, we type <code class="highlighter-rouge">y=normalden(x)</code>. You can also include graphing options available to twoway plots (e.g., <code class="highlighter-rouge">xtitle</code>).</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>twoway function y=normalden(x), range(-4 4) xtitle("{it: x}") ///
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y=normalden(x), range(-4 4) xtitle("{it: x}") ///
 ytitle("Density") title("Standard Normal Distribution")
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/Stand_Normal.jpg" alt="Stand_Normal.jpg" /></p>
 
@@ -365,42 +348,39 @@ ytitle("Density") title("Standard Normal Distribution")
 
 <p>The choice of -4 and 4 as upper and lower bounds is arbitrary. You can connect the three graphs by using a double pipe, <code class="highlighter-rouge">||</code>, between calls to the <code class="highlighter-rouge">twoway function</code> command. We will shade the area under the curve for #1 and #3 using the <code class="highlighter-rouge">recast(area)</code> option of <code class="highlighter-rouge">twoway function</code>. We will assign the color of the shading to dark navy blue using the <code class="highlighter-rouge">color(dknavy)</code> option. We will leave the area under the curve for #2 unshaded.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y=normalden(x), range(-1.96 1.96) color(dknavy) || ///
 function y=normalden(x), range(-4 -1.96) recast(area) color(dknavy) || ///
 function y=normalden(x), range(1.96 4) recast(area) color(dknavy) ///
 xtitle("{it: x}") ///
 ytitle("Density") title("Critial Values for Standard Normal") ///
 subtitle("Two-tailed test and {&amp;alpha}=.05") ///
 legend(off) xlabel(-1.96 0 1.96)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/twotail_normal.jpg" alt="twotail_normal.jpg" /></p>
 
 <p>We can repeat for a one-tailed test.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>twoway function y=normalden(x), range(-4 1.64) color(dknavy) || ///
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y=normalden(x), range(-4 1.64) color(dknavy) || ///
 function y=normalden(x), range(1.64 4) recast(area) color(dknavy) ///
 xtitle("{it: x}") ///
 ytitle("Density") title("Critial Values for Standard Normal") ///
 subtitle("One-tailed test and {&amp;alpha}=.05") ///
 legend(off) xlabel(0 1.64)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/onetailed_normal.jpg" alt="onetailed_normal.jpg" /></p>
 
 <p>We can also visualize other distributions available in Stata. Below, I provide an example of a <em>t</em>-distribution with 20 degrees of freedom</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>twoway function y=tden(20,x), range(-2.09 2.09) color(dknavy) || ///
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y=tden(20,x), range(-2.09 2.09) color(dknavy) || ///
 function y=tden(20,x), range(-4 -2.09) recast(area) color(dknavy) || ///
 function y=tden(20,x), range(2.09 4) recast(area) color(dknavy) ///
 xtitle("{it: x}") ///
 ytitle("Density") title("Critial Values for {it: t}-distribution with 20 df") ///
 subtitle("Two-tailed test and {&amp;alpha}=.05") ///
 legend(off) xlabel(-2.09 0 2.09)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/tdist20df.jpg" alt="tdist20df.jpg" /></p>
 

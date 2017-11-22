@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -141,9 +143,8 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p>The <code class="highlighter-rouge">anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>anova price foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anova price foreign
+</code></pre></div></div>
 
 <p>Viola – you’ve got an ANOVA source table.</p>
 
@@ -155,9 +156,8 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p>The <code class="highlighter-rouge">loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code class="highlighter-rouge">loneway</code> can be really useful.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>loneway price foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>loneway price foreign
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
 

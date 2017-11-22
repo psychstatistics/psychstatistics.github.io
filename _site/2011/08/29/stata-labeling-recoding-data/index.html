@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -137,16 +139,14 @@
 
 <p>To create labels using commands, you would use the <code class="highlighter-rouge">label</code> command. The syntax is:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>label define labelname value "name"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>label define labelname value "name"
 label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To apply your labels, use the <code class="highlighter-rouge">label</code> command again. The syntax is <code class="highlighter-rouge">label value variable labelname</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>label value condition cond
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>label value condition cond
+</code></pre></div></div>
 
 <h1 id="recoding-data">Recoding Data</h1>
 
@@ -160,15 +160,13 @@ label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
 
 <p>It is also quick and easy to recode variables using the <code class="highlighter-rouge">recode</code> command:\</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+</code></pre></div></div>
 
 <p>If you wanted to create a new variable with the recoded values, just use the <code class="highlighter-rouge">clonevar</code> command <em>first</em>, which will create a new variable with identical values to the first one. Then run the <code class="highlighter-rouge">recode</code> command on your new variable. The syntax is <code class="highlighter-rouge">clonevar newvariable = variabletoclone</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>clonevar item2_reverse = item2	
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clonevar item2_reverse = item2	
+</code></pre></div></div>
 
 <p>If you wanted to rename your new variable later, you would simply use the <code class="highlighter-rouge">rename</code> command. The syntax is <code class="highlighter-rouge">rename oldname newname</code>.</p>
 

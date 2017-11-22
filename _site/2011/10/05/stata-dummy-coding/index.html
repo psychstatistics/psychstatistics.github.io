@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -150,14 +152,13 @@
 
 <p>Consequently, we’ll need to make 3 dummy coded indicator variables to represent drug. We’ll use level 4 as the reference category. We’ll use a series of generate and replace commands to create the variables. This is definitely the brute-force way to make the variables, but it makes the logic behind creating dummy variables clear.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate drug1=1 if drug==1
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug1=1 if drug==1
 replace drug1=0 if drug!=1
 generate drug2=1 if drug==2
 replace drug2=0 if drug!=2
 generate drug3=1 if drug==3
 replace drug3=0 if drug!=3
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Tabulating each of the dummy variables – drug1 - drug3 – we see they match our original tabulation.</p>
 
@@ -167,24 +168,21 @@ replace drug3=0 if drug!=3
 
 <p>We can also use a feature of the generate command to create a new variable that takes on the values 1 and 0. So, for example, if we want to create drug1, where drug1 is equal to 1 when the drug condition equals 1, we say:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate drug1=drug==1
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug1=drug==1
+</code></pre></div></div>
 
 <p>This creates a variable that is 1 when drug equals 1 (recall that <code class="highlighter-rouge">==</code> is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate drug2=drug==2
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug2=drug==2
 generate drug3=drug==3
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Method 3: Use the <code class="highlighter-rouge">generate</code> option of <code class="highlighter-rouge">tabulate</code></p>
 
 <p>The function tabulate has an option called generate. The generate option takes one argument called stubname, where stubname is the stub of the new variable names created by the option. In our examples so far, the stub has been drug. Unlike the examples we have done so far, this method will create as many dummy variables as there are levels of the categorical variable (4 in our case). In our example, we type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>tabulate drug, generate(drug)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tabulate drug, generate(drug)
+</code></pre></div></div>
 
 <p>We now have four new variables in our dataset – drug1-drug4.</p>
 

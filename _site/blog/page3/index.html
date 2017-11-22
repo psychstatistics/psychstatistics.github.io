@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -147,9 +149,8 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p>The <code class="highlighter-rouge">anova</code> command is simple and follows the standard Stata syntax – Command DV IV</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>anova price foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anova price foreign
+</code></pre></div></div>
 
 <p>Viola – you’ve got an ANOVA source table.</p>
 
@@ -161,9 +162,8 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
 
 <p>The <code class="highlighter-rouge">loneway</code> command is just for oneway ANOVA models. It provides output in addition to the source table, such as the intraclass correlation and the reliability of the group means. So depending upon the analysis you want to do and the information you need, <code class="highlighter-rouge">loneway</code> can be really useful.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>loneway price foreign
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>loneway price foreign
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-2.jpg" alt="Results-auto_dta-2.jpg" /></p>
 
@@ -181,31 +181,27 @@ We will use the <strong>auto</strong> dataset for this illustration. We will use
     <p>##Descriptive Statistics##
 For this tutorial we are going to use the <code class="highlighter-rouge">auto</code> dataset that comes with Stata. To load this data type</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear
+</code></pre></div></div>
 
 <p>The auto dataset has the following variables.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>describe
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>describe
+</code></pre></div></div>
 
 <p><img src="/assets/describe_stata.jpg" alt="describe_stata.jpg" /></p>
 
 <p>Suppose we want to get some summarize statistics for price such as the mean, standard deviation, and range. We’ll use the <code class="highlighter-rouge">summarize</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price
+</code></pre></div></div>
 
 <p><img src="/assets/summarize_price.jpg" alt="summarize_price.jpg" /></p>
 
 <p>Now let’s add the option <code class="highlighter-rouge">detail</code> to <code class="highlighter-rouge">summarize</code>. This will give us lots more information, including the median and other percentiles.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price, detail
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price, detail
+</code></pre></div></div>
 
 <p><img src="/assets/summ_detail.jpg" alt="summ_detail.jpg" /></p>
 
@@ -213,17 +209,15 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>To get descriptives for multiple variables at once just add the variable names after <code class="highlighter-rouge">summarize</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/summ_mult.jpg" alt="summ_mult.jpg" /></p>
 
 <p>Adding the <code class="highlighter-rouge">detail</code> option.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price mpg, detail
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price mpg, detail
+</code></pre></div></div>
 
 <p><img src="/assets/summ_mult_detail.jpg" alt="summ_mult_detail.jpg" /></p>
 
@@ -231,29 +225,25 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>Suppose we want to get the descriptive statistics for price by car type (foreign vs domestic). We can use what is called <code class="highlighter-rouge">by</code> processing.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by foreign: summarize price
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by foreign: summarize price
+</code></pre></div></div>
 
 <p><img src="/assets/summ_by.jpg" alt="summ_by.jpg" /></p>
 
 <p>When using the by command, the variable of interest needs to be sorted in the data set. For example, in the previous example the variable “foreign” is already sorted within our data set. If we wanted to examine the price by mpg, we would need to sort miles per gallon. One way to sort data is using a simple sort command followed by the variable name. Stata will sort the data in ascending order by default.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sort mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sort mpg
+</code></pre></div></div>
 
 <p>After we sort the data, we can then use the standard by mpg: command. In <code class="highlighter-rouge">by</code> processing, we can also sort the data and execute the <code class="highlighter-rouge">by</code> command at the same time using the <code class="highlighter-rouge">bysort</code> command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>bysort mpg: summarize price
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bysort mpg: summarize price
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">by</code> command can also be used in other commands, such as creating graphics. For example, if we wanted to examine histograms of mpg by the make of the car, we would use the <code class="highlighter-rouge">by</code> command as an option. The make of car does not have to be sorted for this command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>histogram(mpg), by(foreign)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>histogram(mpg), by(foreign)
+</code></pre></div></div>
 
 <p><img src="/assets/histogram_by_foreign.png" alt="histogram_by_foreign.png" /></p>
 
@@ -261,17 +251,15 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>The <code class="highlighter-rouge">by</code> statement will give us descriptives for all levels of the <code class="highlighter-rouge">by</code> variable (i.e., both foreign and domestic). Suppose we just want the describes for one level of the <code class="highlighter-rouge">by</code> variable. We can use the <code class="highlighter-rouge">if</code> statement for that. For foreign cars (i.e., <code class="highlighter-rouge">foreign == 1</code>):</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price if foreign == 1
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price if foreign == 1
+</code></pre></div></div>
 
 <p><img src="/assets/sum_if_1.jpg" alt="sum_if_1.jpg" /></p>
 
 <p>For domestic cars (i.e., <code class="highlighter-rouge">foreign == 0</code>)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize price if foreign == 0
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize price if foreign == 0
+</code></pre></div></div>
 
 <p><img src="/assets/sum_if_11.jpg" alt="sum_if_11.jpg" /></p>
 
@@ -321,18 +309,16 @@ For this tutorial we are going to use the <code class="highlighter-rouge">auto</
 
 <p>The <code class="highlighter-rouge">in</code> qualifier specifies a particular subset of cases based on their order in the dataset. For example, if we want to examine the mpg in the 10 least expensive cars, we would use the <code class="highlighter-rouge">in</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sort price
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sort price
 summarize mpg in 1/10
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/summarize_mpg_in.png" alt="summarize_mpg_in.png" /></p>
 
 <p>As a helpful hint for any of these processes, if your variables are labeled (showing the label instead of the numeric value) and you need to find the numeric values to examine levels of the variable, you can use the <code class="highlighter-rouge">nolabel</code> option.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>browse, nolabel
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>browse, nolabel
+</code></pre></div></div>
 
 <p>This will show you the number values for variables. You can also find those values by double-clicking on them in the data browser.</p>
 
@@ -354,19 +340,17 @@ summarize mpg in 1/10
 
 <p>The <code class="highlighter-rouge">egen</code> function is used to create new variables. To create a mean with <code class="highlighter-rouge">egen</code> we use the following syntax:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>egen nameofnewvariable=mean(nameofoldvariable)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>egen nameofnewvariable=mean(nameofoldvariable)
+</code></pre></div></div>
 
 <p>We can download the the pig data from the <code class="highlighter-rouge">xtmixed</code> help.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>webuse pig, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>webuse pig, clear
+</code></pre></div></div>
 
 <p>The variables are <strong>id</strong>, <strong>week</strong>, and <strong>weight</strong>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>list in 1/15, clean
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>list in 1/15, clean
 id week weight
 1. 1 1 24
 2. 1 2 32
@@ -383,18 +367,16 @@ id week weight
 13. 2 4 45
 14. 2 5 51
 15. 2 6 58.5
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>We can create a grand mean (say, for creating centered variables) of <strong>weight</strong> using <code class="highlighter-rouge">egen</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>egen grandweight=mean(weight)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>egen grandweight=mean(weight)
+</code></pre></div></div>
 
 <p>This creates a new variable that is equal to the grand mean for weight (it is a constant across all variables)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>list in 1/15, clean
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>list in 1/15, clean
 id week weight grandw~t
 1. 1 1 24 50.40509
 2. 1 2 32 50.40509
@@ -411,26 +393,23 @@ id week weight grandw~t
 13. 2 4 45 50.40509
 14. 2 5 51 50.40509
 15. 2 6 58.5 50.40509
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>##<code class="highlighter-rouge">egen mean</code> for cluster means##</p>
 
 <p>We can combine <code class="highlighter-rouge">egen mean</code> with <code class="highlighter-rouge">by</code> to compute cluster means. (Remember that <strong>id</strong> is the cluster id variable.)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by id: egen groupweight=mean(weight)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by id: egen groupweight=mean(weight)
+</code></pre></div></div>
 
 <p>If the <strong>id</strong> variable isn’t sorted, then you can change the code to:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by id, sort: egen groupweight=mean(weight)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by id, sort: egen groupweight=mean(weight)
+</code></pre></div></div>
 
 <p>This creates a variable that is equal to the cluster mean for each cluster. That is, its value is constant within clusters but varies across clusters.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>list in 1/15, clean
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>list in 1/15, clean
 id week weight grandw~t groupw~t
 1. 1 1 24 50.40509 48.66667
 2. 1 2 32 50.40509 48.66667
@@ -447,22 +426,19 @@ id week weight grandw~t groupw~t
 13. 2 4 45 50.40509 51.33333
 14. 2 5 51 50.40509 51.33333
 15. 2 6 58.5 50.40509 51.33333
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>##Looking at missing data##</p>
 
 <p>You can also use <code class="highlighter-rouge">egen</code> to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use <code class="highlighter-rouge">egen</code> combined with <code class="highlighter-rouge">rowmiss</code> to create a missing variable to examine this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>egen missing = rowmiss(weight weight2)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>egen missing = rowmiss(weight weight2)
+</code></pre></div></div>
 
 <p>Then you can use the tabulate command to identify if any values are missing:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>tabulate missing
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tabulate missing
+</code></pre></div></div>
 
 <p><img src="/assets/tabulate_missing1.png" alt="tabulate.missing1.png" /></p>
 
@@ -485,9 +461,8 @@ id week weight grandw~t groupw~t
 <p>##Syntax##
 You can import csv files using the <code class="highlighter-rouge">insheet</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>insheet using "auto.csv", comma clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>insheet using "auto.csv", comma clear
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">using auto.csv</code> statement just tells Stata the file name of the csv file. If the csv file is not in your working directory, then you will need to provide the entire filepath or <code class="highlighter-rouge">cd</code> to the directory with the csv file. I typically include the option <code class="highlighter-rouge">comma</code>. This tells Stata that the file is a csv file. This isn’t necessary but it will speed up the <code class="highlighter-rouge">insheet</code> command (only an issue if the csv file is pretty big). However, the primary reason I put it in there is to make the code more readable (i.e., so that I know from the code that I read in a csv file, which is particularly important if the file extension is something other than csv). I also add the <code class="highlighter-rouge">clear</code> option to clear out any data that are currently in memory.</p>
 
@@ -523,7 +498,7 @@ You can import csv files using the <code class="highlighter-rouge">insheet</code
 
 <p>I started trying to solve this problem by writing a function for identifying prime numbers. I found an entry on Wikipedia for the “<a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>.” The entry also included Python code for implementing the sieve. I’ve reproduced an adapted version of the Wikipedia code. I had to change it because my computer ran out of memory when creating the candidate list. I had to change it so the candidate list had an upper limit of the square root of 600851475143. In any case, here is the solution with the sieve function first and then a function for actually solving the problem.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>def sieve(n): 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def sieve(n): 
     fin = int(n**0.5) ##candidates below sqrt of n -- this is the upper limit
     candidates = list(range(fin+1)) ##This is an change of the wiki code
 
@@ -535,8 +510,7 @@ You can import csv files using the <code class="highlighter-rouge">insheet</code
 
     # Filter out non-primes and return the list.
     return [i for i in candidates[2:] if i]
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>##A function for returning prime factors of n
 	def largeprime(n):
@@ -546,10 +520,9 @@ You can import csv files using the <code class="highlighter-rouge">insheet</code
 
 <p>##Return the prime factors as a list and print the last number</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>div = list(largeprime(n))
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>div = list(largeprime(n))
 print div[-1]
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This solution takes .38 seconds.</p>
 

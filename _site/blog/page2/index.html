@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -143,16 +145,14 @@
 
 <p>To create labels using commands, you would use the <code class="highlighter-rouge">label</code> command. The syntax is:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>label define labelname value "name"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>label define labelname value "name"
 label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To apply your labels, use the <code class="highlighter-rouge">label</code> command again. The syntax is <code class="highlighter-rouge">label value variable labelname</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>label value condition cond
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>label value condition cond
+</code></pre></div></div>
 
 <h1 id="recoding-data">Recoding Data</h1>
 
@@ -166,15 +166,13 @@ label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
 
 <p>It is also quick and easy to recode variables using the <code class="highlighter-rouge">recode</code> command:\</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>recode item2 (1=5) (2=4) (3=3) (4=2) (5=1)
+</code></pre></div></div>
 
 <p>If you wanted to create a new variable with the recoded values, just use the <code class="highlighter-rouge">clonevar</code> command <em>first</em>, which will create a new variable with identical values to the first one. Then run the <code class="highlighter-rouge">recode</code> command on your new variable. The syntax is <code class="highlighter-rouge">clonevar newvariable = variabletoclone</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>clonevar item2_reverse = item2	
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clonevar item2_reverse = item2	
+</code></pre></div></div>
 
 <p>If you wanted to rename your new variable later, you would simply use the <code class="highlighter-rouge">rename</code> command. The syntax is <code class="highlighter-rouge">rename oldname newname</code>.</p>
 
@@ -206,11 +204,10 @@ label define cond 1 "No tx" 2 "Tx A" 3 "Tx B" 4 "Tx C"
 
 <p>The first command you will need is the <code class="highlighter-rouge">use</code> command to specify the file you want Stata to use. If the file is not in the working directory that you are currently in, just specify which directory you want to pull the file from. Here are three examples of the <code class="highlighter-rouge">use</code> command, one from a data set in the current working directly, one from the internet and one from a jump drive in a different working directory. Notice that on the end of each command, I add the option <code class="highlighter-rouge">clear</code>. This is to clear any data that Stata is currently working with.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>use relate.dta, clear
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use relate.dta, clear
 use http://www.stata-press.com/data/agis3/relate, clear
 use "E:\relate.dta", clear
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>After I specify the data file, I enter the rest of the commands I want to run. Within this file, Stata will assume that each line is a new command unless you tell it otherwise. If you have a long command that you need on separate lines, add /// at the end of each line. That tells Stata that the next line is part of the same command. When I am ready to run the analyses, I select the commands I would like to run (you don’t have to select any text if you want to run them all) and click on the last icon on the toolbar in the do-file window:</p>
 
@@ -228,9 +225,8 @@ use "E:\relate.dta", clear
 
 <p>You can also start, suspend, resume and close logs using the log command. I will use this command to begin a log file, specify the name and location of the file as well as the extension. If I were going to create a log file called “creatinglogfiles” in a file on my desktop called “501” (filepath: /Desktop/501), I would type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>log using "/Desktop/501/creatinglogfiles", text
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log using "/Desktop/501/creatinglogfiles", text
+</code></pre></div></div>
 
 <p>I included <code class="highlighter-rouge">text</code> because I want the file to be a .log file, not an .smcl file. If I wanted to overwrite a file that already existed, I would add <code class="highlighter-rouge">replace</code> after <code class="highlighter-rouge">text</code>.</p>
 
@@ -258,9 +254,8 @@ use "E:\relate.dta", clear
 
 <p>However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the <code class="highlighter-rouge">reshape</code> command, specifying that you’re reshaping to the long format. The syntax is <code class="highlighter-rouge">reshape long/wide stubname, i(i) j(j)</code> where the stubname is the stub of your variables (in this case, it is “cond”), <em>i</em> is the id variable and <em>j</em> is the new variable you’ll create (or the existing variable if reshaping the data into wide format).</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>reshape long cond, i(id) j(condition)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reshape long cond, i(id) j(condition)
+</code></pre></div></div>
 
 <p>Now my data looks like this:</p>
 
@@ -268,9 +263,8 @@ use "E:\relate.dta", clear
 
 <p>Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the <code class="highlighter-rouge">rename</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>rename cond mood
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rename cond mood
+</code></pre></div></div>
 
 <p><img src="/assets/rename_condition.png" alt="rename.condition.png" /></p>
 
@@ -288,11 +282,10 @@ use "E:\relate.dta", clear
     <h1 id="generating-new-variables">Generating New Variables</h1>
 <p>The primary method for creating new variables in Stata is the <code class="highlighter-rouge">generate</code> command. Load the <strong>auto</strong> dataset.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>clear
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clear
 sysuse auto
 describe
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta_1.jpg" alt="Results-auto.dta_1.jpg" /></p>
 
@@ -300,15 +293,13 @@ describe
 
 <p>Let’s create a new variable that is the sum of <em>weight</em> and <em>length</em> (ignore for the moment that summing weights and lengths doesn’t make a ton of sense). Simple with <code class="highlighter-rouge">generate</code>. The syntax of <code class="highlighter-rouge">generate</code> is:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate nameOfNewVariable=whateverTheNewVariableIsEqualTo
+</code></pre></div></div>
 
 <p>So to create a new variable called <em>weightlength</em> that is the sum of <em>weight</em> and <em>length</em> we type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate weightlength = weight+length
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate weightlength = weight+length
+</code></pre></div></div>
 
 <p>Now we have new variable called <em>weightlength</em>.</p>
 
@@ -316,50 +307,43 @@ describe
 
 <p>Suppose now that we want to create a new variable that is the square of weight.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate weight2 = weight^2
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate weight2 = weight^2
+</code></pre></div></div>
 
 <h2 id="new-variable-that-is-a-constant">New Variable that is a Constant</h2>
 
 <p>Suppose we want to create a new variable that is a constant value (this isn’t necessarily a good idea and you can use macros to store constants but using a variable can be pretty convenient too). Let’s make a new variable <em>x</em> that is equal to 100.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate x = 100
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate x = 100
+</code></pre></div></div>
 
 <p>Let’s create a new variable that is equal to the mean of weight – we’ll call it <em>meanweight</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize weight
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize weight
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-3.jpg" alt="Results-auto.dta-3.jpg" /></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate meanweight = 3019.459
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate meanweight = 3019.459
+</code></pre></div></div>
 
 <p>You can also use the results of the <code class="highlighter-rouge">summarize</code> command to create a mean.</p>
 
 <p><img src="/assets/Viewer-1-help-summarize-1.jpg" alt="Viewer-1-help-summarize-1.jpg" /></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize weight
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize weight
 generate meanweight = r(mean)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can use the <code class="highlighter-rouge">_N</code> operator to create a new variable that is equal to the number of observations in a dataset.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate obs = _N
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate obs = _N
+</code></pre></div></div>
 
 <p>If you combine this with <code class="highlighter-rouge">by</code> you can create a new variable that will be equal to the number of observations within the levels of the <code class="highlighter-rouge">by</code> variable. For example, we can type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by foreign: generate obs = _N
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by foreign: generate obs = _N
+</code></pre></div></div>
 
 <p>This will create a variable that is a constant within the levels of <em>foreign</em>. That is, we are going to get the number of foreign cars and the number of domestic cars. If a line in the data is associated with foreign cars the new <em>obs</em> variable will have a value of 22 and domestic cars will have a value of 52. Give it a try and see how it works.</p>
 
@@ -367,23 +351,20 @@ generate meanweight = r(mean)
 
 <p>We can create a new variable that is a random draw from a distribution. Let’s create a new variable whose values will be random draws from a normal distribution with a mean of 0 and a standard deviation of 1. The random normal generator command is <code class="highlighter-rouge">rnormal()</code> (it defaults to a mean of 0 and standard deviation of 1 and it will draw as many values as there are observations in the dataset).</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate random = rnormal()
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate random = rnormal()
+</code></pre></div></div>
 
 <h2 id="create-a-new-variable-that-indexes-the-observations">Create a New Variable that Indexes the Observations</h2>
 
 <p>You can use the <code class="highlighter-rouge">_n</code> operator to create a variable that indexes the observation number.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>generate index = _n
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate index = _n
+</code></pre></div></div>
 
 <p>This will create a new variable that runs from 1 to 74. You can combine this with <code class="highlighter-rouge">by</code> to create an index within another variable.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by foreign: index = _n
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by foreign: index = _n
+</code></pre></div></div>
 
 <p>This will create a new variable that runs from 1 to 52 for domestic cars and 1 to 22 for foreign cars.</p>
 
@@ -412,31 +393,27 @@ generate meanweight = r(mean)
 
 <p>We will use the built-in dataset <strong>systolic</strong>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>webuse systolic
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>webuse systolic
+</code></pre></div></div>
 
 <h2 id="examining-the-data">Examining the data</h2>
 
 <p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>summarize systolic, detail
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize systolic, detail
+</code></pre></div></div>
 
 <p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>table drug
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>table drug
+</code></pre></div></div>
 
 <p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
 
 <p>Let’s also look at a boxplot of systolic by drug.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph box systolic, by(drug)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph box systolic, by(drug)
+</code></pre></div></div>
 
 <p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
 
@@ -446,9 +423,8 @@ generate meanweight = r(mean)
 
 <p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>anova systolic drug
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anova systolic drug
+</code></pre></div></div>
 
 <p>We reject the null hypothesis.</p>
 
@@ -465,24 +441,21 @@ generate meanweight = r(mean)
 
 <p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+</code></pre></div></div>
 
 <p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
 
 <p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code class="highlighter-rouge">1.drug</code> or <code class="highlighter-rouge">2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
 See if you can figure out why the following statement is equivalent</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+</code></pre></div></div>
 
 <p>Suppose we want to know if level 1 of drug is different from level 2.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>test 1.drug = 2.drug
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test 1.drug = 2.drug
+</code></pre></div></div>
 
 <p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
 

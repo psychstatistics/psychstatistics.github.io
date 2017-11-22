@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -138,9 +140,8 @@
 
 <p>However, for many analyses where participants have repeated measures, you will need your data in “long” format. In order to do this, you will use the <code class="highlighter-rouge">reshape</code> command, specifying that you’re reshaping to the long format. The syntax is <code class="highlighter-rouge">reshape long/wide stubname, i(i) j(j)</code> where the stubname is the stub of your variables (in this case, it is “cond”), <em>i</em> is the id variable and <em>j</em> is the new variable you’ll create (or the existing variable if reshaping the data into wide format).</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>reshape long cond, i(id) j(condition)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reshape long cond, i(id) j(condition)
+</code></pre></div></div>
 
 <p>Now my data looks like this:</p>
 
@@ -148,9 +149,8 @@
 
 <p>Now each participant has 4 rows with their reported mood in each condition. This may be confusing because “cond” actually reflects the value for mood in this data. So, in order to make your data more clear, you can use the <code class="highlighter-rouge">rename</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>rename cond mood
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rename cond mood
+</code></pre></div></div>
 
 <p><img src="/assets/rename_condition.png" alt="rename.condition.png" /></p>
 

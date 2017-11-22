@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -129,17 +131,15 @@
   <h1 id="bivariate-regression">Bivariate Regression</h1>
 <p>In this post we’ll use the system dataset <strong>auto</strong>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sysuse auto, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-1.jpg" alt="Results - auto.dta-1" /></p>
 
 <p>To estimate the model we use the <code class="highlighter-rouge">regress</code> command in the command window. The <code class="highlighter-rouge">regress</code> command follows the general format of <code class="highlighter-rouge">regress dv iv, options</code>. Type <code class="highlighter-rouge">help regress</code> or visit the online help for <a href="http://www.stata.com/help.cgi?regress"><code class="highlighter-rouge">regress</code></a> for a description of the options available for regress. For example the regression of <em>price</em> on <em>mpg</em> is estimated as follows:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>regress price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>regress price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-3.jpg" alt="Results-auto.dta-3" /></p>
 
@@ -155,9 +155,8 @@
 
 <p>Suppose we would like Stata to report standardized coefficients. To get standardized coefficients we add the <code class="highlighter-rouge">beta</code> option to our command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>regress price mpg, beta
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>regress price mpg, beta
+</code></pre></div></div>
 
 <p><img src="/assets/Results-auto_dta-4.jpg" alt="Results-auto.dta-4" /></p>
 
@@ -167,17 +166,15 @@
 
 <p>To produce a scatterplot between <em>price</em> (y-axis) and <em>mpg</em> (x-axis), we use the <code class="highlighter-rouge">graph twoway scatter</code> command.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway scatter price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway scatter price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/Graph-Graph-1.jpg" alt="Graph-Graph-1" /></p>
 
 <p>Now let’s add the regression line to the plot. The <code class="highlighter-rouge">lfit</code> graph command allows us to do this (<code class="highlighter-rouge">lfit</code> stands for <em>linear</em> fit). However, we don’t want the regression line in isolation. We want it on top of the scatterplot. Stata lets you combine twoway graphs in one of two ways: (1) using parentheses or (2) using pipes. To add the regression line with parentheses, we type:&lt;/p&gt;</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway (lfit price mpg) (scatter price mpg)	
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway (lfit price mpg) (scatter price mpg)	
+</code></pre></div></div>
 
 <p>The first set of parentheses is the regression line and the second is the scatterplot. This produces the following plot:</p>
 
@@ -185,15 +182,13 @@
 
 <p>To add the regression line with pipes (this produces an identical plot as above), we type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway lfit price mpg || scatter price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway lfit price mpg || scatter price mpg
+</code></pre></div></div>
 
 <p>It can be nice to include confidence intervals on the plot. To do this we simply change the <code class="highlighter-rouge">lfit</code> command to <code class="highlighter-rouge">lfitci</code>, where the <code class="highlighter-rouge">ci</code> refers to confidence interval.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph twoway lfitci price mpg || scatter price mpg
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph twoway lfitci price mpg || scatter price mpg
+</code></pre></div></div>
 
 <p><img src="/assets/scatter3.jpg" alt="scatter3" /></p>
 

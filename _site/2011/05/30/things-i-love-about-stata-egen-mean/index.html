@@ -94,6 +94,8 @@
         
       
         
+      
+        
           
         
       
@@ -134,19 +136,17 @@
 
 <p>The <code class="highlighter-rouge">egen</code> function is used to create new variables. To create a mean with <code class="highlighter-rouge">egen</code> we use the following syntax:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>egen nameofnewvariable=mean(nameofoldvariable)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>egen nameofnewvariable=mean(nameofoldvariable)
+</code></pre></div></div>
 
 <p>We can download the the pig data from the <code class="highlighter-rouge">xtmixed</code> help.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>webuse pig, clear
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>webuse pig, clear
+</code></pre></div></div>
 
 <p>The variables are <strong>id</strong>, <strong>week</strong>, and <strong>weight</strong>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>list in 1/15, clean
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>list in 1/15, clean
 id week weight
 1. 1 1 24
 2. 1 2 32
@@ -163,18 +163,16 @@ id week weight
 13. 2 4 45
 14. 2 5 51
 15. 2 6 58.5
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>We can create a grand mean (say, for creating centered variables) of <strong>weight</strong> using <code class="highlighter-rouge">egen</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>egen grandweight=mean(weight)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>egen grandweight=mean(weight)
+</code></pre></div></div>
 
 <p>This creates a new variable that is equal to the grand mean for weight (it is a constant across all variables)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>list in 1/15, clean
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>list in 1/15, clean
 id week weight grandw~t
 1. 1 1 24 50.40509
 2. 1 2 32 50.40509
@@ -191,26 +189,23 @@ id week weight grandw~t
 13. 2 4 45 50.40509
 14. 2 5 51 50.40509
 15. 2 6 58.5 50.40509
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>##<code class="highlighter-rouge">egen mean</code> for cluster means##</p>
 
 <p>We can combine <code class="highlighter-rouge">egen mean</code> with <code class="highlighter-rouge">by</code> to compute cluster means. (Remember that <strong>id</strong> is the cluster id variable.)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by id: egen groupweight=mean(weight)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by id: egen groupweight=mean(weight)
+</code></pre></div></div>
 
 <p>If the <strong>id</strong> variable isn’t sorted, then you can change the code to:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>by id, sort: egen groupweight=mean(weight)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>by id, sort: egen groupweight=mean(weight)
+</code></pre></div></div>
 
 <p>This creates a variable that is equal to the cluster mean for each cluster. That is, its value is constant within clusters but varies across clusters.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>list in 1/15, clean
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>list in 1/15, clean
 id week weight grandw~t groupw~t
 1. 1 1 24 50.40509 48.66667
 2. 1 2 32 50.40509 48.66667
@@ -227,22 +222,19 @@ id week weight grandw~t groupw~t
 13. 2 4 45 50.40509 51.33333
 14. 2 5 51 50.40509 51.33333
 15. 2 6 58.5 50.40509 51.33333
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>##Looking at missing data##</p>
 
 <p>You can also use <code class="highlighter-rouge">egen</code> to generate a variable to examine missing data on each row. This can be particularly important when you are generating scale variables, or variables that will be combining values of multiple variables. For example, in the pig data above, if they were to weigh the pigs a second time (weight2) and create a variable of the difference between Time 1 and 2, if any pig were missing one of the time points, the difference score would not be accurate. In this hypothetical example, you could use <code class="highlighter-rouge">egen</code> combined with <code class="highlighter-rouge">rowmiss</code> to create a missing variable to examine this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>egen missing = rowmiss(weight weight2)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>egen missing = rowmiss(weight weight2)
+</code></pre></div></div>
 
 <p>Then you can use the tabulate command to identify if any values are missing:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>tabulate missing
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tabulate missing
+</code></pre></div></div>
 
 <p><img src="/assets/tabulate_missing1.png" alt="tabulate.missing1.png" /></p>
 
