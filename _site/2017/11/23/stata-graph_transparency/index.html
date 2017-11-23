@@ -132,9 +132,11 @@
 
 <p>Suppose you want to plot two normal distributions. You can use the <code class="highlighter-rouge">twoway function</code> graph type to accomplish this (see <a href="https://www.psychstatistics.com/2010/11/24/stata-graphing-distributions/">Stata Transparency</a>). If the distributions overlap at all, it will be difficult to fully appreciate how much they overlap because the distribution in front will obscure the distribution in back. Here’s an example:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
-|| function y = normalden(x+.5), range(-4 4) color(ebblue) recast(area) ///	
-	scheme(burd) legend(off)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y = normalden(x), range(-4 4) ///
+		color(eltgreen) recast(area) ///
+	|| function y = normalden(x+.5), range(-4 4) ///
+		color(ebblue) recast(area) ///	
+		scheme(burd) legend(off)
 </code></pre></div></div>
 
 <p><img src="/assets/normaldenoverlap.png" alt="overlap" />
@@ -143,9 +145,11 @@ Note, I add the option <code class="highlighter-rouge">scheme(burd)</code> to us
 
 <p>As you can see, the the blue distribution obscures the green. To fix this, we add transparency to the blue distribution. This is done by changing the color to <code class="highlighter-rouge">color(ebblue%40)</code>. This makes the blue distribution 40% opaque.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
-|| function y = normalden(x+.5), range(-4 4) color(ebblue%40) recast(area) ///	
-	scheme(burd) legend(off)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y = normalden(x), range(-4 4) ///
+		color(eltgreen) recast(area) ///
+	|| function y = normalden(x+.5), range(-4 4) ///
+		color(ebblue%40) recast(area) ///	
+		scheme(burd) legend(off)
 </code></pre></div></div>
 
 <p><img src="/assets/normaldenoverlap_transparency.png" alt="overlap" />

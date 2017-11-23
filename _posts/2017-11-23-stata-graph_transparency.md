@@ -10,9 +10,11 @@ Stata 15 includes the ability to add transparency in graphs. What’s transparen
 
 Suppose you want to plot two normal distributions. You can use the `twoway function` graph type to accomplish this (see [Stata Transparency](https://www.psychstatistics.com/2010/11/24/stata-graphing-distributions/)). If the distributions overlap at all, it will be difficult to fully appreciate how much they overlap because the distribution in front will obscure the distribution in back. Here’s an example:
 
-	twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
-	|| function y = normalden(x+.5), range(-4 4) color(ebblue) recast(area) ///	
-		scheme(burd) legend(off)
+	twoway function y = normalden(x), range(-4 4) ///
+			color(eltgreen) recast(area) ///
+		|| function y = normalden(x+.5), range(-4 4) ///
+			color(ebblue) recast(area) ///	
+			scheme(burd) legend(off)
 
 ![overlap](/assets/normaldenoverlap.png)
 ￼
@@ -21,9 +23,11 @@ Note, I add the option `scheme(burd)` to use the burd plotting scheme (see [burd
 As you can see, the the blue distribution obscures the green. To fix this, we add transparency to the blue distribution. This is done by changing the color to `color(ebblue%40)`. This makes the blue distribution 40% opaque. 
 
 
-	twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
-	|| function y = normalden(x+.5), range(-4 4) color(ebblue%40) recast(area) ///	
-		scheme(burd) legend(off)
+	twoway function y = normalden(x), range(-4 4) ///
+			color(eltgreen) recast(area) ///
+		|| function y = normalden(x+.5), range(-4 4) ///
+			color(ebblue%40) recast(area) ///	
+			scheme(burd) legend(off)
 
 ![overlap](/assets/normaldenoverlap_transparency.png)
 ￼
