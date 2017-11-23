@@ -4,13 +4,44 @@
  <title>Psychstatistics</title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2017-11-21T22:43:04-07:00</updated>
+ <updated>2017-11-23T16:27:55-07:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Scott Baldwin</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Stata: Transparency in Graphs</title>
+   <link href="http://localhost:4000/2017/11/23/stata-graph_transparency/"/>
+   <updated>2017-11-23T00:00:00-07:00</updated>
+   <id>http://localhost:4000/2017/11/23/stata-graph_transparency</id>
+   <content type="html">&lt;p&gt;Stata 15 includes the ability to add transparency in graphs. What’s transparency you ask? Transparency is relevant when you have graphical elements that overlap. Without any transparency the element that is in front will completely obscure any elements behind it. Transparency solves that problem.&lt;/p&gt;
+
+&lt;p&gt;Suppose you want to plot two normal distributions. You can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;twoway function&lt;/code&gt; graph type to accomplish this (see &lt;a href=&quot;https://www.psychstatistics.com/2010/11/24/stata-graphing-distributions/&quot;&gt;Stata Transparency&lt;/a&gt;). If the distributions overlap at all, it will be difficult to fully appreciate how much they overlap because the distribution in front will obscure the distribution in back. Here’s an example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
+|| function y = normalden(x+.5), range(-4 4) color(ebblue) recast(area) ///	
+	scheme(burd) legend(off)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/normaldenoverlap.png&quot; alt=&quot;overlap&quot; /&gt;
+￼
+Note, I add the option &lt;code class=&quot;highlighter-rouge&quot;&gt;scheme(burd)&lt;/code&gt; to use the burd plotting scheme (see &lt;a href=&quot;https://github.com/briatte/burd/wiki&quot;&gt;burd&lt;/a&gt;). This isn’t necessary to use transparency. I just like burd better than the default graphing scheme. Type &lt;code class=&quot;highlighter-rouge&quot;&gt;ssc install scheme-burd, replace&lt;/code&gt; if you dont have the burd scheme.&lt;/p&gt;
+
+&lt;p&gt;As you can see, the the blue distribution obscures the green. To fix this, we add transparency to the blue distribution. This is done by changing the color to &lt;code class=&quot;highlighter-rouge&quot;&gt;color(ebblue%40)&lt;/code&gt;. This makes the blue distribution 40% opaque.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
+|| function y = normalden(x+.5), range(-4 4) color(ebblue%40) recast(area) ///	
+	scheme(burd) legend(off)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/normaldenoverlap_transparency.png&quot; alt=&quot;overlap&quot; /&gt;
+￼
+Trying fiddling around with the percentage to see how it affects things.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>LKJ Priors</title>

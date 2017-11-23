@@ -27,5 +27,3 @@ paginate_path:    "blog/page:num/"
 #version:          2.1.0
   
 excerpt_separator: <!--more-->
-
-theme: jekyll-theme-cayman

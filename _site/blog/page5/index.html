@@ -128,6 +128,62 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2011/04/21/stata-correlation-and-covariance/">
+        Stata: Correlation and Covariance
+      </a>
+    </h1>
+
+    <span class="post-date">21 Apr 2011</span>
+    <h1 id="correlation-and-covariance">Correlation and Covariance</h1>
+<p>This post will illustrate how to:</p>
+
+<ol>
+  <li>Create a correlation matrix of variables using the <a href="http://www.stata.com/help.cgi?correlate"><code class="highlighter-rouge">correlate</code></a> command.</li>
+  <li>Display a correlation matrix as a covariance matrix.</li>
+  <li>Obtain the statistical significance of a correlation using the <a href="http://www.stata.com/help.cgi?pwcorr"><code class="highlighter-rouge">pwcorr</code></a> command.</li>
+</ol>
+
+<h2 id="correlation-matrix">Correlation Matrix</h2>
+
+<p>We’ll use the <strong>auto</strong> dataset for this tutorial.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sysuse auto, clear 
+</code></pre></div></div>
+
+<p><img src="/assets/auto.jpg" alt="auto.jpg" /></p>
+
+<p>We’ll create a correlation matrix of four variables – <em>price</em>, <em>mpg</em>, <em>weight</em>, and <em>length</em>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>correlation price mpg weight length
+</code></pre></div></div>
+
+<p><img src="/assets/corr.jpg" alt="corr.jpg" /></p>
+
+<p>Note: We can shorten the <code class="highlighter-rouge">correlation</code> command to <code class="highlighter-rouge">corr</code> for convenience.</p>
+
+<h2 id="covariance-matrix">Covariance Matrix</h2>
+
+<p>If we want to create of covariance matrix, we simply add the <code class="highlighter-rouge">covariance</code> option to the <code class="highlighter-rouge">correlation</code> command.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>correlation price mpg weigh length, covariance
+</code></pre></div></div>
+
+<p><img src="/assets/covariance.jpg" alt="covariance.jpg" /></p>
+
+<h2 id="statistical-significance-of-a-correlation">Statistical Significance of a Correlation</h2>
+
+<p>The <code class="highlighter-rouge">correlation</code> command produces a clean correlation matrix (or covariance matrix with the <code class="highlighter-rouge">covariance</code> option). If we want to see the statistical significance of a correlation, we need to use the <code class="highlighter-rouge">pwcorr</code> command with the <code class="highlighter-rouge">sig</code> option.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pwcorr price mpg weight length, sig
+</code></pre></div></div>
+
+<p><img src="/assets/pwcorr.jpg" alt="pwcorr.jpg" /></p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2011/04/21/stata-multiple-regression-and-partial-and-semipartial-correlations/">
         Stata: Multiple Regression and Partial and Semipartial Correlations
       </a>
@@ -404,22 +460,6 @@ legend(off) xlabel(-2.09 0 2.09)
 <h2 id="part-ii">Part II</h2>
 
 <p><object width="560" height="340"><param name="movie" value="http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;hl=en_US&amp;hd=1" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="http://www.youtube.com/v/6tZFOsp7vfw?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="560" height="340" />&lt;/embed&gt;</object></p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2010/11/16/amos-multiple-group-analysis/">
-        AMOS: Multiple Group Analysis
-      </a>
-    </h1>
-
-    <span class="post-date">16 Nov 2010</span>
-    <h1 id="multiple-group-analysis-in-amos">Multiple Group Analysis in AMOS</h1>
-
-<p>This screencast will introduce how to perform a multiple group analysis in AMOS.</p>
-
-<p><object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;hl=en_US&amp;hd=1" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="http://www.youtube.com/v/H4gHIs4y6sU?fs=1&amp;hl=en_US&amp;hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344" />&lt;/embed&gt;</object></p>
 
   </div>
   

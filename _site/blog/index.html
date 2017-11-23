@@ -128,6 +128,40 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2017/11/23/stata-graph_transparency/">
+        Stata: Transparency in Graphs
+      </a>
+    </h1>
+
+    <span class="post-date">23 Nov 2017</span>
+    <p>Stata 15 includes the ability to add transparency in graphs. What’s transparency you ask? Transparency is relevant when you have graphical elements that overlap. Without any transparency the element that is in front will completely obscure any elements behind it. Transparency solves that problem.</p>
+
+<p>Suppose you want to plot two normal distributions. You can use the <code class="highlighter-rouge">twoway function</code> graph type to accomplish this (see <a href="https://www.psychstatistics.com/2010/11/24/stata-graphing-distributions/">Stata Transparency</a>). If the distributions overlap at all, it will be difficult to fully appreciate how much they overlap because the distribution in front will obscure the distribution in back. Here’s an example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
+|| function y = normalden(x+.5), range(-4 4) color(ebblue) recast(area) ///	
+	scheme(burd) legend(off)
+</code></pre></div></div>
+
+<p><img src="/assets/normaldenoverlap.png" alt="overlap" />
+￼
+Note, I add the option <code class="highlighter-rouge">scheme(burd)</code> to use the burd plotting scheme (see <a href="https://github.com/briatte/burd/wiki">burd</a>). This isn’t necessary to use transparency. I just like burd better than the default graphing scheme. Type <code class="highlighter-rouge">ssc install scheme-burd, replace</code> if you dont have the burd scheme.</p>
+
+<p>As you can see, the the blue distribution obscures the green. To fix this, we add transparency to the blue distribution. This is done by changing the color to <code class="highlighter-rouge">color(ebblue%40)</code>. This makes the blue distribution 40% opaque.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>twoway function y = normalden(x), range(-4 4) color(eltgreen) recast(area) ///
+|| function y = normalden(x+.5), range(-4 4) color(ebblue%40) recast(area) ///	
+	scheme(burd) legend(off)
+</code></pre></div></div>
+
+<p><img src="/assets/normaldenoverlap_transparency.png" alt="overlap" />
+￼
+Trying fiddling around with the percentage to see how it affects things.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2014/12/27/d-lkj-priors/">
         LKJ Priors
       </a>
@@ -491,76 +525,6 @@ Maccallum, R. C., Browne, M. W., &amp; Sugawara, H. M. (1996). Power analysis an
 Muthen, L., &amp; Muthen, B. (2002). How to use a Monte Carlo study to decide on sample size and determine power. <em>Structural Equation Modeling, 9,</em> 599-620.
 Saris, W. E., &amp; Satorra, A. (1993). Power evaluations in structural equation models. In K. A. Bollen &amp; J. S. Long (Eds.), <em>Testing Structural Equation Models</em> (pp. 181-204). Newbury Park, CA: Sage.
 Satorra, A. &amp; Saris, W. E. (1985). Power of the likelihood ratio test in covariance structure analysis. <em>Psychometrika, 50,</em> 83-90.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2011/10/05/stata-dummy-coding/">
-        Stata: Dummy Coding
-      </a>
-    </h1>
-
-    <span class="post-date">05 Oct 2011</span>
-    <h2 id="introduction">Introduction</h2>
-
-<p>This post will illustrate how to:</p>
-
-<ol>
-  <li>Use the generate and replace commands to create dummy variables.</li>
-  <li>A second use of the generate command to dummy variables that is simpler that #1.</li>
-  <li>Using tabluate to create dummy variables.</li>
-</ol>
-
-<p>Dummy coding is used when you have nominal categories, meaning the groups are assigned a value for coding purposes, but the values don’t represent more or less of anything. For example, I might code three different categories of race and coded them as follows: Caucasian = 1, African American = 2, Hispanic = 3. The numbers are for coding purposes only, 3 is not actually any bigger or more than 1. But if we use these in a regression (or any other) analysis, the numbers will be treated as continuous - not categorical. So we need to create dummy variables. Generally, we create k-1 new groups, where k is the total number of groups, and one group is used as the reference sample, or the group we want to compare other groups to.</p>
-
-<p>Method 1: Using <code class="highlighter-rouge">generate</code> and <code class="highlighter-rouge">replace</code></p>
-
-<p>We’ll use the built in system data systolic.</p>
-
-<p><img src="/assets/Stata_SE-12_0-systolic_dta-1.jpg" alt="Stata_SE-12.0-systolic.dta-1.jpg" /></p>
-
-<p>The drug variable has 4 levels.</p>
-
-<p><img src="/assets/Stata_SE-12_0-systolic_dta-2.jpg" alt="Stata_SE-12.0-systolic.dta-2.jpg" /></p>
-
-<p>Consequently, we’ll need to make 3 dummy coded indicator variables to represent drug. We’ll use level 4 as the reference category. We’ll use a series of generate and replace commands to create the variables. This is definitely the brute-force way to make the variables, but it makes the logic behind creating dummy variables clear.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug1=1 if drug==1
-replace drug1=0 if drug!=1
-generate drug2=1 if drug==2
-replace drug2=0 if drug!=2
-generate drug3=1 if drug==3
-replace drug3=0 if drug!=3
-</code></pre></div></div>
-
-<p>Tabulating each of the dummy variables – drug1 - drug3 – we see they match our original tabulation.</p>
-
-<p><img src="/assets/Stata_SE-12_0-systolic_dta-3.jpg" alt="Stata_SE-12.0-systolic.dta-3.jpg" /></p>
-
-<p>Method 2: Use <code class="highlighter-rouge">generate</code> only</p>
-
-<p>We can also use a feature of the generate command to create a new variable that takes on the values 1 and 0. So, for example, if we want to create drug1, where drug1 is equal to 1 when the drug condition equals 1, we say:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug1=drug==1
-</code></pre></div></div>
-
-<p>This creates a variable that is 1 when drug equals 1 (recall that <code class="highlighter-rouge">==</code> is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug2=drug==2
-generate drug3=drug==3
-</code></pre></div></div>
-
-<p>Method 3: Use the <code class="highlighter-rouge">generate</code> option of <code class="highlighter-rouge">tabulate</code></p>
-
-<p>The function tabulate has an option called generate. The generate option takes one argument called stubname, where stubname is the stub of the new variable names created by the option. In our examples so far, the stub has been drug. Unlike the examples we have done so far, this method will create as many dummy variables as there are levels of the categorical variable (4 in our case). In our example, we type:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tabulate drug, generate(drug)
-</code></pre></div></div>
-
-<p>We now have four new variables in our dataset – drug1-drug4.</p>
-
-<p><img src="/assets/dummy_gen_example.png" alt="dummy_gen_example.png" /></p>
 
   </div>
   

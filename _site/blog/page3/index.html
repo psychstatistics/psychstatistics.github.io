@@ -128,6 +128,97 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2011/07/06/stata-planned-comparisons-with-the-test-command/">
+        Stata: Planned Comparisons with the test command
+      </a>
+    </h1>
+
+    <span class="post-date">06 Jul 2011</span>
+    <h1 id="planned-comparisons">Planned Comparisons</h1>
+
+<p>This post will show you how to:</p>
+
+<ol>
+  <li>Run a one-way ANOVA using an independent variable with four levels.</li>
+  <li>Use planned comparisons to contrast levels of the independent variable.</li>
+</ol>
+
+<p>We will use the built-in dataset <strong>systolic</strong>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>webuse systolic
+</code></pre></div></div>
+
+<h2 id="examining-the-data">Examining the data</h2>
+
+<p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize systolic, detail
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>table drug
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
+
+<p>Let’s also look at a boxplot of systolic by drug.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph box systolic, by(drug)
+</code></pre></div></div>
+
+<p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
+
+<p>Thus, it appears there are some differences between drug levels and systolic blood pressure.</p>
+
+<h2 id="oneway-anova">Oneway ANOVA</h2>
+
+<p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anova systolic drug
+</code></pre></div></div>
+
+<p>We reject the null hypothesis.</p>
+
+<p><img src="/assets/Results-systolic_dta-2.jpg" alt="Results-systolic.dta-2.jpg" /></p>
+
+<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code class="highlighter-rouge">test</code> command to perform planned comparisons</h2>
+
+<p>In Stata, once we have completed the ANOVA, we can use the <code class="highlighter-rouge">test</code> command to perform planned comparisons. Note two important things about the <code class="highlighter-rouge">test</code> command:</p>
+
+<ol>
+  <li>You can only use it <strong>after</strong> you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.</li>
+  <li>The <code class="highlighter-rouge">test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code class="highlighter-rouge">test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code class="highlighter-rouge">test</code> needs will not be available if you run another model.</li>
+</ol>
+
+<p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
+
+<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code class="highlighter-rouge">1.drug</code> or <code class="highlighter-rouge">2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
+See if you can figure out why the following statement is equivalent</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
+</code></pre></div></div>
+
+<p>Suppose we want to know if level 1 of drug is different from level 2.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test 1.drug = 2.drug
+</code></pre></div></div>
+
+<p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
+
+<p>We cannot reject reject the null.</p>
+
+<p>The <code class="highlighter-rouge">test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2011/07/01/stata-oneway-anova/">
         Stata: Oneway ANOVA
       </a>
@@ -479,52 +570,6 @@ You can import csv files using the <code class="highlighter-rouge">insheet</code
 <p>Click on <strong>Browse</strong> to select the csv file saved on your computer. Select <strong>Comma-delimited data</strong>. I’ve also selected <strong>Replace data in memory</strong> to clear out any data loaded into Stata already. If you need to add variable names, you can add them in the dialog box.</p>
 
 <p>Now your data will be read into Stata and ready to use.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2011/05/29/project-euler-probelm-3/">
-        Project Euler - Probelm #3
-      </a>
-    </h1>
-
-    <span class="post-date">29 May 2011</span>
-    <h2 id="problem-description">Problem Description</h2>
-
-<p>The prime factors of 13195 are 5, 7, 13 and 29. What is the largest prime factor of the number 600851475143?</p>
-
-<h2 id="python-solution">Python Solution</h2>
-
-<p>I started trying to solve this problem by writing a function for identifying prime numbers. I found an entry on Wikipedia for the “<a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>.” The entry also included Python code for implementing the sieve. I’ve reproduced an adapted version of the Wikipedia code. I had to change it because my computer ran out of memory when creating the candidate list. I had to change it so the candidate list had an upper limit of the square root of 600851475143. In any case, here is the solution with the sieve function first and then a function for actually solving the problem.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def sieve(n): 
-    fin = int(n**0.5) ##candidates below sqrt of n -- this is the upper limit
-    candidates = list(range(fin+1)) ##This is an change of the wiki code
-
-    # Loop over the candidates, marking out each multiple.
-    for i in xrange(2, fin+1): 
-        if candidates[i]:
-            candidates[2*i::i] = [None] * (fin//i - 1) 
-            ##the previous line replaces all multiples of i with None
-
-    # Filter out non-primes and return the list.
-    return [i for i in candidates[2:] if i]
-</code></pre></div></div>
-
-<p>##A function for returning prime factors of n
-	def largeprime(n):
-	    for i in sieve(n):
-	        if n % i == 0:
-	            yield i</p>
-
-<p>##Return the prime factors as a list and print the last number</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>div = list(largeprime(n))
-print div[-1]
-</code></pre></div></div>
-
-<p>This solution takes .38 seconds.</p>
 
   </div>
   

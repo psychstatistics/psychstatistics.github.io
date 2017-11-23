@@ -128,6 +128,76 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2011/10/05/stata-dummy-coding/">
+        Stata: Dummy Coding
+      </a>
+    </h1>
+
+    <span class="post-date">05 Oct 2011</span>
+    <h2 id="introduction">Introduction</h2>
+
+<p>This post will illustrate how to:</p>
+
+<ol>
+  <li>Use the generate and replace commands to create dummy variables.</li>
+  <li>A second use of the generate command to dummy variables that is simpler that #1.</li>
+  <li>Using tabluate to create dummy variables.</li>
+</ol>
+
+<p>Dummy coding is used when you have nominal categories, meaning the groups are assigned a value for coding purposes, but the values don’t represent more or less of anything. For example, I might code three different categories of race and coded them as follows: Caucasian = 1, African American = 2, Hispanic = 3. The numbers are for coding purposes only, 3 is not actually any bigger or more than 1. But if we use these in a regression (or any other) analysis, the numbers will be treated as continuous - not categorical. So we need to create dummy variables. Generally, we create k-1 new groups, where k is the total number of groups, and one group is used as the reference sample, or the group we want to compare other groups to.</p>
+
+<p>Method 1: Using <code class="highlighter-rouge">generate</code> and <code class="highlighter-rouge">replace</code></p>
+
+<p>We’ll use the built in system data systolic.</p>
+
+<p><img src="/assets/Stata_SE-12_0-systolic_dta-1.jpg" alt="Stata_SE-12.0-systolic.dta-1.jpg" /></p>
+
+<p>The drug variable has 4 levels.</p>
+
+<p><img src="/assets/Stata_SE-12_0-systolic_dta-2.jpg" alt="Stata_SE-12.0-systolic.dta-2.jpg" /></p>
+
+<p>Consequently, we’ll need to make 3 dummy coded indicator variables to represent drug. We’ll use level 4 as the reference category. We’ll use a series of generate and replace commands to create the variables. This is definitely the brute-force way to make the variables, but it makes the logic behind creating dummy variables clear.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug1=1 if drug==1
+replace drug1=0 if drug!=1
+generate drug2=1 if drug==2
+replace drug2=0 if drug!=2
+generate drug3=1 if drug==3
+replace drug3=0 if drug!=3
+</code></pre></div></div>
+
+<p>Tabulating each of the dummy variables – drug1 - drug3 – we see they match our original tabulation.</p>
+
+<p><img src="/assets/Stata_SE-12_0-systolic_dta-3.jpg" alt="Stata_SE-12.0-systolic.dta-3.jpg" /></p>
+
+<p>Method 2: Use <code class="highlighter-rouge">generate</code> only</p>
+
+<p>We can also use a feature of the generate command to create a new variable that takes on the values 1 and 0. So, for example, if we want to create drug1, where drug1 is equal to 1 when the drug condition equals 1, we say:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug1=drug==1
+</code></pre></div></div>
+
+<p>This creates a variable that is 1 when drug equals 1 (recall that <code class="highlighter-rouge">==</code> is a logical evaluator) and 0 any other time. If we want to use the fourth condition as the reference category, we repeat the generate command for drug2 and drug3.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>generate drug2=drug==2
+generate drug3=drug==3
+</code></pre></div></div>
+
+<p>Method 3: Use the <code class="highlighter-rouge">generate</code> option of <code class="highlighter-rouge">tabulate</code></p>
+
+<p>The function tabulate has an option called generate. The generate option takes one argument called stubname, where stubname is the stub of the new variable names created by the option. In our examples so far, the stub has been drug. Unlike the examples we have done so far, this method will create as many dummy variables as there are levels of the categorical variable (4 in our case). In our example, we type:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tabulate drug, generate(drug)
+</code></pre></div></div>
+
+<p>We now have four new variables in our dataset – drug1-drug4.</p>
+
+<p><img src="/assets/dummy_gen_example.png" alt="dummy_gen_example.png" /></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2011/08/29/stata-labeling-recoding-data/">
         Stata: Labeling & Recoding Data
       </a>
@@ -371,97 +441,6 @@ generate meanweight = r(mean)
 <h2 id="conclusion">Conclusion</h2>
 
 <p>I’ve just touched on the ways you can create new variables. You can also use the <code class="highlighter-rouge">egen</code> command to create new variables. Try new ways to create variables and be sure to read the help files.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2011/07/06/stata-planned-comparisons-with-the-test-command/">
-        Stata: Planned Comparisons with the test command
-      </a>
-    </h1>
-
-    <span class="post-date">06 Jul 2011</span>
-    <h1 id="planned-comparisons">Planned Comparisons</h1>
-
-<p>This post will show you how to:</p>
-
-<ol>
-  <li>Run a one-way ANOVA using an independent variable with four levels.</li>
-  <li>Use planned comparisons to contrast levels of the independent variable.</li>
-</ol>
-
-<p>We will use the built-in dataset <strong>systolic</strong>.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>webuse systolic
-</code></pre></div></div>
-
-<h2 id="examining-the-data">Examining the data</h2>
-
-<p>We will treat the <em>systolic</em> variable as the outcome and <em>drug</em> as the independent variable. Let’s look at descriptive statistics for <em>systolic</em> and frequencies for <em>drug</em>.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summarize systolic, detail
-</code></pre></div></div>
-
-<p><img src="/assets/Results-systolic_dta-1.jpg" alt="Results-systolic.dta-1.jpg" /></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>table drug
-</code></pre></div></div>
-
-<p><img src="/assets/Results-systolic_dta.jpg" alt="Results-systolic.dta_.jpg" /></p>
-
-<p>Let’s also look at a boxplot of systolic by drug.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph box systolic, by(drug)
-</code></pre></div></div>
-
-<p><img src="/assets/NewImage.png" alt="NewImage.png" /></p>
-
-<p>Thus, it appears there are some differences between drug levels and systolic blood pressure.</p>
-
-<h2 id="oneway-anova">Oneway ANOVA</h2>
-
-<p>Let’s run a oneway ANOVA. The null hypothesis is that there is no difference in the mean systolic blood pressure among the levels of drug.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>anova systolic drug
-</code></pre></div></div>
-
-<p>We reject the null hypothesis.</p>
-
-<p><img src="/assets/Results-systolic_dta-2.jpg" alt="Results-systolic.dta-2.jpg" /></p>
-
-<h2 id="using-the-test-command-to-perform-planned-comparisons">Using the <code class="highlighter-rouge">test</code> command to perform planned comparisons</h2>
-
-<p>In Stata, once we have completed the ANOVA, we can use the <code class="highlighter-rouge">test</code> command to perform planned comparisons. Note two important things about the <code class="highlighter-rouge">test</code> command:</p>
-
-<ol>
-  <li>You can only use it <strong>after</strong> you have run the ANOVA. If you try to run it before you run the ANOVA, it won’t work.</li>
-  <li>The <code class="highlighter-rouge">test</code> command is available to use for the most recently run model. If you run a second (or third, fourth, etc.) ANOVA model or another model that supports the <code class="highlighter-rouge">test</code> command (e.g., a regression) after you run the ANOVA you care about, you won’t be able to run the analysis you care about. That is, the information that <code class="highlighter-rouge">test</code> needs will not be available if you run another model.</li>
-</ol>
-
-<p>Let’s say we want to know whether the average of drugs 1 and 2 differ from the averages of 3 and 4. To do this, we’d type the following command (after we ran the ANOVA).</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 = (3.drug + 4.drug)/2
-</code></pre></div></div>
-
-<p><img src="/assets/Results-systolic_dta-3.jpg" alt="Results-systolic.dta-3.jpg" /></p>
-
-<p>We reject the null hypothesis that they are not different. Note that to reference levels of the variable <em>drug</em> we type <code class="highlighter-rouge">1.drug</code> or <code class="highlighter-rouge">2.drug</code>, etc. We put the level number, then a period, then the variabl ename.
-See if you can figure out why the following statement is equivalent</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test (1.drug + 2.drug)/2 - (3.drug + 4.drug)/2 = 0
-</code></pre></div></div>
-
-<p>Suppose we want to know if level 1 of drug is different from level 2.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test 1.drug = 2.drug
-</code></pre></div></div>
-
-<p><img src="/assets/Results-systolic_dta-5.jpg" alt="Results-systolic.dta-5.jpg" /></p>
-
-<p>We cannot reject reject the null.</p>
-
-<p>The <code class="highlighter-rouge">test</code> command is really quite flexible. Fiddle around with it to better learn the syntax.</p>
 
   </div>
   
